@@ -1,0 +1,91 @@
+﻿html {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: #111;
+  color: #eee;
+  margin: 0;
+  padding: 0;
+}
+body,
+input {
+  font-family: Lucida Console, monospace;
+  font-size: 16px;
+}
+
+#heading {
+  background: #333;
+  border-bottom: 1px solid #333;
+  box-shadow: -3px 1px 15px #333;
+  height: 25px;
+  margin-bottom: 0px;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+#heading .main {
+  color: #f4f085;
+  font-size: 1.3em;
+}
+#heading .sub {
+  color: #dabd2f;
+  font-size: 1.3em;
+}
+
+#output {
+  margin-bottom: 60px;
+  margin-top: 45px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+#keyboard {
+  background: #222;
+  border-top: 2px solid #000;
+  bottom: 0;
+  color: #eee;
+  left: 0;
+  padding: 5px 0;
+  position: fixed;
+  width: 100%;
+}
+#keyboard label {
+  padding-left: 10px;
+}
+#keyboard input {
+  background: #222;
+  border: 0;
+  color: #eee;
+  font-size: 16px;
+  outline: none;
+  padding: 5px;
+}
+#controller {
+  background: #333333cc;
+  bottom: 10px;
+  padding: 5px;
+  position: fixed;
+  right: 10px;
+}
+
+#status {
+  background: #3d083c;
+  color: #deaddd;
+  bottom: 0;
+  left: 0;
+  padding: 5px;
+  position: fixed;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  #status {
+    bottom: 40px;
+  }
+}
+
+.roomName {
+  color: lightgreen;
+}

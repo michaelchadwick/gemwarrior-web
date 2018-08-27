@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Gem Warrior (Web)</title>
+  <link href="assets/css/screen.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="content">
+    <div id="screenContainer">
+      <div id="display">
+        <div id="input">
+          <form>
+            <div id="heading">
+              <span class="main">|G|E|M| |W|A|R|R|I|O|R|</span>
+            </div>
+
+            <div id="gameDiv">
+              <div id="output"></div>
+
+              <div id="status">
+                [LV: <span id="level"></span>][XP: <span id="xp"></span>][ROX: <span id="rox"></span>] -- [HP: <span id="hp"></span>]
+              </div>
+
+              <!--mobile browser-->
+              <div id="controller">
+                <!--We use a table for the simple alignment of the buttons-->
+                <table>
+                  <tr>
+                    <td></td>
+                    <td><input type='button' class='button' value='N' title="North" style="left: 200px" /></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><input type='button' class='button' value='W' title="West" /></td>
+                    <td></td>
+                    <td><input type='button' class='button' value='E' title="East" /></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td><input type='button' class='button' value='S' title="South" /></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><input type='button' class='button' value='P' title="Pickup" /></td>
+                    <td><input type='button' class='button' value='A' title="About" /></td>
+                    <td><input type='button' class='button' value='?' title="Help" /></td>
+                  </tr>
+                </table>
+              </div>
+              <!--non-mobile browser-->
+              <div id="keyboard">
+                <label> GW> </label>
+                <input type="text" name="userInput" class="buttonMod" id="userInput" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.1.4.min.js"><\/script>')</script>
+  <script src="assets/js/game.js"></script>
+</body>
+</html>
