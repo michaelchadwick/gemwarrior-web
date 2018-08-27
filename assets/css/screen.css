@@ -86,6 +86,12 @@ input {
   }
 }
 
-.roomName {
+.noun {
   color: lightgreen;
+}
+.keyword {
+  color: #eecd90;
+}
+.command-previous {
+  color: #666;
 }
