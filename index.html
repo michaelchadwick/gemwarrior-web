@@ -1,7 +1,10 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gem Warrior (Web)</title>
+  <link rel="icon" src="favicon.ico" />
   <link href="assets/css/screen.css" rel="stylesheet" />
 </head>
 <body>
@@ -17,8 +20,11 @@
             <div id="gameDiv">
               <div id="output"></div>
 
-              <div id="status">
-                [LV: <span id="level"></span>][XP: <span id="xp"></span>][ROX: <span id="rox"></span>] -- [LOC: <span id="loc"></span>] -- [HP: <span id="hp"></span>]
+              <div id="stats">
+                [LV: <span id="level"></span>][XP: <span id="xp"></span>][ROX: <span id="rox"></span>][HP: <span id="hp"></span>]<br />
+              </div>
+              <div id="location">
+                [LOC: <span id="loc"></span>]
               </div>
 
               <!--mobile browser-->
@@ -27,17 +33,17 @@
                 <table>
                   <tr>
                     <td></td>
-                    <td><input type='button' class='button' value='N' title="North" style="left: 200px" /></td>
+                    <td><button type='button' data-command='N'  title="North">N</button></td>
                     <td></td>
                   </tr>
                   <tr>
-                    <td><input type='button' class='button' value='W' title="West" /></td>
+                    <td><button type='button' data-command='W' title="West">W</button></td>
                     <td></td>
-                    <td><input type='button' class='button' value='E' title="East" /></td>
+                    <td><button type='button' data-command='E' title="East">E</button></td>
                   </tr>
                   <tr>
                     <td></td>
-                    <td><input type='button' class='button' value='S' title="South" /></td>
+                    <td><button type='button' data-command='S'  title="South">S</button></td>
                     <td></td>
                   </tr>
                   <tr>
@@ -45,17 +51,19 @@
                     <td></td>
                     <td></td>
                   </tr>
+                </table>
+                <table>
                   <tr>
-                    <td><input type='button' class='button' value='P' title="Pickup" /></td>
-                    <td><input type='button' class='button' value='A' title="About" /></td>
-                    <td><input type='button' class='button' value='?' title="Help" /></td>
+                    <td><button type='button' data-command='P'  title="Pickup">P</button></td>
+                    <td><button type='button' data-command='A'  title="About">A</button></td>
+                    <td><button type='button' data-command='?'  title="Help">?</button></td>
                   </tr>
                 </table>
               </div>
               <!--non-mobile browser-->
               <div id="keyboard">
-                <label> GW> </label>
-                <input type="text" name="userInput" class="buttonMod" id="userInput" />
+                <label for="userInput"> GW> </label>
+                <input type="text" name="userInput" id="userInput" />
               </div>
             </div>
           </form>

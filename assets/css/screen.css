@@ -13,6 +13,23 @@ input {
   font-family: Lucida Console, monospace;
   font-size: 16px;
 }
+button {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
 
 #heading {
   background: #333;
@@ -41,48 +58,85 @@ input {
   padding: 10px;
 }
 
+#controller {
+  background: #333333cc;
+  bottom: 0;
+  clear: left;
+  display: block;
+  left: 0;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+}
+#controller table {
+  float: left;
+}
 #keyboard {
   background: #222;
   border-top: 2px solid #000;
   bottom: 0;
   color: #eee;
+  display: none;
+  height: 34px;
   left: 0;
   padding: 5px 0;
   position: fixed;
   width: 100%;
 }
 #keyboard label {
-  padding-left: 10px;
+  float: left;
+  padding-left: 8px;
+  position: relative;
+  top: 5px;
 }
 #keyboard input {
   background: #222;
   border: 0;
   color: #eee;
-  font-size: 16px;
+  float: left;
+  max-width: 100%;
   outline: none;
   padding: 5px;
 }
-#controller {
-  background: #333333cc;
-  bottom: 10px;
-  padding: 5px;
-  position: fixed;
-  right: 10px;
-}
 
-#status {
+#stats {
   background: #3d083c;
+  clear: left;
   color: #deaddd;
-  bottom: 0;
+  bottom: 153px;
+  height: 27px;
   left: 0;
   padding: 5px;
   position: fixed;
   width: 100%;
 }
+#location {
+  background: #2e0a2e;
+  bottom: 133px;
+  height: 17px;
+  overflow: scroll;
+  padding: 5px;
+  position: fixed;
+  width: 100%;
+}
 
-@media (min-width: 768px) {
-  #status {
-    bottom: 40px;
+@media (min-width: 426px) {
+  body,
+  input {
+    font-size: 20px;
+  }
+  #controller {
+    display: none;
+  }
+  #keyboard {
+    display: block;
+  }
+  #stats {
+    bottom: 81px;
+  }
+  #location {
+    bottom: 46px;
+    height: 24px;
   }
 }
 

@@ -9,24 +9,25 @@ $(function () {
 
   // game screen shortcut variables
   const $display = $('#output')
-  // const $status = $('#status')
-  const $keyboard = $('#keyboard')
-  const $controller = $('#controller')
-  const $statusLV = $('#status #level')
-  const $statusXP = $('#status #xp')
-  const $statusROX = $('#status #rox')
-  const $statusLOC = $('#status #loc')
-  const $statusHP = $('#status #hp')
+  // const $stats = $('#stats')
+  // const $keyboard = $('#keyboard')
+  // const $controller = $('#controller')
+  const $statsLV = $('#stats #level')
+  const $statsXP = $('#stats #xp')
+  const $statsROX = $('#stats #rox')
+  const $statsHP = $('#stats #hp')
+
+  const $statsLOC = $('#location #loc')
 
   // mobile detection
   function formatDisplay() {
+    /*
     if (window.innerWidth < 768) {
-      $keyboard.hide()
-      $controller.show()
+
     } else {
-      $controller.hide()
-      $keyboard.show()
+
     }
+    */
   }
 
   // print result of user command
@@ -48,11 +49,11 @@ $(function () {
   }
 
   function updateStatus(level, xp, rox, loc, hp) {
-    $statusLV.text(level)
-    $statusXP.text(xp)
-    $statusROX.text(rox)
-    $statusLOC.text(loc)
-    $statusHP.text(hp)
+    $statsLV.text(level)
+    $statsXP.text(xp)
+    $statsROX.text(rox)
+    $statsLOC.text(loc)
+    $statsHP.text(hp)
   }
 
   function processGameRound(cmd) {
@@ -79,30 +80,10 @@ $(function () {
   }
 
   function _applyEventHandlers() {
-    $('#controller .button').click(function () {
-      switch (this.value) {
-      case 'N':
-        processGameRound('N')
-        break
-      case 'S':
-        processGameRound('S')
-        break
-      case 'E':
-        processGameRound('E')
-        break
-      case 'W':
-        processGameRound('W')
-        break
-      case 'F':
-        processGameRound('F')
-        break
-      case 'P':
-        processGameRound('P')
-        break
-      case 'A':
-        processGameRound('A')
-        break
-      }
+    $('#controller button').click(function (event) {
+      const command = event.target.dataset.command
+      displayText(`<span class="command-previous">&gt; ${command}`)
+      processGameRound(command)
     })
 
     $('#input form').submit(function (e) {
