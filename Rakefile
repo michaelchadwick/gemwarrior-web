@@ -2,7 +2,7 @@ task :deploy
 
 task :deploy do |t|
   sh "git push origin master"
-  sh "dandelion ddeploy"
+  sh "dandelion deploy"
 end
 
 task :default => [:deploy]
