@@ -19,17 +19,6 @@ $(function () {
 
   const $statsLOC = $('#location #loc')
 
-  // mobile detection
-  function formatDisplay() {
-    /*
-    if (window.innerWidth < 768) {
-
-    } else {
-
-    }
-    */
-  }
-
   // print result of user command
   function repl(result) {
     updateStatus(level, xp, rox, loc, hp)
@@ -70,10 +59,14 @@ $(function () {
     case 'go':
     case 'g':
       return `You go somewhere else inescapable in the <span class='noun'>${loc}</span>.`
+    case 'inventory':
+    case 'inven':
+    case 'i':
+      return 'You have the <span class="noun">clothes on your back</span>, a <span class="noun">broken flashlight</span>, a <span class="noun">candlestick holder</span>, and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
     case '?':
     case 'h':
     case 'help':
-      return 'HELP: The following commands are valid: <span class="keyword">look go help</span>'
+      return 'HELP: The following commands are valid: <span class="keyword">(l)ook (g)o (h)elp (i)nventory</span>'
     default:
       return 'That command isn\'t recognized. Type "help" for valid commands'
     }
@@ -126,7 +119,5 @@ $(function () {
   }
 
   $(window).on('load', _init)
-  $(window).on('load resize', function () {
-    formatDisplay()
-  })
+  // $(window).on('load resize', function () {})
 })
