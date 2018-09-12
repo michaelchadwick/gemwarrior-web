@@ -10,22 +10,22 @@ $(function () {
   // game screen shortcut variables
   const $display = $('#output')
   // const $stats = $('#stats')
-  // const $keyboard = $('#keyboard')
-  // const $controller = $('#controller')
   const $statsLV = $('#stats #level')
   const $statsXP = $('#stats #xp')
   const $statsROX = $('#stats #rox')
   const $statsHP = $('#stats #hp')
-
   const $statsLOC = $('#location #loc')
 
+  // const $keyboard = $('#keyboard')
+  // const $controller = $('#controller')
   // print result of user command
+
   function repl(result) {
     updateStatus(level, xp, rox, loc, hp)
-    displayText(result)
+    out(result)
   }
 
-  function displayText(text, lb) {
+  function out(text, lb) {
     let $content_to_display = text
     if (!lb) {
       $content_to_display += '<br />'
@@ -45,8 +45,33 @@ $(function () {
     $statsHP.text(hp)
   }
 
-  function processGameRound(cmd) {
-    displayText(`'${cmd}' not implemented yet`)
+  function processGameRound(command) {
+    switch (command) {
+    case 'N':
+      out(`You go <strong>north</strong> a bit. You are still in an inescapable hole.`)
+      break
+    case 'W':
+      out(`You go <strong>west</strong> a bit. You are still in an inescapable hole.`)
+      break
+    case 'S':
+      out(`You go <strong>south</strong> a bit. You are still in an inescapable hole.`)
+      break
+    case 'E':
+      out(`You go <strong>east</strong> a bit. You are still in an inescapable hole.`)
+      break
+    case 'P':
+      out(`You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`)
+      break
+    case 'A':
+      out(`<strong>Gem Warrior (Web)</strong> was programmed by <a href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity.`)
+      break
+    case 'I':
+      out('You have the <span class="noun">clothes on your back</span>, a <span class="noun">broken flashlight</span>, a <span class="noun">candlestick holder</span>, and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".')
+      break
+    case '?':
+      out(`HELP: The following actions are valid: <span class="keyword">(N)orth (W)est (S)outh (E)ast (P)ickup (A)about (I)nventory (?)uestion Point</span>`)
+      break
+    }
   }
 
   // process the user command input
@@ -75,7 +100,7 @@ $(function () {
   function _applyEventHandlers() {
     $('#controller button').click(function (event) {
       const command = event.target.dataset.command
-      displayText(`<span class="command-previous">&gt; ${command}`)
+      out(`<span class="command-previous">&gt; ${command}`)
       processGameRound(command)
     })
 
@@ -84,7 +109,7 @@ $(function () {
 
       const input = $('#userInput').val().toLowerCase()
 
-      displayText(`<span class="command-previous">&gt; ${input}</span>`)
+      out(`<span class="command-previous">&gt; ${input}</span>`)
 
       const result = evaluator(input)
       $('#userInput').val('')
@@ -103,11 +128,11 @@ $(function () {
   }
 
   function _welcome() {
-    displayText('***********************')
-    displayText('Welcome to Gem Warrior!')
-    displayText('Good luck...')
-    displayText('***********************')
-    displayText('')
+    out('***********************')
+    out('Welcome to Gem Warrior!')
+    out('Good luck...')
+    out('***********************')
+    out('')
   }
 
   function _init() {
@@ -119,5 +144,12 @@ $(function () {
   }
 
   $(window).on('load', _init)
+  $(document).on('touchmove', function(event) {
+    event = event.originalEvent || event
+    if (event.scale !== 1) {
+      event.preventDefault()
+    }
+  }, false)
+  window.scrollTo(0,1)
   // $(window).on('load resize', function () {})
 })

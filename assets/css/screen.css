@@ -1,4 +1,5 @@
 ﻿html {
+  -webkit-text-size-adjust: none;
   margin: 0;
   padding: 0;
 }
@@ -14,28 +15,29 @@ input {
   font-size: 16px;
 }
 button {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none;
+  -webkit-user-select: none;
+  background: rgb(239, 241, 209);
   border: 1px solid transparent;
-  padding: .375rem .75rem;
-  font-size: 1rem;
-  line-height: 1.5;
   border-radius: .25rem;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .375rem .75rem;
+  text-align: center;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 #heading {
   background: #333;
   border-bottom: 1px solid #333;
   box-shadow: -3px 1px 15px #333;
-  height: 25px;
+  height: 18px;
   margin-bottom: 0px;
   padding: 10px;
   position: fixed;
@@ -52,10 +54,14 @@ button {
 }
 
 #output {
-  margin-bottom: 60px;
-  margin-top: 45px;
-  overflow-y: auto;
+  height: 100%;
+  margin-bottom: 200px;
+  margin-top: 40px;
+  overflow-y: scroll;
   padding: 10px;
+}
+#output a {
+  color: #ece759;
 }
 
 #controller {
@@ -103,16 +109,16 @@ button {
   background: #3d083c;
   clear: left;
   color: #deaddd;
-  bottom: 153px;
-  height: 27px;
+  bottom: 163px;
+  height: 20px;
   left: 0;
-  padding: 5px;
+  padding: 2px 0 6px 5px;
   position: fixed;
   width: 100%;
 }
 #location {
   background: #2e0a2e;
-  bottom: 133px;
+  bottom: 143px;
   height: 17px;
   overflow: scroll;
   padding: 5px;
