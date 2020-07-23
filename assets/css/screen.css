@@ -3,17 +3,20 @@
   margin: 0;
   padding: 0;
 }
+
 body {
   background: #111;
   color: #eee;
   margin: 0;
   padding: 0;
 }
+
 body,
 input {
   font-family: Lucida Console, monospace;
   font-size: 16px;
 }
+
 button {
   -moz-user-select: none;
   -ms-user-select: none;
@@ -34,76 +37,30 @@ button {
 }
 
 #heading {
-  background: #333;
-  border-bottom: 1px solid #333;
+  background: #444;
+  border-bottom: 1px solid #f4f085;
   box-shadow: -3px 1px 15px #333;
-  height: 18px;
+  height: 20px;
   margin-bottom: 0px;
   padding: 10px;
   position: fixed;
   top: 0;
-  width: 100%;
-}
-#heading .main {
-  color: #f4f085;
-  font-size: 1.3em;
-}
-#heading .sub {
-  color: #dabd2f;
-  font-size: 1.3em;
-}
+  width: 100%; }
+  #heading .main {
+    color: #f4f085;
+    font-size: 1.3em; }
+  #heading .sub {
+    color: #dabd2f;
+    font-size: 1.3em; }
 
 #output {
   height: 100%;
   margin-bottom: 200px;
   margin-top: 40px;
   overflow-y: scroll;
-  padding: 10px;
-}
-#output a {
-  color: #ece759;
-}
-
-#controller {
-  background: #333333cc;
-  bottom: 0;
-  clear: left;
-  display: block;
-  left: 0;
-  padding: 0;
-  position: fixed;
-  width: 100%;
-}
-#controller table {
-  float: left;
-}
-#keyboard {
-  background: #222;
-  border-top: 2px solid #000;
-  bottom: 0;
-  color: #eee;
-  display: none;
-  height: 34px;
-  left: 0;
-  padding: 5px 0;
-  position: fixed;
-  width: 100%;
-}
-#keyboard label {
-  float: left;
-  padding-left: 8px;
-  position: relative;
-  top: 5px;
-}
-#keyboard input {
-  background: #222;
-  border: 0;
-  color: #eee;
-  float: left;
-  max-width: 100%;
-  outline: none;
-  padding: 5px;
-}
+  padding: 10px; }
+  #output a {
+    color: #ece759; }
 
 #stats {
   background: #3d083c;
@@ -114,8 +71,8 @@ button {
   left: 0;
   padding: 2px 0 6px 5px;
   position: fixed;
-  width: 100%;
-}
+  width: 100%; }
+
 #location {
   background: #2e0a2e;
   bottom: 143px;
@@ -123,23 +80,65 @@ button {
   overflow: scroll;
   padding: 5px;
   position: fixed;
-  width: 100%;
-}
+  width: 100%; }
+
+/* mobile */
+#controller {
+  background: #333333cc;
+  bottom: 0;
+  clear: left;
+  display: block;
+  left: 0;
+  padding: 0;
+  position: fixed;
+  width: 100%; }
+  #controller table {
+    float: left; }
+
+/* desktop */
+#keyboard {
+  background: #222;
+  border-top: 2px solid #000;
+  bottom: 0;
+  color: #eee;
+  display: none;
+  height: 34px;
+  left: 0;
+  padding: 5px 0;
+  position: fixed;
+  width: 100%; }
+  #keyboard label {
+    float: left;
+    padding-left: 8px;
+    position: relative;
+    top: 5px; }
+  #keyboard input {
+    background: #222;
+    border: 0;
+    color: #eee;
+    float: left;
+    max-width: 100%;
+    outline: none;
+    padding: 5px; }
 
 @media (min-width: 426px) {
   body,
   input {
     font-size: 20px;
   }
+
   #controller {
     display: none;
   }
+
   #keyboard {
     display: block;
   }
+
   #stats {
     bottom: 81px;
   }
+
   #location {
     bottom: 46px;
     height: 24px;
@@ -147,11 +146,13 @@ button {
 }
 
 .noun {
-  color: lightgreen;
+  color: #90ee90;
 }
+
 .keyword {
   color: #eecd90;
 }
+
 .command-previous {
   color: #666;
 }
