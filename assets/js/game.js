@@ -1,11 +1,12 @@
-﻿/* global $ */
-
-$(function () {
+﻿$(function () {
   let level = 1
   let xp = 0
   let rox = 0
   let hp = 10
   let loc = 'Inescapable Hole of Turbidity'
+  let player = {
+    'standingness': 'standing'
+  }
 
   // game screen shortcut variables
   const $display = $('#output')
@@ -27,6 +28,7 @@ $(function () {
 
   function out(text, lb) {
     let $content_to_display = text
+
     if (!lb) {
       $content_to_display += '<br />'
     }
@@ -45,53 +47,59 @@ $(function () {
     $statsHP.text(hp)
   }
 
-  function processGameRound(command) {
-    switch (command) {
-    case 'N':
-      out(`You go <strong>north</strong> a bit. You are still in an inescapable hole.`)
-      break
-    case 'W':
-      out(`You go <strong>west</strong> a bit. You are still in an inescapable hole.`)
-      break
-    case 'S':
-      out(`You go <strong>south</strong> a bit. You are still in an inescapable hole.`)
-      break
-    case 'E':
-      out(`You go <strong>east</strong> a bit. You are still in an inescapable hole.`)
-      break
-    case 'P':
-      out(`You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`)
-      break
-    case 'A':
-      out(`<strong>Gem Warrior (Web)</strong> was programmed by <a href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity.`)
-      break
-    case 'I':
-      out('You have the <span class="noun">clothes on your back</span>, a <span class="noun">broken flashlight</span>, a <span class="noun">candlestick holder</span>, and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".')
-      break
-    case '?':
-      out(`HELP: The following actions are valid: <span class="keyword">(N)orth (W)est (S)outh (E)ast (P)ickup (A)about (I)nventory (?)uestion Point</span>`)
-      break
-    }
-  }
-
   // process the user command input
   function evaluator(command) {
-
-    switch (command) {
+    switch (command.toLowerCase()) {
+    case 'character':
+    case 'char':
+    case 'c':
+      return `You assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.<br />
+      <p>You are <strong>${player.standingness}</strong>.</p>
+      You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
     case 'look':
     case 'l':
       return `You look around the <span class='noun'>${loc}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
+    case 'si':
+    case 'sit':
+      if (player.standingness === 'sitting') {
+        return `You are already ${player.standingness}.`
+      } else {
+        player.standingness = 'sitting'
+        return 'You sit down.'
+      }
+    case 'st':
+    case 'stand':
+      if (player.standingness === 'standing') {
+        return `You are already ${player.standingness}.`
+      } else {
+        player.standingness = 'standing'
+        return 'You stand up.'
+      }
     case 'go':
     case 'g':
       return `You go somewhere else inescapable in the <span class='noun'>${loc}</span>.`
+    case 'n':
+      return `You go <strong>north</strong> a bit. You are still in an inescapable hole.`
+    case 'w':
+      return `You go <strong>west</strong> a bit. You are still in an inescapable hole.`
+    case 's':
+      return `You go <strong>south</strong> a bit. You are still in an inescapable hole.`
+    case 'e':
+      return `You go <strong>east</strong> a bit. You are still in an inescapable hole.`
     case 'inventory':
     case 'inven':
     case 'i':
       return 'You have the <span class="noun">clothes on your back</span>, a <span class="noun">broken flashlight</span>, a <span class="noun">candlestick holder</span>, and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
+    case 'pickup':
+    case 'p':
+      return `You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
+    case 'about':
+    case 'a':
+      return `<strong>Gem Warrior (Web)</strong> was programmed by <a href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity.`
     case '?':
     case 'h':
     case 'help':
-      return 'HELP: The following commands are valid: <span class="keyword">(l)ook (g)o (h)elp (i)nventory</span>'
+      return 'HELP: The following commands are valid: <span class="keyword">(c)haracter (l)ook (p)ickup (i)nventory (si)t (st)and (h)elp (a)bout</span>'
     default:
       return 'That command isn\'t recognized. Type "help" for valid commands'
     }
@@ -101,7 +109,7 @@ $(function () {
     $('#controller button').click(function (event) {
       const command = event.target.dataset.command
       out(`<span class="command-previous">&gt; ${command}`)
-      processGameRound(command)
+      out(evaluator(command))
     })
 
     $('#input form').submit(function (e) {
