@@ -95,7 +95,7 @@
       return `You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
     case 'about':
     case 'a':
-      return `<strong>Gem Warrior (Web)</strong> was programmed by <a href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity.`
+      return `<strong>Gem Warrior (Web)</strong> was programmed by <a href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a href='https://github.com/michaelchadwick/gemwarrior'>Gem Warrior</a>, a Ruby gem (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.") <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
     case '?':
     case 'h':
     case 'help':
