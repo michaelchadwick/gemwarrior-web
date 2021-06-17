@@ -1,0 +1,256 @@
+// colors
+$black: #111111;
+$gray-light: #eeeeee;
+$white: #fcfcfc;
+// elements
+$box-shadow: #333333;
+$button-bg: #eff1d1;
+$link-color: #fffca3;
+// sections
+$heading-bg: #444444;
+$heading-bottom: #f4f085;
+$heading-main: #f4f085;
+$heading-sub: #dabd2f;
+$stats-bg: #3d083c;
+$stats-color: #deaddd;
+
+
+html {
+  -webkit-text-size-adjust: none;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: $black;
+  color: $gray-light;
+  margin: 0;
+  padding: 0;
+}
+
+body,
+input {
+  font-family: Lucida Console, monospace;
+  font-size: 16px;
+}
+
+button {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  background: $button-bg;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: .375rem .75rem;
+  text-align: center;
+  transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, color .15s ease-in-out;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#heading {
+  background: $heading-bg;
+  border-bottom: 1px solid $heading-bottom;
+  box-shadow: -3px 1px 15px $box-shadow;
+  height: 20px;
+  margin-bottom: 0;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  .main {
+    color: $heading-main;
+    font-size: 1.3em;
+  }
+
+  .sub {
+    color: $heading-sub;
+    font-size: 1.3em;
+  }
+}
+
+#output {
+  height: 100%;
+  margin-bottom: 200px;
+  margin-top: 40px;
+  overflow-y: scroll;
+  padding: 10px;
+
+  a {
+    color: darken($link-color, 5%);
+    text-decoration: none;
+    text-shadow: unset;
+    transition: all 0.2s ease;
+
+    &.glow-repeat {
+      animation: glow-pulse 1.5s ease-in-out infinite alternate;
+    }
+
+    &.glow-up {
+      animation: glow-up 0.5s ease-in-out infinite;
+    }
+
+    &.glow-transition {
+      &:hover {
+        color: $stats-color;
+        text-shadow:
+          0 0 5px $stats-bg,
+          0 0 10px $stats-color,
+          0 0 40px $stats-color;
+      }
+    }
+  }
+
+  @keyframes glow-pulse {
+    100% {
+      text-shadow:
+        0 0 4px $white,
+        0 0 11px $white,
+        0 0 19px $white,
+        0 0 40px $white,
+        0 0 80px darken($white, 5%),
+        0 0 90px darken($white, 5%),
+        0 0 100px darken($white, 5%),
+        0 0 150px darken($white, 5%);
+    }
+    0% {
+      text-shadow:
+        0 0 4px $white,
+        0 0 10px $white,
+        0 0 18px $white,
+        0 0 38px $white,
+        0 0 73px darken($white, 5%),
+        0 0 80px darken($white, 5%),
+        0 0 94px darken($white, 5%),
+        0 0 140px darken($white, 5%);
+    }
+  }
+
+  @keyframes glow-up {
+    0% {
+      text-shadow: 0 0 1px $white
+    }
+    100% {
+      text-shadow: 0 0 10px $white
+    }
+  }
+}
+
+@media screen and (prefers-reduced-motion) {
+  #output {
+    a {
+      animation: none;
+    }
+  }
+}
+
+#stats {
+  background: $stats-bg;
+  bottom: 163px;
+  clear: left;
+  color: $stats-color;
+  height: 20px;
+  left: 0;
+  padding: 2px 0 6px 5px;
+  position: fixed;
+  width: 100%;
+}
+
+#location {
+  background: #2e0a2e;
+  bottom: 143px;
+  height: 17px;
+  overflow: scroll;
+  padding: 5px;
+  position: fixed;
+  width: 100%;
+}
+
+// mobile
+#controller {
+  background: #333333cc;
+  bottom: 0;
+  clear: left;
+  display: block;
+  left: 0;
+  padding: 0;
+  position: fixed;
+  width: 100%;
+
+  table {
+    float: left;
+  }
+}
+
+// desktop
+#keyboard {
+  background: #222;
+  border-top: 2px solid $black;
+  bottom: 0;
+  color: #eee;
+  display: none;
+  height: 34px;
+  left: 0;
+  padding: 5px 0;
+  position: fixed;
+  width: 100%;
+
+  label {
+    float: left;
+    padding-left: 8px;
+    position: relative;
+    top: 5px;
+  }
+
+  input {
+    background: #222222;
+    border: 0;
+    color: $gray-light;
+    float: left;
+    max-width: 100%;
+    outline: none;
+    padding: 5px;
+  }
+}
+
+@media (min-width: 426px) {
+  body,
+  input {
+    font-size: 20px;
+  }
+
+  #controller {
+    display: none;
+  }
+
+  #keyboard {
+    display: block;
+  }
+
+  #stats {
+    bottom: 81px;
+  }
+
+  #location {
+    bottom: 46px;
+    height: 24px;
+  }
+}
+
+.noun {
+  color: #90ee90;
+}
+
+.keyword {
+  color: #eecd90;
+}
+
+.command-previous {
+  color: #666666;
+}
