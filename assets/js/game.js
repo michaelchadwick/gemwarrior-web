@@ -7,6 +7,7 @@
   let player = {
     'standingness': 'standing'
   }
+  let blinker = null
 
   // game screen shortcut variables
   const $display = $('#output')
@@ -171,10 +172,36 @@
 
   function _playerStand() {
     _getAvatarDisplay('standing')
+    _playerBlink()
   }
 
   function _playerSit() {
     _getAvatarDisplay('sitting')
+    _playerBlink()
+  }
+
+  function _playerBlink() {
+    clearInterval(blinker)
+
+    if (player.standingness === 'standing') {
+      blinker = setInterval(() => {
+        _getAvatarDisplay('standing-blink')
+        setTimeout(() => _getAvatarDisplay('standing'), 100)
+      }, _getBlinkFreq())
+    }
+    else if (player.standingness === 'sitting') {
+      blinker = setInterval(() => {
+        _getAvatarDisplay('sitting-blink')
+        setTimeout(() => _getAvatarDisplay('sitting'), 100)
+      }, _getBlinkFreq())
+    }
+  }
+
+  function _getBlinkFreq() {
+    var min = 2000
+    var max = 10000
+
+    return Math.floor(Math.random() * (max - min + 1) + min)
   }
 
   function _welcome() {
