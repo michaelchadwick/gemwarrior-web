@@ -247,7 +247,7 @@
     out('************************')
     out('Welcome to Gem Warrior!')
     out('')
-    out('Type "help" for commands')
+    out('Try "help" if stuck')
     out('')
     out('<strong>Good luck...</strong>')
     out('************************')
