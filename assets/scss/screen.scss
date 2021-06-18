@@ -75,7 +75,7 @@ button {
   background: $heading-bg;
   border-bottom: 1px solid $heading-bottom;
   box-shadow: -3px 1px 15px $box-shadow;
-  height: 20px;
+  height: 14px;
   margin-bottom: 0;
   padding: 10px;
   position: fixed;
@@ -91,11 +91,23 @@ button {
     color: $heading-sub;
     font-size: 1.3em;
   }
+
+  button {
+    &.help {
+      background: $heading-bottom;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.75rem;
+      position: relative;
+      top: -5px;
+    }
+  }
 }
 
 #output {
   height: 100%;
-  margin-bottom: 200px;
+  margin-bottom: 105px;
   margin-top: 40px;
   overflow-y: scroll;
   padding: 10px;
@@ -283,6 +295,16 @@ button {
   body,
   input {
     font-size: 20px;
+  }
+
+  #heading {
+    height: 20px;
+
+    button {
+      &.help {
+        display: none;
+      }
+    }
   }
 
   #controller {

@@ -108,15 +108,17 @@
       case '?':
       case 'h':
       case 'help':
-        return 'HELP: The following commands are valid: <span class="keyword">(c)haracter (l)ook (p)ickup (i)nventory (si)t (st)and (sl)eep (h)elp (a)bout</span>'
+        var commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
+        return `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
       default:
-        return 'That command isn\'t recognized. Type "help" for valid commands'
+        return 'That command isn\'t recognized. Type "help" for valid commands.'
       }
   }
 
   function _applyEventHandlers() {
-    $('#controller button').click(function (event) {
+    $('button').click(function (event) {
       const command = event.target.dataset.command
+      out('')
       out(`<span class="command-previous">&gt; ${command}`)
       out(evaluator(command))
     })
@@ -126,6 +128,7 @@
 
       const input = $('#userInput').val().toLowerCase()
 
+      out('')
       out(`<span class="command-previous">&gt; ${input}</span>`)
 
       const result = evaluator(input)
@@ -251,7 +254,6 @@
     out('')
     out('<strong>Good luck...</strong>')
     out('************************')
-    out('')
   }
 
   function _init() {
