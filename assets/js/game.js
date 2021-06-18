@@ -144,22 +144,37 @@
     }, false)
   }
 
+  function _getAvatarDisplay(status) {
+    switch (status) {
+      case 'standing':
+        $.get('../assets/data/player-standing.txt', (data) => {
+          $('#avatar').html(data).wrap('<pre>')
+        })
+        break
+      case 'standing-blink':
+        $.get('../assets/data/player-standing-blink.txt', (data) => {
+          $('#avatar').html(data).wrap('<pre>')
+        })
+        break
+      case 'sitting':
+        $.get('../assets/data/player-sitting.txt', (data) => {
+          $('#avatar').html(data).wrap('<pre>')
+        })
+        break
+      case 'sitting-blink':
+        $.get('../assets/data/player-sitting-blink.txt', (data) => {
+          $('#avatar').html(data).wrap('<pre>')
+        })
+        break
+    }
+  }
+
   function _playerStand() {
-    $.get('../assets/data/player-stand.txt', (data) => {
-      $('#avatar').html(data).wrap('<pre>')
-    })
-      .fail((e) => {
-        console.log('could not stand', e)
-      })
+    _getAvatarDisplay('standing')
   }
 
   function _playerSit() {
-    $.get('../assets/data/player-sit.txt', (data) => {
-      $('#avatar').html(data).wrap('<pre>')
-    })
-      .fail((e) => {
-        console.log('could not sit', e)
-      })
+    _getAvatarDisplay('sitting')
   }
 
   function _welcome() {
