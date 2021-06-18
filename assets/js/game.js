@@ -247,8 +247,7 @@
     out('************************')
     out('Welcome to Gem Warrior!')
     out('')
-    out('* Stats, location, and command line at the bottom')
-    out('* Type "help" for command list')
+    out('Type "help" for commands')
     out('')
     out('<strong>Good luck...</strong>')
     out('************************')
@@ -263,8 +262,6 @@
     _welcome()
 
     _playerStand()
-
-    repl(evaluator('about'))
   }
 
   // on load, set things up
