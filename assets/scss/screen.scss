@@ -179,19 +179,16 @@ button {
 }
 
 #avatar {
-  background: transparent;
-  bottom: 100px;
+  bottom: 44px;
   color: $white;
-  display: none;
   font-family: 'Lucida Console', monospace;
   font-size: 10px;
-  height: 100px;
+  height: 145px;
+  width: 55px;
   margin: 0;
   padding: 0;
   position: fixed;
-  right: 80px;
-  white-space: pre;
-  width: 70px;
+  right: 20px;
   z-index: 1;
 }
 
