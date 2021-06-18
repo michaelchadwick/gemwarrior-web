@@ -155,37 +155,37 @@
     switch (status) {
       case 'standing':
         $.get('../assets/data/player-standing.txt', (data) => {
-          $('#avatar').html(data).wrap('<pre>')
+          $('#avatar').html(data)
         })
         break
       case 'standing-blink':
         $.get('../assets/data/player-standing-blink.txt', (data) => {
-          $('#avatar').html(data).wrap('<pre>')
+          $('#avatar').html(data)
         })
         break
       case 'sitting':
         $.get('../assets/data/player-sitting.txt', (data) => {
-          $('#avatar').html(data).wrap('<pre>')
+          $('#avatar').html(data)
         })
         break
       case 'sitting-blink':
         $.get('../assets/data/player-sitting-blink.txt', (data) => {
-          $('#avatar').html(data).wrap('<pre>')
+          $('#avatar').html(data)
         })
         break
       case 'reclining1':
         $.get('../assets/data/player-reclining1.txt', (data) => {
-          $('#avatar').html(data).wrap('<pre>')
+          $('#avatar').html(data)
         })
         break
       case 'reclining2':
         $.get('../assets/data/player-reclining2.txt', (data) => {
-          $('#avatar').html(data).wrap('<pre>')
+          $('#avatar').html(data)
         })
         break
       case 'reclining3':
         $.get('../assets/data/player-reclining3.txt', (data) => {
-          $('#avatar').html(data).wrap('<pre>')
+          $('#avatar').html(data)
         })
         break
     }
