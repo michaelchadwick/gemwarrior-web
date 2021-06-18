@@ -244,14 +244,14 @@
   }
 
   function _welcome() {
-    out('*************************************************')
+    out('************************')
     out('Welcome to Gem Warrior!')
     out('')
     out('* Stats, location, and command line at the bottom')
     out('* Type "help" for command list')
     out('')
     out('<strong>Good luck...</strong>')
-    out('*************************************************')
+    out('************************')
     out('')
   }
 
