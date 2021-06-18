@@ -21,7 +21,8 @@ html {
 }
 
 body {
-  background: $black;
+  background: repeating-linear-gradient(45deg, #2b2b2b 0%, #2b2b2b 10%, #222222 0%, #222222 50%) 0 / 15px 15px;
+  background-color: $black;
   color: $gray-light;
   margin: 0;
   padding: 0;

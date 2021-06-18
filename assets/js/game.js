@@ -8,6 +8,7 @@
     'standingness': 'standing'
   }
   let blinker = null
+  let sleeper = null
 
   // game screen shortcut variables
   const $display = $('#output')
@@ -78,6 +79,11 @@
           _playerStand()
           return 'You stand up.'
         }
+      case 'sl':
+      case 'sleep':
+        player.standingness = 'reclining'
+        _playerRecline()
+        return 'You lie down to rest.'
       case 'go':
       case 'g':
         return `You go somewhere else inescapable in the <span class='noun'>${loc}</span>.`
@@ -102,7 +108,7 @@
       case '?':
       case 'h':
       case 'help':
-        return 'HELP: The following commands are valid: <span class="keyword">(c)haracter (l)ook (p)ickup (i)nventory (si)t (st)and (h)elp (a)bout</span>'
+        return 'HELP: The following commands are valid: <span class="keyword">(c)haracter (l)ook (p)ickup (i)nventory (si)t (st)and (sl)eep (h)elp (a)bout</span>'
       default:
         return 'That command isn\'t recognized. Type "help" for valid commands'
       }
@@ -167,17 +173,50 @@
           $('#avatar').html(data).wrap('<pre>')
         })
         break
+      case 'reclining1':
+        $.get('../assets/data/player-reclining1.txt', (data) => {
+          $('#avatar').html(data).wrap('<pre>')
+        })
+        break
+      case 'reclining2':
+        $.get('../assets/data/player-reclining2.txt', (data) => {
+          $('#avatar').html(data).wrap('<pre>')
+        })
+        break
+      case 'reclining3':
+        $.get('../assets/data/player-reclining3.txt', (data) => {
+          $('#avatar').html(data).wrap('<pre>')
+        })
+        break
     }
   }
 
   function _playerStand() {
+    player.standingness = 'standing'
     _getAvatarDisplay('standing')
     _playerBlink()
   }
 
   function _playerSit() {
+    player.standingness = 'sitting'
     _getAvatarDisplay('sitting')
     _playerBlink()
+  }
+
+  function _playerRecline() {
+    reclineTimer = null
+
+    if (player.standingness === 'reclining') {
+      clearInterval(blinker)
+      _getAvatarDisplay('reclining1')
+      reclineTimer = setTimeout(() => {
+        _getAvatarDisplay('reclining2')
+        setTimeout(() => {
+          _getAvatarDisplay('reclining3')
+          setTimeout(() => _playerRecline(), 1000)
+        }, 1000)
+      }, 1000)
+    }
   }
 
   function _playerBlink() {
@@ -199,7 +238,7 @@
 
   function _getBlinkFreq() {
     var min = 2000
-    var max = 10000
+    var max = 20000
 
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
