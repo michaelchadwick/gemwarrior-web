@@ -6,6 +6,10 @@ task :deploy do |t|
 end
 
 task :sass do |t|
+  sh "sass assets/scss/screen.scss:assets/css/screen.css"
+end
+
+task :sassw do |t|
   sh "sass --watch assets/scss/screen.scss:assets/css/screen.css"
 end
 
