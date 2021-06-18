@@ -200,13 +200,13 @@
     if (player.standingness === 'standing') {
       blinker = setInterval(() => {
         _getAvatarDisplay('standing-blink')
-        setTimeout(() => _getAvatarDisplay('standing'), 100)
+        setTimeout(() => _getAvatarDisplay('standing'), _getBlinkSpeed())
       }, _getBlinkFreq())
     }
     else if (player.standingness === 'sitting') {
       blinker = setInterval(() => {
         _getAvatarDisplay('sitting-blink')
-        setTimeout(() => _getAvatarDisplay('sitting'), 100)
+        setTimeout(() => _getAvatarDisplay('sitting'), _getBlinkSpeed())
       }, _getBlinkFreq())
     }
   }
@@ -214,6 +214,13 @@
   function _getBlinkFreq() {
     var min = 2000
     var max = 20000
+
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
+  function _getBlinkSpeed() {
+    var min = 100
+    var max = 600
 
     return Math.floor(Math.random() * (max - min + 1) + min)
   }
