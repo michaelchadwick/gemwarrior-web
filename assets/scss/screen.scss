@@ -6,6 +6,7 @@ $white: #fcfcfc;
 $box-shadow: #333333;
 $button-bg: #eff1d1;
 $link-color: #fffca3;
+$prev-color: #7d7d7d;
 // sections
 $heading-bg: #444444;
 $heading-bottom: #f4f085;
@@ -42,15 +43,32 @@ button {
   border: 1px solid transparent;
   border-radius: 0.25rem;
   display: inline-block;
+  font-family: 'Lucida Console', monospace;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
+  margin-right: 5px;
   padding: 0.375rem 0.75rem;
   text-align: center;
-  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, color 0.15s ease-in-out;
+  text-transform: uppercase;
+  transition:
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
+    color 0.15s ease-in-out;
   user-select: none;
   vertical-align: middle;
   white-space: nowrap;
+
+  &:active,
+  &:focus {
+    filter: hue-rotate(-180deg) saturate(10);
+  }
+
+  &:hover {
+    cursor: pointer;
+    filter: hue-rotate(-180deg) saturate(5);
+  }
 }
 
 #heading {
@@ -154,29 +172,26 @@ button {
 
 #stats,
 #location {
+  height: 20px;
+  padding: 2px 0 6px 5px;
+  position: fixed;
+  width: 100%;
   z-index: 0;
 }
 
 #stats {
   background: $stats-bg;
-  bottom: 163px;
+  bottom: 78px;
   clear: left;
   color: $stats-color;
-  height: 20px;
   left: 0;
-  padding: 2px 0 6px 5px;
-  position: fixed;
-  width: 100%;
 }
 
 #location {
   background: #2e0a2e;
-  bottom: 143px;
+  bottom: 52px;
   height: 17px;
   overflow: scroll;
-  padding: 5px;
-  position: fixed;
-  width: 100%;
 }
 
 #avatar {
@@ -190,22 +205,40 @@ button {
   padding: 0;
   position: fixed;
   right: 20px;
+  white-space: break-spaces;
   z-index: 1;
 }
 
 // mobile
 #controller {
-  background: #333333cc;
+  background: #555555cc;
   bottom: 0;
   clear: left;
   display: block;
+  height: 35px;
   left: 0;
-  padding: 0;
+  padding: 5px 5px 10px;
   position: fixed;
   width: 100%;
 
-  table {
-    float: left;
+  #directions,
+  #commands {
+    height: 38px;
+  }
+
+  #directions {
+    display: inline-block;
+    position: relative;
+    width: 165px;
+  }
+
+  #commands {
+    background: #999999cc;
+    display: inline-block;
+    overflow-x: scroll;
+    position: absolute;
+    white-space: nowrap;
+    width: calc(100% - 175px);
   }
 }
 
@@ -261,7 +294,7 @@ button {
   }
 
   #stats {
-    bottom: 81px;
+    bottom: 80px;
   }
 
   #location {
@@ -279,5 +312,5 @@ button {
 }
 
 .command-previous {
-  color: #666666;
+  color: $prev-color;
 }
