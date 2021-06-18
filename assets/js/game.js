@@ -65,6 +65,7 @@
           return `You are already ${player.standingness}.`
         } else {
           player.standingness = 'sitting'
+          _playerSit()
           return 'You sit down.'
         }
       case 'st':
@@ -73,6 +74,7 @@
           return `You are already ${player.standingness}.`
         } else {
           player.standingness = 'standing'
+          _playerStand()
           return 'You stand up.'
         }
       case 'go':
@@ -142,6 +144,24 @@
     }, false)
   }
 
+  function _playerStand() {
+    $.get('../assets/data/player-stand.txt', (data) => {
+      $('#avatar').html(data).wrap('<pre>')
+    })
+      .fail((e) => {
+        console.log('could not stand', e)
+      })
+  }
+
+  function _playerSit() {
+    $.get('../assets/data/player-sit.txt', (data) => {
+      $('#avatar').html(data).wrap('<pre>')
+    })
+      .fail((e) => {
+        console.log('could not sit', e)
+      })
+  }
+
   function _welcome() {
     out('*************************************************')
     out('Welcome to Gem Warrior!')
@@ -160,6 +180,8 @@
     updateStatus(level, xp, rox, loc, hp)
 
     _welcome()
+
+    _playerStand()
 
     repl(evaluator('about'))
   }
