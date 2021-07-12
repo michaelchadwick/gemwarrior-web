@@ -3,12 +3,21 @@
   let xp = 0
   let rox = 0
   let hp = 10
-  let loc = 'Inescapable Hole of Turbidity'
-  let commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
-  let player = {
-    'standingness': 'standing'
-  }
   let blinker = null
+  let player = {
+    'standingness': 'standing',
+    'inventory': [
+      'broken flashlight',
+      'candlestick holder'
+    ]
+  }
+  let text
+
+  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
+  const loc = {
+    'title': 'Inescapable Hole of Turbidity',
+    'objects': ['rock']
+  }
 
   // game screen shortcut variables
   const $display = $('#output')
@@ -45,7 +54,7 @@
     $statsLV.text(level)
     $statsXP.text(xp)
     $statsROX.text(rox)
-    $statsLOC.text(loc)
+    $statsLOC.text(loc.title)
     $statsHP.text(hp)
   }
 
@@ -60,7 +69,15 @@
         You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
       case 'look':
       case 'l':
-        return `You look around the <span class='noun'>${loc}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
+        text = `You look around the <span class='noun'>${loc.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
+
+        if (loc.objects.length > 0) {
+          text += '<br /><br />'
+
+          text += `There are things to pick up here: <span class="noun">${loc.objects}</span>`
+        }
+
+        return text
       case 'si':
       case 'sit':
         if (player.standingness === 'sitting') {
@@ -86,7 +103,7 @@
         return 'You lie down to rest.'
       case 'go':
       case 'g':
-        return `You go somewhere else inescapable in the <span class='noun'>${loc}</span>.`
+        return `You go somewhere else inescapable in the <span class='noun'>${loc.title}</span>.`
       case 'n':
         return `You go <strong>north</strong> a bit. You are still in an inescapable hole.`
       case 'w':
@@ -99,14 +116,35 @@
       case 'inven':
       case 'i':
         if (rox === 1) {
-          roxCount = ' <strong>1 piece</strong> of rox, '
+          roxCount = ' <strong>1</strong> rock'
         } else {
           roxCount = ` <strong>${rox}</strong> rox`
         }
-        return `You have the <span class="noun">clothes on your back</span>, a <span class="noun">broken flashlight</span>, a <span class="noun">candlestick holder</span>, <span class="noun">${roxCount}</span> and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".`
+
+        playerInv = ''
+        player.inventory.forEach((thing) => {
+          playerInv += `<span class="noun">a ${thing}</span>, `
+        })
+
+        if (player.inventory.length !== 0) {
+          text = `You have the clothes on your back, ${playerInv} <span class="noun">${roxCount}</span>, and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".`
+        } else {
+          text = `You have nothing on your person except the clothes on your back and ${roxCount}`
+        }
+
+        return text
       case 'pickup':
       case 'p':
-        return `You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
+        if (loc.objects.includes('rock')) {
+          text = 'You pick up a rock.'
+          loc.objects = []
+          rox++
+
+        } else {
+          text = `You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
+        }
+
+        return text
       case 'about':
       case 'a':
         return `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior'>Gem Warrior</a>, a Ruby gem (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.") <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
