@@ -190,7 +190,7 @@ rules:
   max-statements-per-line: 0
   max-statements:
     - error
-    - 30
+    - 100
   multiline-ternary: 0
   new-cap: 0
   new-parens: 0
