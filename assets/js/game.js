@@ -1,7 +1,7 @@
 ﻿$(function () {
   let level = 1
   let xp = 0
-  let rox = 0
+  let rox = 2
   let hp = 10
   let blinker = null
   let player = {
@@ -13,7 +13,7 @@
   }
   let text
 
-  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
+  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
   const loc = {
     'title': 'Inescapable Hole of Turbidity',
     'objects': ['rock']
@@ -74,7 +74,7 @@
         if (loc.objects.length > 0) {
           text += '<br /><br />'
 
-          text += `There are things to pick up here: <span class="noun">${loc.objects}</span>`
+          text += `There are things to pick up here: <span class="noun">${loc.objects.join(', ')}</span>`
         }
 
         return text
@@ -137,11 +137,24 @@
       case 'p':
         if (loc.objects.includes('rock')) {
           text = 'You pick up a rock.'
-          loc.objects = []
+          loc.objects.splice(loc.objects.indexOf('rock'), 1)
           rox++
 
         } else {
           text = `You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
+        }
+
+        return text
+      case 'throw':
+      case 'th':
+        if (rox > 0) {
+          rox--
+
+          loc.objects.push('rock')
+
+          text = 'You throw a rock on the ground, because that is definitely a productive move.'
+        } else {
+          text = 'You have no rox to throw, so your hand just makes the motion with no effect, sadly.'
         }
 
         return text
