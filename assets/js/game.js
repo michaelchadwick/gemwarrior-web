@@ -60,7 +60,12 @@
 
   // process the user command input
   function evaluator(command) {
-    switch (command.toLowerCase()) {
+    let cmds = command.split(' ')
+
+    let verb = cmds[0].toLowerCase()
+    let obj = cmds[1] ? cmds[1].toLowerCase() : null
+
+    switch (verb) {
       case 'character':
       case 'char':
       case 'c':
@@ -135,13 +140,16 @@
         return text
       case 'pickup':
       case 'p':
-        if (loc.objects.includes('rock')) {
-          text = 'You pick up a rock.'
-          loc.objects.splice(loc.objects.indexOf('rock'), 1)
-          rox++
-
+        if (obj) {
+          if (obj === 'rock' && loc.objects.includes('rock')) {
+            text = 'You pick up a <span class="noun">rock</span>.'
+            loc.objects.splice(loc.objects.indexOf('rock'), 1)
+            rox++
+          } else {
+            text = 'That object is not present, so picking it up is going to be difficult.'
+          }
         } else {
-          text = `You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
+          text = `Since you did not indicate <strong>what</strong> to pick up, you bend down momentarily and attempt to pick up some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
         }
 
         return text
@@ -152,15 +160,17 @@
 
           loc.objects.push('rock')
 
-          text = 'You throw a rock on the ground, because that is definitely a productive move.'
+          text = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
         } else {
-          text = 'You have no rox to throw, so your hand just makes the motion with no effect, sadly.'
+          text = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
         }
 
         return text
       case 'about':
       case 'a':
-        return `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior'>Gem Warrior</a>, a Ruby gem (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.") <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
+        return `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior'>Gem Warrior</a>, a Ruby gem (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")
+
+        <p><em><strong>Narrator</strong>: It actually wasn't very portable at all.</em></p>`
       case '?':
       case 'h':
       case 'help':
