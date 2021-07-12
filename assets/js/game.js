@@ -4,6 +4,7 @@
   let rox = 0
   let hp = 10
   let loc = 'Inescapable Hole of Turbidity'
+  let commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
   let player = {
     'standingness': 'standing'
   }
@@ -97,7 +98,12 @@
       case 'inventory':
       case 'inven':
       case 'i':
-        return 'You have the <span class="noun">clothes on your back</span>, a <span class="noun">broken flashlight</span>, a <span class="noun">candlestick holder</span>, and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
+        if (rox === 1) {
+          roxCount = ' <strong>1 piece</strong> of rox, '
+        } else {
+          roxCount = ` <strong>${rox}</strong> rox`
+        }
+        return `You have the <span class="noun">clothes on your back</span>, a <span class="noun">broken flashlight</span>, a <span class="noun">candlestick holder</span>, <span class="noun">${roxCount}</span> and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".`
       case 'pickup':
       case 'p':
         return `You bend down momentarily and attempt to <strong>pick up</strong> some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
@@ -107,7 +113,6 @@
       case '?':
       case 'h':
       case 'help':
-        var commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
         return `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
       default:
         return 'That command isn\'t recognized. Type "help" for valid commands.'
