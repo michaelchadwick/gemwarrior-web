@@ -11,9 +11,10 @@
     ]
   }
   let blinker = null
+  let history = []
   let text
 
-  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
+  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(hist)ory', '(a)bout']
   const loc = {
     'title': 'Inescapable Hole of Turbidity',
     'objects': ['rock']
@@ -60,6 +61,8 @@
 
   // process the user command input
   function evaluator(command) {
+    history.push(command)
+
     let cmds = command.split(' ')
 
     let verb = cmds[0].toLowerCase()
@@ -171,13 +174,16 @@
         return `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior'>Gem Warrior</a>, a Ruby gem (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")
 
         <p><em><strong>Narrator</strong>: It actually wasn't very portable at all.</em></p>`
+      case 'hist':
+      case 'history':
+        return _getHistoryDisplay()
       case '?':
       case 'h':
       case 'help':
         return `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
       default:
         return 'That command isn\'t recognized. Type "help" for valid commands.'
-      }
+    }
   }
 
   function _applyEventHandlers() {
@@ -188,17 +194,22 @@
       out(evaluator(command))
     })
 
+    // catch the command bar form
     $('#input form').submit(function (e) {
       e.preventDefault()
 
-      const input = $('#userInput').val().toLowerCase()
+      const input = $('#userInput').val()
 
+      // show last entered command
       out('')
       out(`<span class="command-previous">&gt; ${input}</span>`)
 
+      // evaluate command
       const result = evaluator(input)
-      $('#userInput').val('')
       repl(result)
+
+      // clear command bar
+      $('#userInput').val('')
     })
 
     // jquery command to force the textbox to take focus
@@ -230,6 +241,11 @@
         $('#avatar').html(response.data)
       }
     }
+  }
+
+  // get a filtered list of the player's command history
+  function _getHistoryDisplay() {
+    return `<strong>Command history</strong>: ${history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
   }
 
   function _playerStand() {
