@@ -72,9 +72,11 @@
       case 'character':
       case 'char':
       case 'c':
-        return `You assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.<br />
+        text = `You assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.<br />
         <p>You are <strong>${player.status}</strong>.</p>
         You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
+
+        break
       case 'look':
       case 'l':
         text = `You look around the <span class='noun'>${loc.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
@@ -85,41 +87,61 @@
           text += `There are things to pick up here: <span class="noun">${loc.objects.join(', ')}</span>`
         }
 
-        return text
-      case 'si':
+        break
       case 'sit':
+      case 'si':
         if (player.status === 'sitting') {
-          return `You are already ${player.status}.`
+          text = `You are already ${player.status}.`
         } else {
           player.status = 'sitting'
           _playerSit()
-          return 'You sit down.'
+          text = 'You sit down.'
         }
-      case 'st':
+
+        break
       case 'stand':
+      case 'st':
         if (player.status === 'standing') {
-          return `You are already ${player.status}.`
+          text = `You are already ${player.status}.`
         } else {
           player.status = 'standing'
           _playerStand()
-          return 'You stand up.'
+          text = 'You stand up.'
         }
-      case 'sl':
+
+        break
       case 'sleep':
+      case 'sl':
         player.status = 'reclining'
         _playerRecline()
-        return 'You lie down to rest.'
+
+        text = 'You lie down to rest.'
+
+        break
       case 'go':
       case 'g':
-        return `You go somewhere else inescapable in the <span class='noun'>${loc.title}</span>.`
+        text = `You go somewhere else inescapable in the <span class='noun'>${loc.title}</span>.`
+
+        break
+      case 'north':
       case 'n':
-        return `You go <strong>north</strong> a bit. You are still in an inescapable hole.`
+        text = `You go <strong>north</strong> a bit. You are still in an inescapable hole.`
+
+        break
+      case 'west':
       case 'w':
-        return `You go <strong>west</strong> a bit. You are still in an inescapable hole.`
+        text = `You go <strong>west</strong> a bit. You are still in an inescapable hole.`
+
+        break
+      case 'south':
       case 's':
-        return `You go <strong>south</strong> a bit. You are still in an inescapable hole.`
+        text = `You go <strong>south</strong> a bit. You are still in an inescapable hole.`
+
+        break
+      case 'east':
       case 'e':
-        return `You go <strong>east</strong> a bit. You are still in an inescapable hole.`
+        text = `You go <strong>east</strong> a bit. You are still in an inescapable hole.`
+        break
       case 'inventory':
       case 'inven':
       case 'i':
@@ -140,12 +162,13 @@
           text = `You have nothing on your person except the clothes on your back and ${roxCount}`
         }
 
-        return text
+        break
       case 'pickup':
       case 'p':
         if (obj) {
           if (obj === 'rock' && loc.objects.includes('rock')) {
             text = 'You pick up a <span class="noun">rock</span>.'
+
             loc.objects.splice(loc.objects.indexOf('rock'), 1)
             player.rox++
           } else {
@@ -155,7 +178,7 @@
           text = `Since you did not indicate <strong>what</strong> to pick up, you bend down momentarily and attempt to pick up some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
         }
 
-        return text
+        break
       case 'throw':
       case 'th':
         if (player.rox > 0) {
@@ -168,25 +191,36 @@
           text = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
         }
 
-        return text
+        break
       case 'about':
       case 'a':
-        return `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior'>Gem Warrior</a>, a Ruby gem (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")
+        text = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior'>Gem Warrior</a>, a Ruby gem (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")
 
         <p><em><strong>Narrator</strong>: It actually wasn't very portable at all.</em></p>`
-      case 'hist':
+
+        break
       case 'history':
-        return _getHistoryDisplay()
-      case '?':
-      case 'h':
+      case 'hist':
+        text = _getHistoryDisplay()
+
+        break
       case 'help':
-        return `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
+      case 'h':
+      case '?':
+        text = `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
+
+        break
       default:
-        return 'That command isn\'t recognized. Type "help" for valid commands.'
+        text = 'That command isn\'t recognized. Type "help" for valid commands.'
+
+        break
     }
+
+    return text
   }
 
   function _applyEventHandlers() {
+    // catch the mobile buttons form
     $('button').click(function (event) {
       const command = event.target.dataset.command
       out('')
