@@ -33,7 +33,7 @@
   // print result of user command
 
   function repl(result) {
-    updateStatus(player.level, player.xp, player.rox, loc, player.hp)
+    updateStatus(player.level, player.xp, player.hp, player.rox, loc)
     out(result)
   }
 
@@ -120,10 +120,10 @@
       case 'inventory':
       case 'inven':
       case 'i':
-        if (rox === 1) {
+        if (player.rox === 1) {
           roxCount = ' <strong>1</strong> rock'
         } else {
-          roxCount = ` <strong>${rox}</strong> rox`
+          roxCount = ` <strong>${player.rox}</strong> rox`
         }
 
         playerInv = ''
@@ -144,7 +144,7 @@
           if (obj === 'rock' && loc.objects.includes('rock')) {
             text = 'You pick up a <span class="noun">rock</span>.'
             loc.objects.splice(loc.objects.indexOf('rock'), 1)
-            rox++
+            player.rox++
           } else {
             text = 'That object is not present, so picking it up is going to be difficult.'
           }
@@ -155,8 +155,8 @@
         return text
       case 'throw':
       case 'th':
-        if (rox > 0) {
-          rox--
+        if (player.rox > 0) {
+          player.rox--
 
           loc.objects.push('rock')
 
