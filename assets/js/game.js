@@ -12,7 +12,10 @@
   }
   let blinker = null
   let history = []
+  let historyMarker = 0
   let text
+
+  $cmd = $('#userInput')
 
   const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(hist)ory', '(a)bout']
   const loc = {
@@ -62,6 +65,7 @@
   // process the user command input
   function evaluator(command) {
     history.push(command)
+    historyMarker = history.length
 
     let cmds = command.split(' ')
 
@@ -219,6 +223,42 @@
     return text
   }
 
+  // replace the command bar's command with historic data if available
+  function _traverseHistory(key) {
+    const up = 38
+
+    if (history.length > 0) {
+      if (key === up) { // up, or "back", or "prev cmd"
+        if (historyMarker > 0) {
+          historyMarker--
+        }
+      } else { // down, or "forward", or "next most recent cmd"
+        if (historyMarker < history.length) {
+          historyMarker++
+        } else { // back to current untyped-as-of-yet command
+          $cmd.val()
+          historyMarker = history.length
+        }
+      }
+
+      // set command bar to historical value
+      $cmd.val(history[historyMarker])
+
+      // move cursor to end of value
+      var cmd = document.getElementById('userInput')
+
+      if (cmd.setSelectionRange) {
+        var len = $cmd.val().length * 2
+
+        setTimeout(function() {
+          cmd.setSelectionRange(len, len)
+        }, 1)
+      } else {
+        $cmd.val($cmd.val())
+      }
+    }
+  }
+
   function _applyEventHandlers() {
     // catch the mobile buttons form
     $('button').click(function (event) {
@@ -249,11 +289,21 @@
     // jquery command to force the textbox to take focus
     $('#userInput').focus()
 
-    // if we leave userInput, return after a second
+    // if we leave command bar form, return after a second
     $('*').on('mouseup', function() {
       setTimeout(function() {
         $('#userInput').focus()
       }, 1000)
+    })
+
+    // cycle through previous commands
+    $(document).on('keydown', function(event) {
+      const keyUp = 38
+      const keyDn = 40
+
+      if ([keyUp, keyDn].includes(event.keyCode)) {
+        _traverseHistory(event.keyCode)
+      }
     })
 
     $(document).on('touchmove', function(event) {
