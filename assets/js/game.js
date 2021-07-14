@@ -1,16 +1,16 @@
 ﻿$(function () {
-  let level = 1
-  let xp = 0
-  let rox = 2
-  let hp = 10
-  let blinker = null
   let player = {
-    'standingness': 'standing',
+    'level': 1,
+    'xp': 0,
+    'hp': 10,
+    'rox': 2,
+    'status': 'standing',
     'inventory': [
       'broken flashlight',
       'candlestick holder'
     ]
   }
+  let blinker = null
   let text
 
   const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(a)bout']
@@ -33,7 +33,7 @@
   // print result of user command
 
   function repl(result) {
-    updateStatus(level, xp, rox, loc, hp)
+    updateStatus(player.level, player.xp, player.rox, loc, player.hp)
     out(result)
   }
 
@@ -50,12 +50,12 @@
     }
   }
 
-  function updateStatus(level, xp, rox, loc, hp) {
+  function updateStatus(level, xp, hp, rox, loc) {
     $statsLV.text(level)
     $statsXP.text(xp)
+    $statsHP.text(hp)
     $statsROX.text(rox)
     $statsLOC.text(loc.title)
-    $statsHP.text(hp)
   }
 
   // process the user command input
@@ -70,7 +70,7 @@
       case 'char':
       case 'c':
         return `You assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.<br />
-        <p>You are <strong>${player.standingness}</strong>.</p>
+        <p>You are <strong>${player.status}</strong>.</p>
         You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
       case 'look':
       case 'l':
@@ -85,25 +85,25 @@
         return text
       case 'si':
       case 'sit':
-        if (player.standingness === 'sitting') {
-          return `You are already ${player.standingness}.`
+        if (player.status === 'sitting') {
+          return `You are already ${player.status}.`
         } else {
-          player.standingness = 'sitting'
+          player.status = 'sitting'
           _playerSit()
           return 'You sit down.'
         }
       case 'st':
       case 'stand':
-        if (player.standingness === 'standing') {
-          return `You are already ${player.standingness}.`
+        if (player.status === 'standing') {
+          return `You are already ${player.status}.`
         } else {
-          player.standingness = 'standing'
+          player.status = 'standing'
           _playerStand()
           return 'You stand up.'
         }
       case 'sl':
       case 'sleep':
-        player.standingness = 'reclining'
+        player.status = 'reclining'
         _playerRecline()
         return 'You lie down to rest.'
       case 'go':
@@ -233,13 +233,13 @@
   }
 
   function _playerStand() {
-    player.standingness = 'standing'
+    player.status = 'standing'
     _getAvatarDisplay('standing')
     _playerBlink()
   }
 
   function _playerSit() {
-    player.standingness = 'sitting'
+    player.status = 'sitting'
     _getAvatarDisplay('sitting')
     _playerBlink()
   }
@@ -247,7 +247,7 @@
   function _playerRecline() {
     reclineTimer = null
 
-    if (player.standingness === 'reclining') {
+    if (player.status === 'reclining') {
       clearInterval(blinker)
       _getAvatarDisplay('reclining1')
       reclineTimer = setTimeout(() => {
@@ -263,13 +263,13 @@
   function _playerBlink() {
     clearInterval(blinker)
 
-    if (player.standingness === 'standing') {
+    if (player.status === 'standing') {
       blinker = setInterval(() => {
         _getAvatarDisplay('standing-blink')
         setTimeout(() => _getAvatarDisplay('standing'), _getBlinkSpeed())
       }, _getBlinkFreq())
     }
-    else if (player.standingness === 'sitting') {
+    else if (player.status === 'sitting') {
       blinker = setInterval(() => {
         _getAvatarDisplay('sitting-blink')
         setTimeout(() => _getAvatarDisplay('sitting'), _getBlinkSpeed())
@@ -304,7 +304,7 @@
   function _init() {
     _applyEventHandlers()
 
-    updateStatus(level, xp, rox, loc, hp)
+    updateStatus(player.level, player.xp, player.hp, player.rox, loc)
 
     _welcome()
 
