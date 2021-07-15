@@ -17,11 +17,12 @@
 
   $cmd = $('#userInput')
 
-  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(hist)ory', '(a)bout']
+  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(pl)ay song', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(hist)ory', '(a)bout']
   const loc = {
     'title': 'Inescapable Hole of Turbidity',
     'objects': ['rock']
   }
+  const synth = new WebAudioTinySynth()
 
   // game screen shortcut variables
   const $display = $('#output')
@@ -81,6 +82,7 @@
         You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
 
         break
+
       case 'look':
       case 'l':
         text = `You look around the <span class='noun'>${loc.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
@@ -92,6 +94,7 @@
         }
 
         break
+
       case 'sit':
       case 'si':
         if (player.status === 'sitting') {
@@ -114,6 +117,7 @@
         }
 
         break
+
       case 'sleep':
       case 'sl':
         player.status = 'reclining'
@@ -122,11 +126,13 @@
         text = 'You lie down to rest.'
 
         break
+
       case 'go':
       case 'g':
         text = `You go somewhere else inescapable in the <span class='noun'>${loc.title}</span>.`
 
         break
+
       case 'north':
       case 'n':
         text = `You go <strong>north</strong> a bit. You are still in an inescapable hole.`
@@ -146,6 +152,7 @@
       case 'e':
         text = `You go <strong>east</strong> a bit. You are still in an inescapable hole.`
         break
+
       case 'inventory':
       case 'inven':
       case 'i':
@@ -167,6 +174,7 @@
         }
 
         break
+
       case 'pickup':
       case 'p':
         if (obj) {
@@ -183,6 +191,15 @@
         }
 
         break
+
+      case 'playsong':
+      case 'pl':
+        _playSong()
+
+        text = 'Playing the song of my people...'
+
+        break;
+
       case 'throw':
       case 'th':
         if (player.rox > 0) {
@@ -196,6 +213,7 @@
         }
 
         break
+
       case 'about':
       case 'a':
         text = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
@@ -203,17 +221,20 @@
         <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
 
         break
+
       case 'history':
       case 'hist':
         text = _getHistoryDisplay()
 
         break
+
       case 'help':
       case 'h':
       case '?':
         text = `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
 
         break
+
       default:
         text = 'That command isn\'t recognized. Type "help" for valid commands.'
 
@@ -399,6 +420,15 @@
     out('')
     out('<strong>Good luck...</strong>')
     out('************************')
+  }
+
+  function _playSong() {
+    synth.send([0x90, 60, 100])
+    setTimeout(() => synth.send([0x80, 60, 0]), 500)
+    setTimeout(() => synth.send([0x90, 60, 100]), 500)
+    setTimeout(() => synth.send([0x90, 62, 100]), 1000)
+    setTimeout(() => synth.send([0x90, 64, 100]), 1500)
+    setTimeout(() => synth.send([0x90, 67, 100]), 2000)
   }
 
   function _init() {
