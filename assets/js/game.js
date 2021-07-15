@@ -1,6 +1,7 @@
 ﻿$(function () {
   let game = {
     'settings': {
+      'playSound': false,
       'showAvatar': true
     }
   }
@@ -20,6 +21,7 @@
   let historyMarker = 0
   let text
   let avatarWorker
+  let synth
 
   $cmd = $('#userInput')
 
@@ -47,7 +49,6 @@
     'title': 'Inescapable Hole of Turbidity',
     'objects': ['rock']
   }
-  const synth = new WebAudioTinySynth()
 
   // game screen shortcut variables
   const $display = $('#output')
@@ -60,13 +61,15 @@
 
   // const $keyboard = $('#keyboard')
   // const $controller = $('#controller')
-  // print result of user command
 
+
+  // update user stats and send command result to display function
   function repl(result) {
     updateStatus(player.level, player.xp, player.hp, player.rox, loc)
     out(result)
   }
 
+  // print result of user command
   function out(text, lb) {
     let $content_to_display = text
 
@@ -97,6 +100,8 @@
 
     let verb = cmds[0].toLowerCase()
     let subj = cmds[1] ? cmds[1].toLowerCase() : null
+
+    console.log('v+s:', `${verb} ${subj}`)
 
     switch (verb) {
       case 'go':
@@ -260,27 +265,45 @@
       case 'settings':
       case 'sett':
         if (subj) {
-          if (subj.toLowerCase() === 'showavatar') {
-            game.settings.showAvatar = !game.settings.showAvatar
+          switch (subj) {
+            case 'playsound':
+              game.settings.playSound = !game.settings.playSound
 
-            text = `Toggling the <span class="keyword">showAvatar</span> setting to <code>${game.settings.showAvatar}</code>.`
+              if (game.settings.playSound) {
+                synth = new WebAudioTinySynth()
 
-            if (!game.settings.showAvatar) {
-              $('#avatar').html('')
-            } else {
-              _getPlayerAvatar(player.status)
-            }
-          } else {
-            text = `There is no current setting with the name <span class="keyword">${subj}.`
+                text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword true">${game.settings.playSound}</span>.`
+              } else {
+                synth = null
+
+                text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword false">${game.settings.playSound}</span>.`
+              }
+
+              break
+            case 'showavatar':
+              game.settings.showAvatar = !game.settings.showAvatar
+
+              if (!game.settings.showAvatar) {
+                text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword false">${game.settings.showAvatar}</span>.`
+
+                $('#avatar').html('')
+              } else {
+                text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword true">${game.settings.showAvatar}</span>.`
+
+                _getAvatarDisplay(player.status)
+              }
+              break
+            default:
+              text = `There is no current setting with the name <span class="keyword">${subj}.`
           }
         } else {
-          text = `${JSON.stringify(game.settings, null, 2)}`
+          text = `<code>${JSON.stringify(game.settings, null, 2)}</code>`
         }
 
         break
 
       default:
-        text = 'That command isn\'t recognized. Type "help" for valid commands.'
+        text = 'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
 
         break
     }
@@ -470,19 +493,23 @@
     out('************************')
     out('Welcome to Gem Warrior!')
     out('')
-    out('Try "help" if stuck')
+    out('Try <span class="keyword">help</span> if stuck')
     out('')
     out('<strong>Good luck...</strong>')
     out('************************')
   }
 
   function _playSong() {
-    synth.send([0x90, 60, 100])
-    setTimeout(() => synth.send([0x80, 60, 0]), 500)
-    setTimeout(() => synth.send([0x90, 60, 100]), 500)
-    setTimeout(() => synth.send([0x90, 62, 100]), 1000)
-    setTimeout(() => synth.send([0x90, 64, 100]), 1500)
-    setTimeout(() => synth.send([0x90, 67, 100]), 2000)
+    if (game.settings.playSound) {
+      synth.send([0x90, 60, 100])
+      setTimeout(() => synth.send([0x80, 60, 0]), 500)
+      setTimeout(() => synth.send([0x90, 60, 100]), 500)
+      setTimeout(() => synth.send([0x90, 62, 100]), 1000)
+      setTimeout(() => synth.send([0x90, 64, 100]), 1500)
+      setTimeout(() => synth.send([0x90, 67, 100]), 2000)
+    } else {
+      return 'The <span class="keyword">playSound</span> setting is currently disabled'
+    }
   }
 
   function _init() {

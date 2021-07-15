@@ -7,6 +7,7 @@ $box-shadow: #333333;
 $button-bg: #eff1d1;
 $link-color: #fffca3;
 $prev-color: #7d7d7d;
+$code-color: #b90eb6;
 // sections
 $heading-bg: #444444;
 $heading-bottom: #f4f085;
@@ -69,6 +70,13 @@ button {
     cursor: pointer;
     filter: hue-rotate(-180deg) saturate(5);
   }
+}
+
+code {
+  background-color: $button-bg;
+  color: $code-color;
+  display: inline-block;
+  padding: 0 2px;
 }
 
 #heading {
@@ -331,6 +339,14 @@ button {
 
 .keyword {
   color: #eecd90;
+
+  &.false {
+    color: #dd4a4a;
+  }
+
+  &.true {
+    color: #32ce32;
+  }
 }
 
 .command-previous {
