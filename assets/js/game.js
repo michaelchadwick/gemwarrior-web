@@ -1,4 +1,9 @@
 ﻿$(function () {
+  let game = {
+    'settings': {
+      'showAvatar': true
+    }
+  }
   let player = {
     'level': 1,
     'xp': 0,
@@ -14,26 +19,29 @@
   let history = []
   let historyMarker = 0
   let text
+  let avatarWorker
 
   $cmd = $('#userInput')
 
   const commands = [
+    '(g)o',
     '(n)orth',
     '(e)ast',
     '(s)outh',
     '(w)est',
-    '(c)haracter',
     '(l)ook',
-    '(p)ickup',
-    '(pl)ay song',
-    '(th)row',
+    '(c)haracter',
     '(i)nventory',
+    '(p)ickup',
+    '(th)row',
     '(si)t',
     '(st)and',
     '(sl)eep',
+    '(pl)ay song',
     '(h)elp',
     '(hist)ory',
-    '(a)bout'
+    '(a)bout',
+    '(set)tings'
   ]
   const loc = {
     'title': 'Inescapable Hole of Turbidity',
@@ -88,68 +96,14 @@
     let cmds = command.split(' ')
 
     let verb = cmds[0].toLowerCase()
-    let obj = cmds[1] ? cmds[1].toLowerCase() : null
+    let subj = cmds[1] ? cmds[1].toLowerCase() : null
 
     switch (verb) {
-      case 'character':
-      case 'char':
-      case 'c':
-        text = `You assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.<br />
-        <p>You are <strong>${player.status}</strong>.</p>
-        You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
-
-        break
-
-      case 'look':
-      case 'l':
-        text = `You look around the <span class='noun'>${loc.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
-
-        if (loc.objects.length > 0) {
-          text += '<br /><br />'
-
-          text += `There are things to pick up here: <span class="noun">${loc.objects.join(', ')}</span>`
-        }
-
-        break
-
-      case 'sit':
-      case 'si':
-        if (player.status === 'sitting') {
-          text = `You are already ${player.status}.`
-        } else {
-          player.status = 'sitting'
-          _playerSit()
-          text = 'You sit down.'
-        }
-
-        break
-      case 'stand':
-      case 'st':
-        if (player.status === 'standing') {
-          text = `You are already ${player.status}.`
-        } else {
-          player.status = 'standing'
-          _playerStand()
-          text = 'You stand up.'
-        }
-
-        break
-
-      case 'sleep':
-      case 'sl':
-        player.status = 'reclining'
-        _playerRecline()
-
-        text = 'You lie down to rest.'
-
-        break
-
       case 'go':
       case 'g':
         text = `You go somewhere else inescapable in the <span class='noun'>${loc.title}</span>.`
 
         break
-
       case 'north':
       case 'n':
         text = `You go <strong>north</strong> a bit. You are still in an inescapable hole.`
@@ -168,6 +122,27 @@
       case 'east':
       case 'e':
         text = `You go <strong>east</strong> a bit. You are still in an inescapable hole.`
+        break
+
+      case 'look':
+      case 'l':
+        text = `You look around the <span class='noun'>${loc.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
+
+        if (loc.objects.length > 0) {
+          text += '<br /><br />'
+
+          text += `There are things to pick up here: <span class="noun">${loc.objects.join(', ')}</span>`
+        }
+
+        break
+
+      case 'character':
+      case 'char':
+      case 'c':
+        text = `You assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.<br />
+        <p>You are <strong>${player.status}</strong>.</p>
+        You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
+
         break
 
       case 'inventory':
@@ -194,8 +169,8 @@
 
       case 'pickup':
       case 'p':
-        if (obj) {
-          if (obj === 'rock' && loc.objects.includes('rock')) {
+        if (subj) {
+          if (subj === 'rock' && loc.objects.includes('rock')) {
             text = 'You pick up a <span class="noun">rock</span>.'
 
             loc.objects.splice(loc.objects.indexOf('rock'), 1)
@@ -208,15 +183,6 @@
         }
 
         break
-
-      case 'playsong':
-      case 'pl':
-        _playSong()
-
-        text = 'Playing the song of my people...'
-
-        break;
-
       case 'throw':
       case 'th':
         if (player.rox > 0) {
@@ -231,11 +197,49 @@
 
         break
 
-      case 'about':
-      case 'a':
-        text = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
+      case 'sit':
+      case 'si':
+        if (player.status === 'sitting') {
+          text = `You are already ${player.status}.`
+        } else {
+          player.status = 'sitting'
+          _playerSit()
+          text = 'You sit down.'
+        }
 
-        <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
+        break
+      case 'stand':
+      case 'st':
+        if (player.status === 'standing') {
+          text = `You are already ${player.status}.`
+        } else {
+          player.status = 'standing'
+          _playerStand()
+          text = 'You stand up.'
+        }
+
+        break
+      case 'sleep':
+      case 'sl':
+        player.status = 'reclining'
+        _playerRecline()
+
+        text = 'You lie down to rest.'
+
+        break
+
+      case 'playsong':
+      case 'pl':
+        _playSong()
+
+        text = 'Playing the song of my people...'
+
+        break;
+
+      case 'help':
+      case 'h':
+      case '?':
+        text = `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
 
         break
 
@@ -245,10 +249,33 @@
 
         break
 
-      case 'help':
-      case 'h':
-      case '?':
-        text = `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
+      case 'about':
+      case 'a':
+        text = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
+
+        <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
+
+        break
+
+      case 'settings':
+      case 'sett':
+        if (subj) {
+          if (subj === 'showAvatar') {
+            game.settings.showAvatar = !game.settings.showAvatar
+
+            text = `Toggling the <span class="keyword">showAvatar</span> setting to <code>${game.settings.showAvatar}</code>.`
+
+            if (!game.settings.showAvatar) {
+              $('#avatar').html('')
+            } else {
+              _getPlayerAvatar(player.status)
+            }
+          } else {
+            text = 'There is no current setting to be managed by that name.'
+          }
+        } else {
+          text = `${JSON.stringify(game.settings, null, 2)}`
+        }
 
         break
 
@@ -350,18 +377,28 @@
         event.preventDefault()
       }
     }, false)
+
+    _initAvatarDisplay()
   }
 
   // shuttle avatar display workload to web worker
-  function _getAvatarDisplay(status) {
+  function _initAvatarDisplay() {
     if (window.Worker) {
-      var avatarWorker = new Worker('assets/js/avatar.js')
-
-      avatarWorker.postMessage(status)
+      avatarWorker = new Worker('assets/js/avatar.js')
 
       avatarWorker.onmessage = (response) => {
         $('#avatar').html(response.data)
       }
+    }
+  }
+
+  function _getAvatarDisplay(status) {
+    if (avatarWorker) {
+      if (game.settings.showAvatar) {
+        avatarWorker.postMessage(status)
+      }
+    } else {
+      console.error('no avatarWorker to postMessage')
     }
   }
 
