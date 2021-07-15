@@ -17,7 +17,24 @@
 
   $cmd = $('#userInput')
 
-  const commands = ['(n)orth', '(e)ast', '(s)outh', '(w)est', '(c)haracter', '(l)ook', '(p)ickup', '(pl)ay song', '(th)row', '(i)nventory', '(si)t', '(st)and', '(sl)eep', '(h)elp', '(hist)ory', '(a)bout']
+  const commands = [
+    '(n)orth',
+    '(e)ast',
+    '(s)outh',
+    '(w)est',
+    '(c)haracter',
+    '(l)ook',
+    '(p)ickup',
+    '(pl)ay song',
+    '(th)row',
+    '(i)nventory',
+    '(si)t',
+    '(st)and',
+    '(sl)eep',
+    '(h)elp',
+    '(hist)ory',
+    '(a)bout'
+  ]
   const loc = {
     'title': 'Inescapable Hole of Turbidity',
     'objects': ['rock']
