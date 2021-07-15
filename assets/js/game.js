@@ -260,7 +260,7 @@
       case 'settings':
       case 'sett':
         if (subj) {
-          if (subj === 'showAvatar') {
+          if (subj.toLowerCase() === 'showavatar') {
             game.settings.showAvatar = !game.settings.showAvatar
 
             text = `Toggling the <span class="keyword">showAvatar</span> setting to <code>${game.settings.showAvatar}</code>.`
@@ -271,7 +271,7 @@
               _getPlayerAvatar(player.status)
             }
           } else {
-            text = 'There is no current setting to be managed by that name.'
+            text = `There is no current setting with the name <span class="keyword">${subj}.`
           }
         } else {
           text = `${JSON.stringify(game.settings, null, 2)}`
