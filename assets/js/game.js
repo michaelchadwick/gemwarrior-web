@@ -43,7 +43,7 @@
     '(h)elp',
     '(hist)ory',
     '(a)bout',
-    '(set)tings'
+    '(sett)ings'
   ]
   const loc = {
     'title': 'Inescapable Hole of Turbidity',
@@ -100,8 +100,6 @@
 
     let verb = cmds[0].toLowerCase()
     let subj = cmds[1] ? cmds[1].toLowerCase() : null
-
-    console.log('v+s:', `${verb} ${subj}`)
 
     switch (verb) {
       case 'go':
