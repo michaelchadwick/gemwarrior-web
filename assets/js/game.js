@@ -25,27 +25,35 @@
 
   $cmd = $('#userInput')
 
-  const commands = [
-    '(g)o',
-    '(n)orth',
-    '(e)ast',
-    '(s)outh',
-    '(w)est',
-    '(l)ook',
-    '(c)haracter',
-    '(i)nventory',
-    '(p)ickup',
-    '(th)row',
-    '(u)se',
-    '(si)t',
-    '(st)and',
-    '(sl)eep',
-    '(pl)ay song',
-    '(h)elp',
-    '(hist)ory',
-    '(a)bout',
-    '(sett)ings'
-  ]
+  const commands = {
+    'travel': [
+      '(g)o',
+      '(n)orth',
+      '(e)ast',
+      '(s)outh',
+      '(w)est'
+    ],
+    'self': [
+      '(c)haracter',
+      '(i)nventory'
+    ],
+    'action': [
+      '(l)ook',
+      '(p)ickup',
+      '(th)row',
+      '(u)se',
+      '(si)t',
+      '(st)and',
+      '(sl)eep'
+    ],
+    'meta': [
+      '(pl)ay song',
+      '(h)elp',
+      '(hist)ory',
+      '(a)bout',
+      '(sett)ings'
+    ]
+  }
   const loc = {
     'title': 'Inescapable Hole of Turbidity',
     'objects': ['rock']
@@ -107,8 +115,6 @@
       subj = subj.filter((i) => !['a', 'the', 'my'].includes(i))
       subj = subj.join(' ').toLowerCase()
     }
-
-    console.log('subj', subj);
 
     switch (verb) {
       case 'go':
@@ -270,7 +276,13 @@
       case 'help':
       case 'h':
       case '?':
-        text = `HELP: The following commands are valid: <span class="keyword">${commands.join(', ')}</span>`
+        var cmdList = ''
+
+        Object.keys(commands).forEach((key) => {
+          cmdList += `<br /><pre>&nbsp;&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${commands[key].join(', ')}</span>`
+        })
+
+        text = `HELP: The following commands are valid: ${cmdList}`
 
         break
 
