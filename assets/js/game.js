@@ -36,6 +36,7 @@
     '(i)nventory',
     '(p)ickup',
     '(th)row',
+    '(u)se',
     '(si)t',
     '(st)and',
     '(sl)eep',
@@ -99,7 +100,15 @@
     let cmds = command.split(' ')
 
     let verb = cmds[0].toLowerCase()
-    let subj = cmds[1] ? cmds[1].toLowerCase() : null
+    let subj = cmds[1]
+
+    if (subj) {
+      subj = cmds.slice(1, cmds.length)
+      subj = subj.filter((i) => !['a', 'the', 'my'].includes(i))
+      subj = subj.join(' ').toLowerCase()
+    }
+
+    console.log('subj', subj);
 
     switch (verb) {
       case 'go':
@@ -150,6 +159,7 @@
 
       case 'inventory':
       case 'inven':
+      case 'inv':
       case 'i':
         if (player.rox === 1) {
           roxCount = ' <strong>1</strong> rock'
@@ -196,6 +206,20 @@
           text = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
         } else {
           text = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
+        }
+
+        break
+
+      case 'use':
+      case 'u':
+        if (subj) {
+          if (player.inventory.includes(subj)) {
+            text = `You use the <span class="keyword">${subj}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
+          } else {
+            text = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, so...well, nothing happens.`
+          }
+        } else {
+          text = `Use <em>what</em>, exactly?`
         }
 
         break
