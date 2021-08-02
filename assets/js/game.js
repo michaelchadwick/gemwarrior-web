@@ -235,7 +235,11 @@
       case 'pl':
         _playSong()
 
-        text = 'Playing the song of my people...'
+        if (game.settings.playSound) {
+          text = 'Playing the song of my people...'
+        } else {
+          text = `Sound is not enabled. Try <span class="keyword">settings playSound</span>.`
+        }
 
         break;
 
