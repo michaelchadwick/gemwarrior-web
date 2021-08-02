@@ -1,0 +1,15 @@
+.codeclimate.yml
+.csslintrc
+.eslintignore
+.eslintrc.js
+.eslintrc.json
+.eslintrc.yaml
+.eslintrc.yml
+.git
+.gitignore
+.jshintrc
+.sass-cache
+LICENSE.md
+README.md
+Rakefile
+rsync-exclude.txt
