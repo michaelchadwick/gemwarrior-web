@@ -13,4 +13,4 @@ task :sassw do |t|
   sh "sass --watch assets/scss/screen.scss:assets/css/screen.css"
 end
 
-task :default => [:deploy]
+task :default => [:sass, :deploy]
