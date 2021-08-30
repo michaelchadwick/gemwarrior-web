@@ -83,16 +83,19 @@ code {
   background: $heading-bg;
   border-bottom: 1px solid $heading-bottom;
   box-shadow: -3px 1px 15px $box-shadow;
-  height: 14px;
   margin-bottom: 0;
-  padding: 10px;
+  min-height: 32px;
+  padding: 5px 5px 0;
   position: fixed;
   top: 0;
   width: 100%;
 
   .main {
     color: $heading-main;
+    display: inline-block;
     font-size: 1.3em;
+    position: relative;
+    top: 8px;
   }
 
   .sub {
@@ -106,9 +109,9 @@ code {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       font-size: 0.75rem;
-      padding: 0.3rem 0.75rem;
+      padding: 0.3rem 0.75rem 0.45rem;
       position: relative;
-      top: -5px;
+      top: 0;
     }
   }
 }
@@ -201,7 +204,7 @@ code {
 
 #stats {
   background: $stats-bg;
-  bottom: 75px;
+  bottom: 72px;
   clear: left;
   color: $stats-color;
   left: 0;
@@ -209,7 +212,7 @@ code {
 
 #location {
   background: #2e0a2e;
-  bottom: 50px;
+  bottom: 47px;
   height: 17px;
   overflow: scroll;
 }
@@ -235,21 +238,21 @@ code {
   bottom: 0;
   clear: left;
   display: block;
-  height: 35px;
+  height: 34px;
   left: 0;
-  padding: 5px 5px 10px;
+  padding: 3px 0 10px 5px;
   position: fixed;
   width: 100%;
 
   #directions,
   #commands {
-    height: 38px;
+    height: auto;
   }
 
   #directions {
     display: inline-block;
     position: relative;
-    width: 165px;
+    width: 171px;
   }
 
   #commands {
@@ -258,7 +261,13 @@ code {
     overflow-x: scroll;
     position: absolute;
     white-space: nowrap;
-    width: calc(100% - 175px);
+    width: calc(100% - 186px);
+
+    button {
+      &.last {
+        margin-right: 0;
+      }
+    }
   }
 }
 
@@ -306,7 +315,7 @@ code {
   }
 
   #heading {
-    height: 20px;
+    height: 38px;
 
     button {
       &.help {
