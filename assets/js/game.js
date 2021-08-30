@@ -279,7 +279,7 @@
         var cmdList = ''
 
         Object.keys(commands).forEach((key) => {
-          cmdList += `<br /><pre>&nbsp;&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${commands[key].join(', ')}</span>`
+          cmdList += `<br />&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${commands[key].join(', ')}</span><br />`
         })
 
         text = `HELP: The following commands are valid: ${cmdList}`
