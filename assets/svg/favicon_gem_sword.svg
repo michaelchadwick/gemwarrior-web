@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
+   sodipodi:docname="favicon_gem_sword.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="6.2217172"
+     inkscape:cx="134.44841"
+     inkscape:cy="349.50158"
+     inkscape:window-width="1312"
+     inkscape:window-height="1081"
+     inkscape:window-x="873"
+     inkscape:window-y="169"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       d="m 34.56492,87.962543 1.496549,2.645833 H 34.389633 L 33.24531,87.962543 Z m -2.116667,0 1.144323,2.645833 h -4.587214 l 1.144323,-2.645833 z m -4.415234,0 h 1.319609 l -1.144323,2.645833 h -1.671836 z m -1.49655,3.175 h 1.665221 l 2.033985,4.162227 c 0.02481,0.05126 -0.04465,0.09757 -0.08268,0.05457 z m 2.450703,0 h 4.623594 l -2.265495,5.261901 c -0.01654,0.03969 -0.07441,0.03969 -0.09095,0 z m 3.375091,4.162227 2.033985,-4.162227 h 1.665221 l -3.616523,4.215143 c -0.03803,0.04465 -0.107487,-0.0017 -0.08268,-0.05292 z"
+       fill="currentColor"
+       id="path59"
+       style="stroke-width:0.217;fill:#ff0000;stroke:#000000;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+    <path
+       d="m 31.099318,90.681909 h -0.677333 l 3.175,3.175 0.352778,-0.331611 m 1.749777,2.137833 -0.296333,0.296333 a 0.35136667,0.35136667 0 0 1 -0.497417,0 l -1.100666,-1.100666 -0.945445,0.938386 -0.497416,-0.497414 0.500944,-0.500944 -3.146778,-3.146778 v -1.675694 h 1.675695 l 3.146777,3.146777 0.500945,-0.500944 0.497417,0.497417 -0.941917,0.941916 1.100667,1.100667 c 0.141111,0.141111 0.141111,0.363361 0.0035,0.500944 z"
+       fill="currentColor"
+       id="path102"
+       style="fill:#0000ff;stroke:#000000;stroke-width:0.153;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+  </g>
+</svg>
