@@ -2,14 +2,15 @@ GemWarrior.dom = {
   "navOverlay": $('#nav-overlay'),
   "navContent": ('$nav-content'),
   "userInput": $('#userInput'),
-  // game screen shortcut variables
-  "display": $('#output'),
-  // "stats": $('#stats'),
-  "statsLV": $('#stats #level'),
-  "statsXP": $('#stats #xp'),
-  "statsROX": $('#stats #rox'),
-  "statsHP": $('#stats #hp'),
-  "statsLOC": $('#location #loc')
+  "output": $('#output'),
+  "interface": $('#interface'),
+  "stats": $('#interface #stats'),
+  "statsLV": $('#interface #stats #level'),
+  "statsXP": $('#interface #stats #xp'),
+  "statsROX": $('#interface #stats #rox'),
+  "statsHP": $('#interface #stats #hp'),
+  "statsLOC": $('#interface #location #loc'),
+  "keyboardInput": $('#keyboard-input')
 }
 
 // DOM > interactive elements

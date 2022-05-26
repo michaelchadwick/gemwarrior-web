@@ -126,32 +126,21 @@ GemWarrior.loadGlobalSettings = function() {
 
 // update user stats and send command result to display function
 GemWarrior.repl = function(result) {
-  GemWarrior.updateStatus()
+  GemWarrior._updateStatus()
   GemWarrior.out(result)
 }
 
 // print result of user command
-GemWarrior.out = function(text, lb) {
+GemWarrior.out = function(text, lineBreak) {
   let $content_to_display = text
 
-  if (!lb) {
+  if (!lineBreak) {
     $content_to_display += '<br />'
   }
 
-  GemWarrior.dom.display.append($content_to_display)
+  GemWarrior.dom.output.append($content_to_display)
 
-  if (GemWarrior.dom.display.height() * 2 > window.innerHeight) {
-    window.scrollTo(0, window.innerHeight * 4)
-  }
-}
-
-// update DOM stats
-GemWarrior.updateStatus = function() {
-  GemWarrior.dom.statsLV.text(GemWarrior.player.level)
-  GemWarrior.dom.statsXP.text(GemWarrior.player.xp)
-  GemWarrior.dom.statsHP.text(GemWarrior.player.hp)
-  GemWarrior.dom.statsROX.text(GemWarrior.player.rox)
-  GemWarrior.dom.statsLOC.text(LOCATION.title)
+  GemWarrior._scrollOutput()
 }
 
 // process the user command input
@@ -408,21 +397,45 @@ GemWarrior._initApp = function() {
   GemWarrior.env = ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
 
   if (GemWarrior.env == 'local') {
+    GemWarrior._initDebug()
+
     document.title = '(LH) ' + document.title
   }
 
-  GemWarrior._applyEventHandlers()
+  GemWarrior._attachEventHandlers()
 
-  GemWarrior.updateStatus()
-
-  GemWarrior.avatar._initAvatarDisplay()
+  GemWarrior._updateStatus()
 
   GemWarrior._welcome()
 
-  GemWarrior.avatar._playerStand()
+  GemWarrior.avatar._initAvatarDisplay()
+
+  GemWarrior._resizeFixed()
+
+  // initial command
+  window.scrollTo(0,1)
 }
 
-GemWarrior._applyEventHandlers = function() {
+// add debug stuff if local
+GemWarrior._initDebug = function() {
+  var qd = {};
+  if (location.search) location.search.substr(1).split("&").forEach(function(item) {
+    var s = item.split("="),
+        k = s[0],
+        v = s[1] && decodeURIComponent(s[1]); //  null-coalescing / short-circuit
+    //(k in qd) ? qd[k].push(v) : qd[k] = [v]
+    (qd[k] = qd[k] || []).push(v) // null-coalescing / short-circuit
+  })
+
+  if (qd.debugCSS && qd.debugCSS == 1) {
+    var debugStyles = document.createElement('link')
+    debugStyles.rel = 'stylesheet'
+    debugStyles.href = './public/build/css/debug.css'
+    document.head.appendChild(debugStyles)
+  }
+}
+
+GemWarrior._attachEventHandlers = function() {
   // {} header icons to open modals
   GemWarrior.dom.interactive.btnNav.click(() => {
     GemWarrior.dom.navOverlay.toggleClass('show')
@@ -434,28 +447,33 @@ GemWarrior._applyEventHandlers = function() {
   GemWarrior.dom.interactive.btnSettings.click(() => modalOpen('settings'))
 
   // catch the mobile keyboard buttons
+  // TODO: show visual display of keys pressed
   $('#keyboard button').click(function (event) {
     const key = event.target.dataset.key
 
-    console.log('key', key)
-
     if (key == '↵') {
-      console.log('sending keyCommand', GemWarrior.keyCommand)
-
       GemWarrior.out('')
       GemWarrior.out(`<span class="command-previous">&gt; ${GemWarrior.keyCommand}`)
       GemWarrior.out(GemWarrior.evaluator(GemWarrior.keyCommand))
 
       GemWarrior.keyCommand = ''
-    } else if (key == '←' && GemWarrior.keyCommand.length) {
-      console.log('removing last key from keyCommand')
+      GemWarrior.dom.keyboardInput.removeClass('show')
+    } else if (key == '<') {
+      if (GemWarrior.keyCommand.length) {
+        GemWarrior.keyCommand = GemWarrior.keyCommand.slice(0, GemWarrior.keyCommand.length - 1)
 
-      GemWarrior.keyCommand = GemWarrior.keyCommand.slice(0, GemWarrior.keyCommand.length - 1)
+        if (!GemWarrior.keyCommand) {
+          GemWarrior.dom.keyboardInput.removeClass('show')
+        }
+      }
     } else {
       GemWarrior.keyCommand += key
 
-      console.log(`adding '${key}' to keyCommand`, GemWarrior.keyCommand)
+      GemWarrior.dom.keyboardInput.addClass('show')
     }
+
+    // add keyCommand to visual keyboardInput bubble
+    GemWarrior.dom.keyboardInput.text(GemWarrior.keyCommand)
   })
 
   // catch the command bar form
@@ -504,6 +522,13 @@ GemWarrior._applyEventHandlers = function() {
       event.preventDefault()
     }
   }, false)
+
+  // When the user clicks or touches anywhere outside of the modal, close it
+  window.addEventListener('click', GemWarrior._handleClickTouch)
+  window.addEventListener('touchend', GemWarrior._handleClickTouch)
+
+  // on viewport change, resize output
+  window.onresize = GemWarrior._resizeFixed
 }
 
 // display command list
@@ -517,79 +542,39 @@ GemWarrior._displayHelp = function() {
   return `HELP: The following commands are valid: ${cmdList}`
 }
 
-// shuttle avatar display workload to web worker
-GemWarrior.avatar._initAvatarDisplay = function() {
-  if (window.Worker) {
-    GemWarrior.avatarWorker = new Worker('assets/js/app/avatar.js')
+// update DOM stats
+GemWarrior._updateStatus = function() {
+  GemWarrior.dom.statsLV.text(GemWarrior.player.level)
+  GemWarrior.dom.statsXP.text(GemWarrior.player.xp)
+  GemWarrior.dom.statsHP.text(GemWarrior.player.hp)
+  GemWarrior.dom.statsROX.text(GemWarrior.player.rox)
+  GemWarrior.dom.statsLOC.text(LOCATION.title)
+}
 
-    GemWarrior.avatarWorker.onmessage = (response) => {
-      $('#avatar').html(response.data)
-    }
+GemWarrior._resizeFixed = function() {
+  console.log('resized fixed elements')
+
+  $('header').width(window.innerWidth - 32)
+  $('#spacer').height($('#interface').height() - 2)
+  $('#interface #keyboard').width(window.innerWidth - 16)
+}
+
+// dynamically scroll output depending on height
+GemWarrior._scrollOutput = function() {
+  const outputHeight = GemWarrior.dom.output.height()
+  const interfaceHeight = GemWarrior.dom.interface.height()
+
+  // console.log('outputHeight - interfaceHeight', outputHeight - interfaceHeight)
+  // console.log('window.innerHeight', window.innerHeight)
+
+  if ((outputHeight * 2 - interfaceHeight) > window.innerHeight) {
+    const newY = window.innerHeight * 4
+
+    window.scrollTo(0, newY)
+
+    console.log(`scrolled to ${newY}`)
   }
 }
-GemWarrior.avatar._getAvatarDisplay = function(status) {
-  if (GemWarrior.avatarWorker) {
-    if (GemWarrior.settings.showAvatar) {
-      GemWarrior.avatarWorker.postMessage(status)
-    }
-  } else {
-    console.error('no GemWarrior.avatarWorker to postMessage')
-  }
-}
-GemWarrior.avatar._playerStand = function() {
-  GemWarrior.player.status = 'standing'
-  GemWarrior.avatar._getAvatarDisplay('standing')
-  GemWarrior.avatar._playerBlink()
-}
-GemWarrior.avatar._playerSit = function() {
-  GemWarrior.player.status = 'sitting'
-  GemWarrior.avatar._getAvatarDisplay('sitting')
-  GemWarrior.avatar._playerBlink()
-}
-GemWarrior.avatar._playerRecline = function() {
-  reclineTimer = null
-
-  if (GemWarrior.player.status === 'reclining') {
-    clearInterval(GemWarrior.blinker)
-    GemWarrior.avatar._getAvatarDisplay('reclining1')
-    reclineTimer = setTimeout(() => {
-      GemWarrior.avatar._getAvatarDisplay('reclining2')
-      setTimeout(() => {
-        GemWarrior.avatar._getAvatarDisplay('reclining3')
-        setTimeout(() => _playerRecline(), 1000)
-      }, 1000)
-    }, 1000)
-  }
-}
-GemWarrior.avatar._playerBlink = function() {
-  clearInterval(GemWarrior.blinker)
-
-  if (GemWarrior.player.status === 'standing') {
-    GemWarrior.blinker = setInterval(() => {
-      GemWarrior.avatar._getAvatarDisplay('standing-blink')
-      setTimeout(() => GemWarrior.avatar._getAvatarDisplay('standing'), GemWarrior.avatar._getBlinkSpeed())
-    }, GemWarrior.avatar._getBlinkFreq())
-  }
-  else if (GemWarrior.player.status === 'sitting') {
-    GemWarrior.blinker = setInterval(() => {
-      _getAvatarDisplay('sitting-blink')
-      setTimeout(() => GemWarrior.avatar._getAvatarDisplay('sitting'), GemWarrior.avatar._getBlinkSpeed())
-    }, GemWarrior.avatar._getBlinkFreq())
-  }
-}
-GemWarrior.avatar._getBlinkFreq = function() {
-  var min = 2000
-  var max = 20000
-
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-GemWarrior.avatar._getBlinkSpeed = function() {
-  var min = 100
-  var max = 600
-
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
 
 // replace the command bar's command with historic data if available
 GemWarrior._traverseHistory = function(key) {
@@ -657,6 +642,81 @@ GemWarrior._playSong = function() {
   }
 }
 
+// shuttle avatar display workload to web worker
+GemWarrior.avatar._initAvatarDisplay = function() {
+  if (window.Worker) {
+    GemWarrior.avatarWorker = new Worker('assets/js/app/avatar.js')
+
+    GemWarrior.avatarWorker.onmessage = (response) => {
+      $('#avatar').html(response.data)
+    }
+  }
+}
+GemWarrior.avatar._getAvatarDisplay = function(status) {
+  if (GemWarrior.avatarWorker) {
+    if (GemWarrior.settings.showAvatar) {
+      GemWarrior.avatarWorker.postMessage(status)
+
+      GemWarrior.avatar._playerStand()
+    }
+  } else {
+    console.error('no GemWarrior.avatarWorker to postMessage')
+  }
+}
+GemWarrior.avatar._playerStand = function() {
+  GemWarrior.player.status = 'standing'
+  GemWarrior.avatar._getAvatarDisplay('standing')
+  GemWarrior.avatar._playerBlink()
+}
+GemWarrior.avatar._playerSit = function() {
+  GemWarrior.player.status = 'sitting'
+  GemWarrior.avatar._getAvatarDisplay('sitting')
+  GemWarrior.avatar._playerBlink()
+}
+GemWarrior.avatar._playerRecline = function() {
+  reclineTimer = null
+
+  if (GemWarrior.player.status === 'reclining') {
+    clearInterval(GemWarrior.blinker)
+    GemWarrior.avatar._getAvatarDisplay('reclining1')
+    reclineTimer = setTimeout(() => {
+      GemWarrior.avatar._getAvatarDisplay('reclining2')
+      setTimeout(() => {
+        GemWarrior.avatar._getAvatarDisplay('reclining3')
+        setTimeout(() => _playerRecline(), 1000)
+      }, 1000)
+    }, 1000)
+  }
+}
+GemWarrior.avatar._playerBlink = function() {
+  clearInterval(GemWarrior.blinker)
+
+  if (GemWarrior.player.status === 'standing') {
+    GemWarrior.blinker = setInterval(() => {
+      GemWarrior.avatar._getAvatarDisplay('standing-blink')
+      setTimeout(() => GemWarrior.avatar._getAvatarDisplay('standing'), GemWarrior.avatar._getBlinkSpeed())
+    }, GemWarrior.avatar._getBlinkFreq())
+  }
+  else if (GemWarrior.player.status === 'sitting') {
+    GemWarrior.blinker = setInterval(() => {
+      _getAvatarDisplay('sitting-blink')
+      setTimeout(() => GemWarrior.avatar._getAvatarDisplay('sitting'), GemWarrior.avatar._getBlinkSpeed())
+    }, GemWarrior.avatar._getBlinkFreq())
+  }
+}
+GemWarrior.avatar._getBlinkFreq = function() {
+  var min = 2000
+  var max = 20000
+
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+GemWarrior.avatar._getBlinkSpeed = function() {
+  var min = 100
+  var max = 600
+
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 // handle both clicks and touches outside of modals
 GemWarrior._handleClickTouch = function(event) {
   var dialog = document.getElementsByClassName('modal-dialog')[0]
@@ -675,16 +735,8 @@ GemWarrior._handleClickTouch = function(event) {
   }
 }
 
-// When the user clicks or touches anywhere outside of the modal, close it
-window.addEventListener('click', GemWarrior._handleClickTouch)
-window.addEventListener('touchend', GemWarrior._handleClickTouch)
-
 /*************************************************************************
  * START THE ENGINE *
  *************************************************************************/
 
-// on load, set things up
 window.onload = GemWarrior._initApp
-
-// initial command
-window.scrollTo(0,1)

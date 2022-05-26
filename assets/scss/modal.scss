@@ -1,20 +1,21 @@
-$blue: #006e90;
-$orange: #f18f01;
-$cloudy-sky: #adcad6;
-$blue-sky: #71d6ff;
-$green: #99c24d;
-$white: #ffffff;
-$black: #000000;
-$gray-dark: #555555;
-$gray: #999999;
-$gray-light: #cccccc;
-$info: #2274a5;
-$warning: #fadf63;
-$danger: #632b30;
+// colors
+$black: #111111;
+$gray-light: #eeeeee;
+$white: #fcfcfc;
+// elements
+$box-shadow: #333333;
+$button-bg: #eff1d1;
+$link-color: #fffca3;
+$prev-color: #7d7d7d;
+$code-color: #b90eb6;
+// sections
+$heading-bg: #444444;
+$heading-bottom: #f4f085;
+$heading-main: #f4f085;
+$heading-sub: #dabd2f;
+$stats-bg: #3d083c;
+$stats-color: #deaddd;
 $debug: #715ec7;
-$shadow-start: rgba(0, 0, 0, 0.45);
-$shadow-end: rgba(0, 0, 0, 0.25);
-$text-shadow: rgba(0, 0, 0, 0.8);
 
 .modal-dialog {
   align-items: center;
@@ -38,7 +39,7 @@ $text-shadow: rgba(0, 0, 0, 0.8);
     background-color: transparent;
 
     .modal-window {
-      background-color: $blue;
+      background-color: $heading-main;
       border: 2px solid $black;
       border-radius: 8px;
       box-shadow: none;
@@ -53,7 +54,7 @@ $text-shadow: rgba(0, 0, 0, 0.8);
 .modal-window {
   --animate-duration: 100ms;
   background-color: $white;
-  border: 4px solid lighten($blue, 5%);
+  border: 4px solid lighten($heading-main, 5%);
   border-top-width: 0;
   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15), 0 0 16px rgba(0, 0, 0, 0.25);
   display: flex;
@@ -70,7 +71,7 @@ $text-shadow: rgba(0, 0, 0, 0.8);
 
 .modal-title {
   align-items: center;
-  background-color: $blue;
+  background-color: $heading-bg;
   color: $white;
   display: flex;
   font-weight: 500;
@@ -167,15 +168,15 @@ $text-shadow: rgba(0, 0, 0, 0.8);
 
 .modal-button-primary {
   color: $white;
-  background-color: $blue;
+  background-color: $heading-main;
 }
 .modal-button-secondary {
   color: $black;
-  background-color: $blue-sky;
+  background-color: darken($heading-main, 5%);
 }
 .modal-button-neutral {
   color: $black;
-  background-color: $gray;
+  background-color: $prev-color;
 }
 .modal-button-action {
   color: $white;
@@ -233,7 +234,7 @@ $text-shadow: rgba(0, 0, 0, 0.8);
 
   .setting-row {
     align-items: center;
-    border-bottom: 1px solid $gray-dark;
+    border-bottom: 1px solid $heading-bg;
     display: flex;
     justify-content: space-between;
     padding: 0;
@@ -250,7 +251,7 @@ $text-shadow: rgba(0, 0, 0, 0.8);
       }
 
       .description {
-        color: $gray-dark;
+        color: $heading-bg;
         font-size: 12px;
       }
     }

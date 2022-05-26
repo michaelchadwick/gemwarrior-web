@@ -18,6 +18,11 @@ $stats-color: #deaddd;
 
 /* FOUNDATION */
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 html {
   height: 100%;
 }
@@ -56,8 +61,8 @@ button {
   height: 30px;
   justify-content: center;
   line-height: 1.5;
-  margin: 0 6px 0 0;
-  padding: 0.375rem 0.75rem;
+  margin: 0 3px 0 0;
+  padding: 0.375rem 0.375rem;
   text-align: center;
   text-transform: uppercase;
   transition:
@@ -71,7 +76,7 @@ button {
 
   &:active,
   &:focus {
-    filter: hue-rotate(-180deg) saturate(10);
+    background-color: $heading-main;
     outline: none;
   }
 
@@ -79,25 +84,9 @@ button {
     margin: 0;
   }
 
-  &.half {
-    flex: 0.5;
-  }
-
-  &.one {
-    flex: 1;
-  }
-
-  &.one-and-a-half {
-    flex: 1.5;
-  }
-
-  &.two {
-    flex: 2;
-  }
-
   &:hover {
+    background-color: $heading-main;
     cursor: pointer;
-    filter: hue-rotate(-180deg) saturate(5);
   }
 
   &:disabled {
@@ -119,6 +108,22 @@ button {
       color: $white;
     }
   }
+}
+
+.half {
+  flex: 0.5;
+}
+
+.one {
+  flex: 1;
+}
+
+.one-and-a-half {
+  flex: 1.5;
+}
+
+.two {
+  flex: 2;
 }
 
 code {
@@ -166,18 +171,18 @@ header {
       height: 100%;
       justify-content: left;
       left: 0;
-      position: absolute;
+      position: fixed;
       top: 0;
       width: 100%;
       z-index: 10;
 
       #nav-content {
         animation: SlideRight 200ms;
-        background-color: $gray-light;
+        background-color: $heading-bg;
         border-radius: 0;
         box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.15);
         box-sizing: border-box;
-        margin-top: 51px;
+        margin-top: 55px;
         max-height: calc(100% - 41px);
         max-width: 500px;
         overflow-y: auto;
@@ -186,7 +191,7 @@ header {
         width: 100%;
 
         a {
-          color: $black;
+          color: $white;
           text-decoration: none;
         }
 
@@ -213,7 +218,7 @@ header {
               padding: 4px 0 4px 18px;
 
               &:hover {
-                background-color: $heading-main;
+                background-color: $heading-sub;
               }
             }
           }
@@ -268,17 +273,18 @@ header {
 
   .title {
     color: $heading-main;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: normal;
-    line-height: 170%;
+    line-height: 200%;
     letter-spacing: 0.1em;
     pointer-events: none;
     text-align: center;
     text-transform: uppercase;
-    transform: translateY(0px);
+    transform: translateY(6px);
   }
 
   .menu-right {
+    display: flex;
     width: 70px;
 
     #button-settings {
@@ -297,13 +303,11 @@ header {
         }
       }
     }
-  }
-}
 
-@media (min-width: 535px) {
-  header {
     .title {
-      transform: translateY(0px);
+      font-size: 0.7rem;
+      line-height: 170%;
+      transform: translateY(3px);
     }
   }
 }
@@ -318,199 +322,227 @@ header {
   }
 }
 
-#output {
-  font-size: 0.9rem;
-  height: 100%;
-  margin-bottom: 105px;
-  margin-top: 55px;
-  padding: 10px;
+section#game {
+  margin: 0 auto;
+  // overflow-y: hidden;
+  width: 100%;
 
-  a {
-    color: darken($link-color, 5%);
-    text-decoration: none;
-    text-shadow: unset;
-    transition: all 0.3s ease-in-out;
+  #output {
+    font-size: 0.9rem;
+    height: 100%;
+    margin: 55px auto 0;
+    overflow-y: scroll;
+    padding: 10px;
+    scroll-behavior: smooth;
 
-    &.glow-repeat {
-      animation: glow-pulse 1.5s ease-in-out infinite alternate;
+    a {
+      color: darken($link-color, 5%);
+      text-decoration: none;
+      text-shadow: unset;
+      transition: all 0.3s ease-in-out;
+
+      &.glow-repeat {
+        animation: glow-pulse 1.5s ease-in-out infinite alternate;
+      }
+
+      &.glow-up {
+        animation: glow-up 0.5s ease-in-out infinite;
+      }
+
+      &.glow-transition {
+        &:hover {
+          color: $stats-color;
+          text-shadow:
+            0 0 5px $stats-bg,
+            0 0 10px $stats-color,
+            0 0 40px $stats-color;
+        }
+      }
     }
 
-    &.glow-up {
-      animation: glow-up 0.5s ease-in-out infinite;
-    }
-
-    &.glow-transition {
-      &:hover {
-        color: $stats-color;
+    @keyframes glow-pulse {
+      100% {
         text-shadow:
-          0 0 5px $stats-bg,
-          0 0 10px $stats-color,
-          0 0 40px $stats-color;
+          0 0 4px $white,
+          0 0 11px $white,
+          0 0 19px $white,
+          0 0 40px $white,
+          0 0 80px darken($white, 5%),
+          0 0 90px darken($white, 5%),
+          0 0 100px darken($white, 5%),
+          0 0 150px darken($white, 5%);
+      }
+
+      0% {
+        text-shadow:
+          0 0 4px $white,
+          0 0 10px $white,
+          0 0 18px $white,
+          0 0 38px $white,
+          0 0 73px darken($white, 5%),
+          0 0 80px darken($white, 5%),
+          0 0 94px darken($white, 5%),
+          0 0 140px darken($white, 5%);
+      }
+    }
+
+    @keyframes glow-up {
+      0% {
+        text-shadow: 0 0 1px $white;
+      }
+
+      100% {
+        text-shadow: 0 0 10px $white;
       }
     }
   }
 
-  @keyframes glow-pulse {
-    100% {
-      text-shadow:
-        0 0 4px $white,
-        0 0 11px $white,
-        0 0 19px $white,
-        0 0 40px $white,
-        0 0 80px darken($white, 5%),
-        0 0 90px darken($white, 5%),
-        0 0 100px darken($white, 5%),
-        0 0 150px darken($white, 5%);
-    }
-
-    0% {
-      text-shadow:
-        0 0 4px $white,
-        0 0 10px $white,
-        0 0 18px $white,
-        0 0 38px $white,
-        0 0 73px darken($white, 5%),
-        0 0 80px darken($white, 5%),
-        0 0 94px darken($white, 5%),
-        0 0 140px darken($white, 5%);
-    }
-  }
-
-  @keyframes glow-up {
-    0% {
-      text-shadow: 0 0 1px $white;
-    }
-
-    100% {
-      text-shadow: 0 0 10px $white;
-    }
+  #spacer {
+    min-height: 70px;
   }
 }
 
-@media screen and (prefers-reduced-motion) {
-  #output {
-    a {
-      animation: none;
-    }
-  }
-}
-
-@media (min-width: 768px) {
-  #output {
-    font-size: 1rem;
-  }
-}
-
-#stats,
-#location {
-  padding: 2px 0 3px;
-  position: fixed;
-  width: 100%;
-  z-index: 0;
-}
-
-#stats {
-  background: $stats-bg;
-  bottom: 145px;
-  clear: left;
-  color: $stats-color;
-  height: 18px;
-  left: 0;
-}
-
-#location {
-  background: #2e0a2e;
-  bottom: 122px;
-  height: 18px;
-}
-
-#avatar {
-  bottom: 44px;
-  color: $white;
-  display: none;
-  font-family: 'Lucida Console', monospace;
-  font-size: 10px;
-  height: 145px;
-  margin: 0;
-  padding: 0;
-  position: fixed;
-  right: 20px;
-  white-space: break-spaces;
-  width: 55px;
-  z-index: 1;
-}
-
-// mobile
-#keyboard {
-  background-color: $black;
+#interface {
+  background-color: #111111;
   bottom: 0;
-  display: block;
-  margin: 0 8px;
+  display: flex;
+  flex-direction: column;
+  height: 165px;
   position: fixed;
-  user-select: none;
   width: 100%;
 
-  .row {
-    display: flex;
-    margin: 0 auto 8px;
-    touch-action: manipulation;
+  #stats,
+  #location {
+    font-size: 0.8rem;
+    padding: 2px;
     width: 100%;
-  }
-}
-
-// desktop
-#cli {
-  background: #222222;
-  border-top: 2px solid $black;
-  bottom: 0;
-  color: $gray-light;
-  display: none;
-  left: 0;
-  padding: 5px 0;
-  position: fixed;
-  width: 100%;
-
-  label {
-    float: left;
-    padding-left: 8px;
-    position: relative;
-    top: 5px;
-  }
-
-  input {
-    background: #222222;
-    border: 0;
-    color: $gray-light;
-    float: left;
-    font-family: 'Lucida Console', 'Consolas', monospace;
-    font-size: 0.9rem;
-    max-width: 100%;
-    outline: none;
-    padding: 5px;
-    position: relative;
-    top: 2px;
-  }
-}
-
-@media (min-width: 768px) {
-  #keyboard {
-    display: none;
-  }
-
-  #cli {
-    display: block;
+    z-index: 0;
   }
 
   #stats {
-    bottom: 62px;
+    background: $stats-bg;
+    color: $stats-color;
+    height: 20px;
   }
 
   #location {
-    bottom: 39px;
+    background: #2e0a2e;
+    height: 20px;
   }
 
   #avatar {
-    display: block;
+    bottom: 44px;
+    color: $white;
+    display: none;
+    font-family: 'Lucida Console', monospace;
+    font-size: 10px;
+    height: 145px;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    right: 20px;
+    white-space: break-spaces;
+    width: 55px;
+    z-index: 1;
+  }
+
+  // mobile
+  #keyboard {
+    margin: 0;
+    padding-top: 8px;
+    user-select: none;
+    width: 95%;
+
+    .row {
+      display: flex;
+      justify-content: center;
+      margin: 0 auto 8px;
+      padding: 0 8px;
+      touch-action: manipulation;
+      width: 100%;
+    }
+  }
+  #keyboard-input {
+    background: $button-bg;
+    border-radius: 4px;
+    bottom: 105%;
+    color: lighten($black, 5%);
+    display: none;
+    font-size: 1.1rem;
+    left: 50%;
+    padding: 5px 10px;
+    pointer-events: none;
+    position: absolute;
+    text-transform: uppercase;
+    transform: translate(-50%, 0);
+    width: fit-content;
+    z-index: 1000;
+
+    &.show {
+      display: block;
+    }
+  }
+
+  // desktop
+  #cli {
+    background: #222222;
+    border-top: 2px solid $black;
+    color: $gray-light;
+    display: none;
+    height: 30px;
+    padding: 5px 0;
+    width: 100%;
+
+    label {
+      float: left;
+      padding-left: 8px;
+      position: relative;
+      top: 5px;
+    }
+
+    input {
+      background: #222222;
+      border: 0;
+      color: $gray-light;
+      float: left;
+      font-family: 'Lucida Console', 'Consolas', monospace;
+      font-size: 0.9rem;
+      max-width: 100%;
+      outline: none;
+      padding: 5px;
+      position: relative;
+      top: 2px;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  #game {
+    #output {
+      bottom: 105px;
+      font-size: 1rem;
+    }
+  }
+
+  #interface {
+    height: 92px;
+
+    #keyboard {
+      display: none;
+    }
+
+    #cli {
+      display: block;
+    }
+
+    #stats,
+    #location {
+      font-size: 1rem;
+    }
+
+    #avatar {
+      display: block;
+    }
   }
 }
 
@@ -532,4 +564,14 @@ header {
 
 .command-previous {
   color: $prev-color;
+}
+
+@media screen and (prefers-reduced-motion) {
+  #game {
+    #output {
+      a {
+        animation: none;
+      }
+    }
+  }
 }
