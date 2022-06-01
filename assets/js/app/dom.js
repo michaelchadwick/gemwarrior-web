@@ -1,3 +1,8 @@
+/* dom */
+/* grab references to dom elements */
+/* global $, GemWarrior */
+
+// DOM > main divs/elements
 GemWarrior.dom = {
   "navOverlay": $('#nav-overlay'),
   "navContent": ('$nav-content'),

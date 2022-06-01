@@ -1,14 +1,14 @@
 /* constants */
 /* set any global constants */
 
-const ENV_PROD_URL = [
+const GW_SETTINGS_KEY = 'gemwarrior-settings'
+const GW_STATE_KEY = 'gemwarrior-state'
+
+const GW_ENV_PROD_URL = [
   'https://gw.neb.host'
 ]
 
-const LS_SETTINGS_KEY = 'gemwarrior-settings'
-const LS_STATE_KEY = 'gemwarrior-state'
-
-const COMMANDS = {
+const GW_COMMANDS = {
   'travel': [
     '(g)o',
     '(n)orth',
@@ -37,7 +37,7 @@ const COMMANDS = {
     '(sett)ings'
   ]
 }
-const LOCATION = {
+const GW_LOCATION = {
   'title': 'Inescapable Hole of Turbidity',
   'objects': ['rock']
 }

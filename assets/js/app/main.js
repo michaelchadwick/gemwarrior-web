@@ -85,20 +85,20 @@ async function modalOpen(type) {
 GemWarrior.saveGlobalSetting = function(setting, value) {
   // console.log('saving setting to LS...', setting, value)
 
-  var settings = JSON.parse(localStorage.getItem(LS_SETTINGS_KEY))
+  var settings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
 
   // set temp obj that will go to LS
   settings[setting] = value
   // set internal code model
   GemWarrior.settings[setting] = value
 
-  localStorage.setItem(LS_SETTINGS_KEY, JSON.stringify(settings))
+  localStorage.setItem(GW_SETTINGS_KEY, JSON.stringify(settings))
 
   // console.log('!global setting saved!', GemWarrior.settings)
 }
 GemWarrior.loadGlobalSettings = function() {
-  if (localStorage.getItem(LS_SETTINGS_KEY)) {
-    var lsConfig = JSON.parse(localStorage.getItem(LS_SETTINGS_KEY))
+  if (localStorage.getItem(GW_SETTINGS_KEY)) {
+    var lsConfig = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
 
     if (lsConfig) {
       if (lsConfig.playSound) {
@@ -164,7 +164,7 @@ GemWarrior.evaluator = function(command) {
   switch (verb) {
     case 'go':
     case 'g':
-      GemWarrior.text = `You go somewhere else inescapable in the <span class='noun'>${LOCATION.title}</span>.`
+      GemWarrior.text = `You go somewhere else inescapable in the <span class='noun'>${GW_LOCATION.title}</span>.`
 
       break
     case 'north':
@@ -189,12 +189,12 @@ GemWarrior.evaluator = function(command) {
 
     case 'look':
     case 'l':
-      GemWarrior.text = `You look around the <span class='noun'>${LOCATION.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
+      GemWarrior.text = `You look around the <span class='noun'>${GW_LOCATION.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
 
-      if (LOCATION.objects.length > 0) {
+      if (GW_LOCATION.objects.length > 0) {
         GemWarrior.text += '<br /><br />'
 
-        GemWarrior.text += `There are things to pick up here: <span class="noun">${LOCATION.objects.join(', ')}</span>`
+        GemWarrior.text += `There are things to pick up here: <span class="noun">${GW_LOCATION.objects.join(', ')}</span>`
       }
 
       break
@@ -234,10 +234,10 @@ GemWarrior.evaluator = function(command) {
     case 'pickup':
     case 'p':
       if (subj) {
-        if (subj === 'rock' && LOCATION.objects.includes('rock')) {
+        if (subj === 'rock' && GW_LOCATION.objects.includes('rock')) {
           GemWarrior.text = 'You pick up a <span class="noun">rock</span>.'
 
-          LOCATION.objects.splice(LOCATION.objects.indexOf('rock'), 1)
+          GW_LOCATION.objects.splice(GW_LOCATION.objects.indexOf('rock'), 1)
           GemWarrior.player.rox++
         } else {
           GemWarrior.text = 'That object is not present, so picking it up is going to be difficult.'
@@ -252,7 +252,7 @@ GemWarrior.evaluator = function(command) {
       if (GemWarrior.player.rox > 0) {
         GemWarrior.player.rox--
 
-        LOCATION.objects.push('rock')
+        GW_LOCATION.objects.push('rock')
 
         GemWarrior.text = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
       } else {
@@ -394,7 +394,7 @@ GemWarrior.evaluator = function(command) {
 
 GemWarrior._initApp = function() {
   // set env
-  GemWarrior.env = ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
+  GemWarrior.env = GW_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
 
   if (GemWarrior.env == 'local') {
     GemWarrior._initDebug()
@@ -535,8 +535,8 @@ GemWarrior._attachEventHandlers = function() {
 GemWarrior._displayHelp = function() {
   var cmdList = ''
 
-  Object.keys(COMMANDS).forEach((key) => {
-    cmdList += `<br />&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${COMMANDS[key].join(', ')}</span><br />`
+  Object.keys(GW_COMMANDS).forEach((key) => {
+    cmdList += `<br />&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${GW_COMMANDS[key].join(', ')}</span><br />`
   })
 
   return `HELP: The following commands are valid: ${cmdList}`
@@ -548,7 +548,7 @@ GemWarrior._updateStatus = function() {
   GemWarrior.dom.statsXP.text(GemWarrior.player.xp)
   GemWarrior.dom.statsHP.text(GemWarrior.player.hp)
   GemWarrior.dom.statsROX.text(GemWarrior.player.rox)
-  GemWarrior.dom.statsLOC.text(LOCATION.title)
+  GemWarrior.dom.statsLOC.text(GW_LOCATION.title)
 }
 
 GemWarrior._resizeFixed = function() {
