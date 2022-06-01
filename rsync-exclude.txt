@@ -9,6 +9,7 @@
 .gitignore
 .jshintrc
 .sass-cache
+node_modules
 LICENSE.md
 README.md
 Rakefile
