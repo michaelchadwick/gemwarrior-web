@@ -1,19 +1,22 @@
-# gemwarrior-web
+# Gem Warrior (web)
 
 A web version of [Gem Warrior](https://github.com/michaelchadwick/gemwarrior).
 
-## audio
+## Audio
 
 Uses [webaudio-tinysynth](https://github.com/g200kg/webaudio-tinysynth) for making noise.
 
-## favicon
+## Favicon
 
 Uses SVGs from [icones.netlify.app](https://icones.netlify.app/collection/all).
 
-## ai art
+## AI Art
 
 Might use "gem warrior" text as image, per [NightCafe](https://creator.nightcafe.studio/).
 
-## contributing
+## Contributing
 
-`rake sass` to build css file (uses [Dart sass](https://sass-lang.com/dart-sass)).
+Uses Ruby `rake`.
+
+Build CSS: `rake sass` (uses [Dart sass](https://sass-lang.com/dart-sass)).
+Watch SCSS: `rake sassw` (uses [Dart sass](https://sass-lang.com/dart-sass)).
