@@ -6,11 +6,13 @@ task :deploy do |t|
 end
 
 task :sass do |t|
-  sh "sass assets/scss/app.scss:assets/css/app.css"
+  # dart sass
+  sh "sass assets/scss:public/build/css"
 end
 
 task :sassw do |t|
-  sh "sass --watch assets/scss/app.scss:assets/css/app.css"
+  # dart sass
+  sh "sass --watch assets/scss:public/build/css"
 end
 
 task :default => [:sass, :deploy]
