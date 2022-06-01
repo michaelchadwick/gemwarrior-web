@@ -1,3 +1,6 @@
+/* avatar */
+/* js worker for avatar display */
+
 onmessage = function(msg) {
   var xhr = new XMLHttpRequest();
 
