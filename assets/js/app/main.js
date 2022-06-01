@@ -145,7 +145,7 @@ GemWarrior.out = function(text, lineBreak) {
 
 // process the user command input
 GemWarrior.evaluator = function(command) {
-  console.log('command', command)
+  // console.log('command', command)
 
   GemWarrior.history.push(command)
   GemWarrior.historyMarker = GemWarrior.history.length
@@ -482,7 +482,7 @@ GemWarrior._attachEventHandlers = function() {
 
     const input = $('#userInput').val()
 
-    console.log('input', input)
+    // console.log('input', input)
 
     // show last entered command
     GemWarrior.out('')
@@ -552,11 +552,13 @@ GemWarrior._updateStatus = function() {
 }
 
 GemWarrior._resizeFixed = function() {
-  console.log('resized fixed elements')
+  // console.log('resized fixed elements')
 
   $('header').width(window.innerWidth - 32)
   $('#spacer').height($('#interface').height() - 2)
   $('#interface #keyboard').width(window.innerWidth - 16)
+
+  GemWarrior._scrollOutput()
 }
 
 // dynamically scroll output depending on height
@@ -572,7 +574,7 @@ GemWarrior._scrollOutput = function() {
 
     window.scrollTo(0, newY)
 
-    console.log(`scrolled to ${newY}`)
+    // console.log(`scrolled to ${newY}`)
   }
 }
 
