@@ -6,7 +6,6 @@
 GemWarrior.dom = {
   "navOverlay": $('#nav-overlay'),
   "navContent": ('$nav-content'),
-  "userInput": $('#userInput'),
   "output": $('#output'),
   "interface": $('#interface'),
   "stats": $('#interface #stats'),
@@ -14,8 +13,7 @@ GemWarrior.dom = {
   "statsXP": $('#interface #stats #xp'),
   "statsROX": $('#interface #stats #rox'),
   "statsHP": $('#interface #stats #hp'),
-  "statsLOC": $('#interface #location #loc'),
-  "keyboardInput": $('#keyboard-input')
+  "statsLOC": $('#interface #location #loc')
 }
 
 // DOM > interactive elements
@@ -23,5 +21,8 @@ GemWarrior.dom.interactive = {
   "btnNav": $('#button-nav'),
   "btnNavClose": $('#button-nav-close'),
   "btnHelp": $('#button-help'),
-  "btnSettings": $('#button-settings')
+  "btnSettings": $('#button-settings'),
+  "cmdInput": $('#command-input'),
+  "keyboard": $('#keyboard'),
+  "keyboardInput": $('#keyboard-input')
 }

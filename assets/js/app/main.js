@@ -267,46 +267,52 @@ GemWarrior._attachEventHandlers = function() {
   $('#keyboard button').click(function (event) {
     const key = event.target.dataset.key
 
+    console.log('key', key)
+
     if (key == '↵') {
       GemWarrior.__handleEnter()
     } else if (key == '<') {
       GemWarrior.__handleBackspace()
     } else {
+      // update keyCommand
       GemWarrior.config.keyCommand += key
 
-      GemWarrior.dom.keyboardInput.addClass('show')
+      // make sure DOM display is visible
+      GemWarrior.dom.interactive.keyboardInput.addClass('show')
     }
 
-    // add keyCommand to visual keyboardInput bubble
-    GemWarrior.dom.keyboardInput.text(GemWarrior.config.keyCommand)
+    // sync to DOM display
+    if (GemWarrior.dom.interactive.keyboard.is(':visible')) {
+      GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+    }
   })
 
   // catch the command bar form
   $('#cli form').submit(function (e) {
     e.preventDefault()
 
-    const input = $('#userInput').val()
+    const input = GemWarrior.dom.interactive.cmdInput.val()
 
-    // console.log('input', input)
+    if (input.length) {
+      // show last entered command
+      GemWarrior._out('')
+      GemWarrior._out(`<span class="command-previous">&gt; ${input}</span>`)
 
-    // show last entered command
-    GemWarrior._out('')
-    GemWarrior._out(`<span class="command-previous">&gt; ${input}</span>`)
+      // evaluate command
+      GemWarrior._repl(GemWarrior._evaluator(input))
 
-    // evaluate command
-    GemWarrior._repl(GemWarrior._evaluator(input))
-
-    // clear command bar
-    $('#userInput').val('')
+      // clear command bar
+      GemWarrior.dom.interactive.cmdInput.val('')
+    }
   })
 
   // jquery command to force the textbox to take focus
-  $('#userInput').focus()
+  GemWarrior.dom.interactive.cmdInput.focus()
 
   // if we leave command bar form, return after a second
   $('*').on('mouseup', function() {
     setTimeout(function() {
-      $('#userInput').focus()
+      GemWarrior.dom.interactive.cmdInput.focus()
     }, 1000)
   })
 
@@ -319,26 +325,31 @@ GemWarrior._attachEventHandlers = function() {
   $(document).on('keydown', function(event) {
     const code = event.code
 
-    if (['ArrowUp', 'ArrowDown'].includes(code)) {
-      GemWarrior.__traverseHistory(code)
-    } else if (code == 'Enter') {
-      GemWarrior.__handleEnter()
-    } else if (code == 'Backspace') {
-      GemWarrior.__handleBackspace()
-    } else if (code.startsWith('Key')) {
-      const key = code.charAt(code.length - 1)
+    if (GemWarrior.dom.interactive.keyboard.is(':visible')) {
+      if (code == 'Enter') {
+        GemWarrior.__handleEnter()
+      } else if (code == 'Backspace') {
+        GemWarrior.__handleBackspace()
+      } else if (code.startsWith('Key')) {
+        const key = code.charAt(code.length - 1)
 
-      $('#keyboard button').each(function() {
-        if ($(this).data('key') == key.toLowerCase()) {
-          GemWarrior.config.keyCommand += key
+        $('#keyboard button').each(function() {
+          if ($(this).data('key') == key.toLowerCase()) {
+            // update keyCommand
+            GemWarrior.config.keyCommand += key
 
-          GemWarrior.dom.keyboardInput.addClass('show')
-        }
-      })
+            // sync to DOM display
+            GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+
+            GemWarrior.dom.interactive.keyboardInput.addClass('show')
+          }
+        })
+      }
+    } else {
+      if (['ArrowUp', 'ArrowDown'].includes(code)) {
+        GemWarrior.__traverseHistory(code)
+      }
     }
-
-    // add keyCommand to visual keyboardInput bubble
-    GemWarrior.dom.keyboardInput.text(GemWarrior.config.keyCommand)
   })
 
   $(document).on('touchmove', function(event) {
@@ -723,22 +734,36 @@ GemWarrior.config.avatar._getBlinkSpeed = function() {
  ************************************************************************/
 
 GemWarrior.__handleEnter = function() {
-  if (GemWarrior.config.keyCommand != '') {
+  if (GemWarrior.config.keyCommand.length > 0) {
+    // display last command and output
     GemWarrior._out('')
     GemWarrior._out(`<span class="command-previous">&gt; ${GemWarrior.config.keyCommand.toLowerCase()}`)
     GemWarrior._out(GemWarrior._evaluator(GemWarrior.config.keyCommand.toLowerCase()))
 
+    // reset keyCommand
     GemWarrior.config.keyCommand = ''
-    GemWarrior.dom.keyboardInput.removeClass('show')
+
+    // sync to DOM display
+    GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+
+    //
+    GemWarrior.dom.interactive.keyboardInput.removeClass('show')
   }
 }
 
 GemWarrior.__handleBackspace = function() {
   if (GemWarrior.config.keyCommand.length) {
+    // remove last letter from keyCommand
     GemWarrior.config.keyCommand = GemWarrior.config.keyCommand.slice(0, GemWarrior.config.keyCommand.length - 1)
 
-    if (!GemWarrior.config.keyCommand) {
-      GemWarrior.dom.keyboardInput.removeClass('show')
+    // sync to DOM display
+    GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+
+    console.log(GemWarrior.config.keyCommand.length)
+
+    // if keyCommand is empty, hide DOM display
+    if (GemWarrior.config.keyCommand.length <= 0) {
+      GemWarrior.dom.interactive.keyboardInput.removeClass('show')
     }
   }
 }
@@ -771,25 +796,25 @@ GemWarrior.__traverseHistory = function(key) {
       if (GemWarrior.config.historyMarker < GemWarrior.config.history.length) {
         GemWarrior.config.historyMarker++
       } else { // back to current untyped-as-of-yet command
-        GemWarrior.dom.userInput.val()
+        GemWarrior.dom.interactive.cmdInput.val()
         GemWarrior.config.historyMarker = GemWarrior.config.history.length
       }
     }
 
     // set command bar to historical value
-    GemWarrior.dom.userInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker])
+    GemWarrior.dom.cmdInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker])
 
     // move cursor to end of value
-    var cmd = document.getElementById('userInput')
+    var cmd = GemWarrior.dom.interactive.cmdInput
 
     if (cmd.setSelectionRange) {
-      var len = GemWarrior.dom.userInput.val().length * 2
+      var len = GemWarrior.dom.interactive.cmdInput.val().length * 2
 
       setTimeout(function() {
         cmd.setSelectionRange(len, len)
       }, 1)
     } else {
-      GemWarrior.dom.userInput.val(GemWarrior.dom.userInput.val())
+      GemWarrior.dom.interactive.cmdInput.val(GemWarrior.dom.interactive.cmdInput.val())
     }
   }
 }
