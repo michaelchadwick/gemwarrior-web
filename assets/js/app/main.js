@@ -21,7 +21,6 @@ GemWarrior.config = {
       'candlestick holder'
     ]
   },
-  "avatar": {},
   "avatarWorker": null,
   "blinker": null,
   "history": [],
@@ -100,8 +99,6 @@ GemWarrior.initApp = function() {
 
   GemWarrior._loadSettings()
 
-  GemWarrior.config.avatar._initAvatarDisplay()
-
   GemWarrior._resizeFixed()
 
   GemWarrior.__displayWelcome()
@@ -150,7 +147,12 @@ GemWarrior._loadSettings = function() {
     if (lsSettings.showAvatar) {
       GemWarrior.settings.showAvatar = lsSettings.showAvatar
 
-      GemWarrior.config.avatar._initAvatarDisplay()
+      if (GemWarrior.settings.showAvatar) {
+        if (!GemWarrior.config.avatarWorker) {
+          GemWarrior._initAvatarWorker()
+          GemWarrior._avatarStand()
+        }
+      }
 
       var setting = document.getElementById('button-setting-show-avatar')
 
@@ -181,9 +183,8 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'true'
 
+          // initialize synth instance
           GemWarrior.config.synth = new WebAudioTinySynth()
-
-          GemWarrior.config.text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword true">${GemWarrior.settings.playSound}</span>.`
 
           // save to code/LS
           GemWarrior._saveSetting('playSound', true)
@@ -191,9 +192,8 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'false'
 
+          // destory synth instance
           GemWarrior.config.synth = null
-
-          GemWarrior.config.text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword false">${GemWarrior.settings.playSound}</span>.`
 
           // save to code/LS
           GemWarrior._saveSetting('playSound', false)
@@ -211,9 +211,10 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-show-avatar').dataset.status = 'true'
 
-          GemWarrior.config.text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword true">${GemWarrior.settings.showAvatar}</span>.`
-
-          GemWarrior.config.avatar._getAvatarDisplay(GemWarrior.config.player.status)
+          if (!GemWarrior.config.avatarWorker) {
+            GemWarrior._initAvatarWorker()
+            GemWarrior._avatarStand()
+          }
 
           // save to code/LS
           GemWarrior._saveSetting('showAvatar', true)
@@ -221,9 +222,8 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-show-avatar').dataset.status = 'false'
 
-          GemWarrior.config.text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword false">${GemWarrior.settings.showAvatar}</span>.`
-
-          $('#avatar').html('')
+          // remove html from avatar div
+          GemWarrior._destroyAvatarDisplay()
 
           // save to code/LS
           GemWarrior._saveSetting('showAvatar', false)
@@ -533,7 +533,7 @@ GemWarrior._evaluator = function(command) {
         GemWarrior.config.text = `You are already ${GemWarrior.config.player.status}.`
       } else {
         GemWarrior.config.player.status = 'sitting'
-        GemWarrior.config.avatar._playerSit()
+        GemWarrior._avatarSit()
         GemWarrior.config.text = 'You sit down.'
       }
 
@@ -544,7 +544,7 @@ GemWarrior._evaluator = function(command) {
         GemWarrior.config.text = `You are already ${GemWarrior.config.player.status}.`
       } else {
         GemWarrior.config.player.status = 'standing'
-        GemWarrior.config.avatar._playerStand()
+        GemWarrior._avatarStand()
         GemWarrior.config.text = 'You stand up.'
       }
 
@@ -552,7 +552,7 @@ GemWarrior._evaluator = function(command) {
     case 'sleep':
     case 'sl':
       GemWarrior.config.player.status = 'reclining'
-      GemWarrior.config.avatar._playerRecline()
+      GemWarrior._avatarRecline()
 
       GemWarrior.config.text = 'You lie down to rest.'
 
@@ -660,79 +660,102 @@ GemWarrior._playSong = function() {
   }
 }
 
-// shuttle avatar display workload to web worker
-GemWarrior.config.avatar._initAvatarDisplay = function() {
+// shuttle avatar display workload to Web Worker
+GemWarrior._initAvatarWorker = function() {
   if (window.Worker) {
+    // console.log('creating new web worker for avatar')
+
+    // Web Worker created from file
     GemWarrior.config.avatarWorker = new Worker('assets/js/app/avatar.js')
 
-    GemWarrior.config.avatarWorker.onmessage = (response) => {
-      $('#avatar').html(response.data)
-    }
-  }
-}
-GemWarrior.config.avatar._getAvatarDisplay = function(status) {
-  if (GemWarrior.config.avatarWorker) {
-    if (GemWarrior.settings.showAvatar) {
-      GemWarrior.config.avatarWorker.postMessage(status)
+    if (GemWarrior.config.avatarWorker) {
+      // console.log('avatarWorker created successfully')
 
-      GemWarrior.config.avatar._playerStand()
+      // attach event listener to process successful Web Worker responses
+      GemWarrior.config.avatarWorker.onmessage = (response) => {
+        GemWarrior.dom.avatar.html(response.data)
+      }
+
+      // initialize data into CacheStorage, if needed
+      GemWarrior.config.avatarWorker.postMessage({ command: 'init' })
+
+      // get initial player avatar display
+      GemWarrior._getAvatarDisplay(GemWarrior.config.player.status)
+    } else {
+      console.error('Web Worker creation failed')
     }
   } else {
-    console.error('no GemWarrior.config.avatarWorker to postMessage')
+    console.error('Web Workers not available', error)
   }
 }
-GemWarrior.config.avatar._playerStand = function() {
+
+GemWarrior._getAvatarDisplay = function(type) {
+  // is this setting enabled?
+  if (GemWarrior.settings.showAvatar) {
+    // do we have a valid Web Worker?
+    if (GemWarrior.config.avatarWorker) {
+      // console.log('sending a message to avatarWorker', )
+
+      // tell Web Worker which data we want via status key
+      GemWarrior.config.avatarWorker.postMessage({ command: 'status', value: type })
+    } else {
+      console.error('no valid Web Worker to postMessage')
+    }
+  }
+}
+
+GemWarrior._avatarStand = function() {
   GemWarrior.config.player.status = 'standing'
-  GemWarrior.config.avatar._getAvatarDisplay('standing')
-  GemWarrior.config.avatar._playerBlink()
+  GemWarrior._getAvatarDisplay('standing')
+  GemWarrior._avatarBlink()
 }
-GemWarrior.config.avatar._playerSit = function() {
+GemWarrior._avatarSit = function() {
   GemWarrior.config.player.status = 'sitting'
-  GemWarrior.config.avatar._getAvatarDisplay('sitting')
-  GemWarrior.config.avatar._playerBlink()
+  GemWarrior._getAvatarDisplay('sitting')
+  GemWarrior._avatarBlink()
 }
-GemWarrior.config.avatar._playerRecline = function() {
+GemWarrior._avatarRecline = function() {
   reclineTimer = null
 
   if (GemWarrior.config.player.status === 'reclining') {
     clearInterval(GemWarrior.config.blinker)
-    GemWarrior.config.avatar._getAvatarDisplay('reclining1')
+    GemWarrior._getAvatarDisplay('reclining1')
     reclineTimer = setTimeout(() => {
-      GemWarrior.config.avatar._getAvatarDisplay('reclining2')
+      GemWarrior._getAvatarDisplay('reclining2')
       setTimeout(() => {
-        GemWarrior.config.avatar._getAvatarDisplay('reclining3')
-        setTimeout(() => _playerRecline(), 1000)
+        GemWarrior._getAvatarDisplay('reclining3')
+        setTimeout(() => GemWarrior._avatarRecline(), 1000)
       }, 1000)
     }, 1000)
   }
 }
-GemWarrior.config.avatar._playerBlink = function() {
+GemWarrior._avatarBlink = function() {
   clearInterval(GemWarrior.config.blinker)
 
   if (GemWarrior.config.player.status === 'standing') {
     GemWarrior.config.blinker = setInterval(() => {
-      GemWarrior.config.avatar._getAvatarDisplay('standing-blink')
-      setTimeout(() => GemWarrior.config.avatar._getAvatarDisplay('standing'), GemWarrior.config.avatar._getBlinkSpeed())
-    }, GemWarrior.config.avatar._getBlinkFreq())
+      GemWarrior._getAvatarDisplay('standing-blink')
+      setTimeout(() => GemWarrior._getAvatarDisplay('standing'), GemWarrior.__getAvatarBlinkSpeed())
+    }, GemWarrior.__getAvatarBlinkFreq())
   }
   else if (GemWarrior.config.player.status === 'sitting') {
     GemWarrior.config.blinker = setInterval(() => {
-      _getAvatarDisplay('sitting-blink')
-      setTimeout(() => GemWarrior.config.avatar._getAvatarDisplay('sitting'), GemWarrior.config.avatar._getBlinkSpeed())
-    }, GemWarrior.config.avatar._getBlinkFreq())
+      GemWarrior._getAvatarDisplay('sitting-blink')
+      setTimeout(() => GemWarrior._getAvatarDisplay('sitting'), GemWarrior.__getAvatarBlinkSpeed())
+    }, GemWarrior.__getAvatarBlinkFreq())
   }
 }
-GemWarrior.config.avatar._getBlinkFreq = function() {
-  var min = 2000
-  var max = 20000
 
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-GemWarrior.config.avatar._getBlinkSpeed = function() {
-  var min = 100
-  var max = 600
+GemWarrior._destroyAvatarDisplay = function() {
+  if (window.Worker) {
+    // console.log('destroying web worker for avatar')
 
-  return Math.floor(Math.random() * (max - min + 1) + min)
+    GemWarrior.config.avatarWorker = null
+
+    GemWarrior.dom.avatar.html('')
+  } else {
+    console.error('could not destroy avatar', error)
+  }
 }
 
 /************************************************************************
@@ -839,6 +862,19 @@ GemWarrior.__displayWelcome = function() {
   GemWarrior._out('')
   GemWarrior._out('<strong>Good luck...</strong>')
   GemWarrior._out('************************')
+}
+
+GemWarrior.__getAvatarBlinkFreq = function() {
+  var min = 2000
+  var max = 20000
+
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+GemWarrior.__getAvatarBlinkSpeed = function() {
+  var min = 100
+  var max = 600
+
+  return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 /*************************************************************************
