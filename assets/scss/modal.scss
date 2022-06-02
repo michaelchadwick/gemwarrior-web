@@ -17,6 +17,7 @@ $stats-bg: #3d083c;
 $stats-color: #deaddd;
 $debug: #715ec7;
 
+/* MODAL */
 .modal-dialog {
   align-items: center;
   background-color: rgb(0, 0, 0);
@@ -226,6 +227,7 @@ $debug: #715ec7;
   }
 }
 
+/* MODAL->SETTINGS */
 #settings {
   align-content: center;
   display: flex;
