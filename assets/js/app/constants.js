@@ -33,8 +33,7 @@ const GW_COMMANDS = {
     '(pl)ay song',
     '(h)elp',
     '(hist)ory',
-    '(a)bout',
-    '(sett)ings'
+    '(a)bout'
   ]
 }
 const GW_LOCATION = {

@@ -100,11 +100,11 @@ GemWarrior.initApp = function() {
 
   GemWarrior._loadSettings()
 
-  GemWarrior._welcome()
-
   GemWarrior.config.avatar._initAvatarDisplay()
 
   GemWarrior._resizeFixed()
+
+  GemWarrior.__displayWelcome()
 
   // initial command
   window.scrollTo(0,1)
@@ -181,11 +181,19 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'true'
 
+          GemWarrior.config.synth = new WebAudioTinySynth()
+
+          GemWarrior.config.text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword true">${GemWarrior.settings.playSound}</span>.`
+
           // save to code/LS
           GemWarrior._saveSetting('playSound', true)
         } else {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'false'
+
+          GemWarrior.config.synth = null
+
+          GemWarrior.config.text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword false">${GemWarrior.settings.playSound}</span>.`
 
           // save to code/LS
           GemWarrior._saveSetting('playSound', false)
@@ -203,13 +211,19 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-show-avatar').dataset.status = 'true'
 
-          GemWarrior.config.avatar._initAvatarDisplay()
+          GemWarrior.config.text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword true">${GemWarrior.settings.showAvatar}</span>.`
+
+          GemWarrior.config.avatar._getAvatarDisplay(GemWarrior.config.player.status)
 
           // save to code/LS
           GemWarrior._saveSetting('showAvatar', true)
         } else {
           // update setting DOM
           document.getElementById('button-setting-show-avatar').dataset.status = 'false'
+
+          GemWarrior.config.text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword false">${GemWarrior.settings.showAvatar}</span>.`
+
+          $('#avatar').html('')
 
           // save to code/LS
           GemWarrior._saveSetting('showAvatar', false)
@@ -254,20 +268,9 @@ GemWarrior._attachEventHandlers = function() {
     const key = event.target.dataset.key
 
     if (key == '↵') {
-      GemWarrior._out('')
-      GemWarrior._out(`<span class="command-previous">&gt; ${GemWarrior.config.keyCommand}`)
-      GemWarrior._out(GemWarrior._evaluator(GemWarrior.config.keyCommand))
-
-      GemWarrior.config.keyCommand = ''
-      GemWarrior.dom.keyboardInput.removeClass('show')
+      GemWarrior.__handleEnter()
     } else if (key == '<') {
-      if (GemWarrior.config.keyCommand.length) {
-        GemWarrior.config.keyCommand = GemWarrior.config.keyCommand.slice(0, GemWarrior.config.keyCommand.length - 1)
-
-        if (!GemWarrior.config.keyCommand) {
-          GemWarrior.dom.keyboardInput.removeClass('show')
-        }
-      }
+      GemWarrior.__handleBackspace()
     } else {
       GemWarrior.config.keyCommand += key
 
@@ -307,14 +310,35 @@ GemWarrior._attachEventHandlers = function() {
     }, 1000)
   })
 
+  // $('#output').scroll(function() {
+  //   const output = document.getElementById('output')
+  //   console.log('#output scrollTop, scrollHeight, clientHeight', output.scrollTop, output.scrollHeight, output.clientHeight)
+  // })
+
   // cycle through previous commands
   $(document).on('keydown', function(event) {
-    const keyUp = 38
-    const keyDn = 40
+    const code = event.code
 
-    if ([keyUp, keyDn].includes(event.keyCode)) {
-      GemWarrior._traverseHistory(event.keyCode)
+    if (['ArrowUp', 'ArrowDown'].includes(code)) {
+      GemWarrior.__traverseHistory(code)
+    } else if (code == 'Enter') {
+      GemWarrior.__handleEnter()
+    } else if (code == 'Backspace') {
+      GemWarrior.__handleBackspace()
+    } else if (code.startsWith('Key')) {
+      const key = code.charAt(code.length - 1)
+
+      $('#keyboard button').each(function() {
+        if ($(this).data('key') == key.toLowerCase()) {
+          GemWarrior.config.keyCommand += key
+
+          GemWarrior.dom.keyboardInput.addClass('show')
+        }
+      })
     }
+
+    // add keyCommand to visual keyboardInput bubble
+    GemWarrior.dom.keyboardInput.text(GemWarrior.config.keyCommand)
   })
 
   $(document).on('touchmove', function(event) {
@@ -326,29 +350,11 @@ GemWarrior._attachEventHandlers = function() {
   }, false)
 
   // When the user clicks or touches anywhere outside of the modal, close it
-  window.addEventListener('click', GemWarrior._handleClickTouch)
-  window.addEventListener('touchend', GemWarrior._handleClickTouch)
+  window.addEventListener('click', GemWarrior.__handleClickTouch)
+  window.addEventListener('touchend', GemWarrior.__handleClickTouch)
 
   // on viewport change, resize output
   window.onresize = GemWarrior._resizeFixed
-}
-
-// handle both clicks and touches outside of modals
-GemWarrior._handleClickTouch = function(event) {
-  var dialog = document.getElementsByClassName('modal-dialog')[0]
-
-  if (dialog) {
-    var isConfirm = dialog.classList.contains('modal-confirm')
-
-    // only close if not a confirmation!
-    if (event.target == dialog && !isConfirm) {
-      dialog.remove()
-    }
-  }
-
-  if (event.target == GemWarrior.dom.navOverlay) {
-    GemWarrior.dom.navOverlay.classList.toggle('show')
-  }
 }
 
 // update user stats and send command result to display function
@@ -556,7 +562,7 @@ GemWarrior._evaluator = function(command) {
 
     case 'history':
     case 'hist':
-      GemWarrior.config.text = GemWarrior._getHistoryDisplay()
+      GemWarrior.config.text = GemWarrior.__getHistoryDisplay()
 
       break
 
@@ -565,46 +571,6 @@ GemWarrior._evaluator = function(command) {
       GemWarrior.config.text = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
 
       <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
-
-      break
-
-    case 'settings':
-    case 'sett':
-      if (subj) {
-        switch (subj) {
-          case 'playsound':
-            GemWarrior.settings.playSound = !GemWarrior.settings.playSound
-
-            if (GemWarrior.settings.playSound) {
-              GemWarrior.config.synth = new WebAudioTinySynth()
-
-              GemWarrior.config.text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword true">${GemWarrior.settings.playSound}</span>.`
-            } else {
-              GemWarrior.config.synth = null
-
-              GemWarrior.config.text = `Toggling the <span class="keyword">playSound</span> setting to <span class="keyword false">${GemWarrior.settings.playSound}</span>.`
-            }
-
-            break
-          case 'showavatar':
-            GemWarrior.settings.showAvatar = !GemWarrior.settings.showAvatar
-
-            if (!GemWarrior.settings.showAvatar) {
-              GemWarrior.config.text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword false">${GemWarrior.settings.showAvatar}</span>.`
-
-              $('#avatar').html('')
-            } else {
-              GemWarrior.config.text = `Toggling the <span class="keyword">showAvatar</span> setting to <span class="keyword true">${GemWarrior.settings.showAvatar}</span>.`
-
-              GemWarrior.config.avatar._getAvatarDisplay(GemWarrior.config.player.status)
-            }
-            break
-          default:
-            GemWarrior.config.text = `There is no current setting with the name <span class="keyword">${subj}.`
-        }
-      } else {
-        GemWarrior.config.text = `<code>${JSON.stringify(GemWarrior.settings, null, 2)}</code>`
-      }
 
       break
 
@@ -637,8 +603,9 @@ GemWarrior._updateStatus = function() {
   GemWarrior.dom.statsLOC.text(GW_LOCATION.title)
 }
 
+// resize fixed elements when viewport changes
 GemWarrior._resizeFixed = function() {
-  console.log('resized fixed elements')
+  // console.log('resized fixed elements')
 
   $('header').width(window.innerWidth - 32)
   $('#spacer').height($('#interface').height() - 2)
@@ -651,63 +618,15 @@ GemWarrior._resizeFixed = function() {
 GemWarrior._scrollOutput = function() {
   const output = document.getElementById('output')
 
+  // console.log('no scrolling yet')
+  // console.log('output.scrollHeight, output.clientHeight', output.scrollHeight, output.clientHeight)
+
   if (output.scrollHeight > output.clientHeight) {
-    $('#output').animate({ scrollTop: output.clientHeight }, 100, function() {
-      console.log('scrolled output')
+    $('#output').animate({ scrollTop: output.scrollHeight }, 100, function() {
+      // console.log('scrolled output', document.getElementById('output').scrollTop)
+      // console.log('output.scrollHeight, output.clientHeight', output.scrollHeight, output.clientHeight)
     })
   }
-}
-
-// replace the command bar's command with historic data if available
-GemWarrior._traverseHistory = function(key) {
-  const up = 38
-
-  if (GemWarrior.config.history.length > 0) {
-    if (key === up) { // up, or "back", or "prev cmd"
-      if (GemWarrior.config.historyMarker > 0) {
-        GemWarrior.config.historyMarker--
-      }
-    } else { // down, or "forward", or "next most recent cmd"
-      if (GemWarrior.config.historyMarker < GemWarrior.config.history.length) {
-        GemWarrior.config.historyMarker++
-      } else { // back to current untyped-as-of-yet command
-        GemWarrior.dom.userInput.val()
-        GemWarrior.config.historyMarker = GemWarrior.config.history.length
-      }
-    }
-
-    // set command bar to historical value
-    GemWarrior.dom.userInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker])
-
-    // move cursor to end of value
-    var cmd = document.getElementById('userInput')
-
-    if (cmd.setSelectionRange) {
-      var len = GemWarrior.dom.userInput.val().length * 2
-
-      setTimeout(function() {
-        cmd.setSelectionRange(len, len)
-      }, 1)
-    } else {
-      GemWarrior.dom.userInput.val(GemWarrior.dom.userInput.val())
-    }
-  }
-}
-
-// get a filtered list of the player's command history
-GemWarrior._getHistoryDisplay = function() {
-  return `<strong>Command history</strong>: ${GemWarrior.config.history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
-}
-
-// display welcome message
-GemWarrior._welcome = function() {
-  GemWarrior._out('************************')
-  GemWarrior._out('Welcome to Gem Warrior!')
-  GemWarrior._out('')
-  GemWarrior._out('Try <span class="keyword">help</span> if stuck')
-  GemWarrior._out('')
-  GemWarrior._out('<strong>Good luck...</strong>')
-  GemWarrior._out('************************')
 }
 
 // play cute song
@@ -797,6 +716,98 @@ GemWarrior.config.avatar._getBlinkSpeed = function() {
   var max = 600
 
   return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+/************************************************************************
+ * _private __helper methods *
+ ************************************************************************/
+
+GemWarrior.__handleEnter = function() {
+  if (GemWarrior.config.keyCommand != '') {
+    GemWarrior._out('')
+    GemWarrior._out(`<span class="command-previous">&gt; ${GemWarrior.config.keyCommand.toLowerCase()}`)
+    GemWarrior._out(GemWarrior._evaluator(GemWarrior.config.keyCommand.toLowerCase()))
+
+    GemWarrior.config.keyCommand = ''
+    GemWarrior.dom.keyboardInput.removeClass('show')
+  }
+}
+
+GemWarrior.__handleBackspace = function() {
+  if (GemWarrior.config.keyCommand.length) {
+    GemWarrior.config.keyCommand = GemWarrior.config.keyCommand.slice(0, GemWarrior.config.keyCommand.length - 1)
+
+    if (!GemWarrior.config.keyCommand) {
+      GemWarrior.dom.keyboardInput.removeClass('show')
+    }
+  }
+}
+
+GemWarrior.__handleClickTouch = function(event) {
+  var dialog = document.getElementsByClassName('modal-dialog')[0]
+
+  if (dialog) {
+    var isConfirm = dialog.classList.contains('modal-confirm')
+
+    // only close if not a confirmation!
+    if (event.target == dialog && !isConfirm) {
+      dialog.remove()
+    }
+  }
+
+  if (event.target == GemWarrior.dom.navOverlay) {
+    GemWarrior.dom.navOverlay.classList.toggle('show')
+  }
+}
+
+// replace the command bar's command with historic data if available
+GemWarrior.__traverseHistory = function(key) {
+  if (GemWarrior.config.history.length > 0) {
+    if (key === 'ArrowUp') { // up, or "back", or "prev cmd"
+      if (GemWarrior.config.historyMarker > 0) {
+        GemWarrior.config.historyMarker--
+      }
+    } else { // down, or "forward", or "next most recent cmd"
+      if (GemWarrior.config.historyMarker < GemWarrior.config.history.length) {
+        GemWarrior.config.historyMarker++
+      } else { // back to current untyped-as-of-yet command
+        GemWarrior.dom.userInput.val()
+        GemWarrior.config.historyMarker = GemWarrior.config.history.length
+      }
+    }
+
+    // set command bar to historical value
+    GemWarrior.dom.userInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker])
+
+    // move cursor to end of value
+    var cmd = document.getElementById('userInput')
+
+    if (cmd.setSelectionRange) {
+      var len = GemWarrior.dom.userInput.val().length * 2
+
+      setTimeout(function() {
+        cmd.setSelectionRange(len, len)
+      }, 1)
+    } else {
+      GemWarrior.dom.userInput.val(GemWarrior.dom.userInput.val())
+    }
+  }
+}
+
+// get a filtered list of the player's command history
+GemWarrior.__getHistoryDisplay = function() {
+  return `<strong>Command history</strong>: ${GemWarrior.config.history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
+}
+
+// display welcome message
+GemWarrior.__displayWelcome = function() {
+  GemWarrior._out('************************')
+  GemWarrior._out('Welcome to Gem Warrior!')
+  GemWarrior._out('')
+  GemWarrior._out('Try <span class="keyword">help</span> if stuck')
+  GemWarrior._out('')
+  GemWarrior._out('<strong>Good luck...</strong>')
+  GemWarrior._out('************************')
 }
 
 /*************************************************************************
