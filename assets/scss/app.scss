@@ -74,21 +74,6 @@ button {
   vertical-align: middle;
   white-space: nowrap;
 
-  &:active,
-  &:focus {
-    background-color: $heading-main;
-    outline: none;
-  }
-
-  &:last-of-type {
-    margin: 0;
-  }
-
-  &:hover {
-    background-color: $heading-main;
-    cursor: pointer;
-  }
-
   &:disabled {
     background-color: #eee;
     color: #ddd;
@@ -107,6 +92,14 @@ button {
     &:hover {
       color: $white;
     }
+  }
+
+  &.inline {
+    display: inline-flex;
+    font-size: 0.75rem;
+    height: 20px;
+    margin-right: 0;
+    padding: 0.2rem;
   }
 }
 
@@ -466,6 +459,12 @@ header {
       padding: 0 8px;
       touch-action: manipulation;
       width: 100%;
+
+      button {
+        &:last-of-type {
+          margin: 0;
+        }
+      }
     }
   }
   #keyboard-input {

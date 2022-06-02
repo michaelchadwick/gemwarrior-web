@@ -2,6 +2,8 @@
 /* js worker for avatar display */
 
 onmessage = function(msg) {
+  console.log('requesting an avatar change')
+
   var xhr = new XMLHttpRequest();
 
   switch (msg.data) {

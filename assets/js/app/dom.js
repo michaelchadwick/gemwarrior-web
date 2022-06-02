@@ -13,7 +13,8 @@ GemWarrior.dom = {
   "statsXP": $('#interface #stats #xp'),
   "statsROX": $('#interface #stats #rox'),
   "statsHP": $('#interface #stats #hp'),
-  "statsLOC": $('#interface #location #loc')
+  "statsLOC": $('#interface #location #loc'),
+  "avatar": $('#interface #avatar')
 }
 
 // DOM > interactive elements

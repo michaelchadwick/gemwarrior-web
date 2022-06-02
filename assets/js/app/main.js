@@ -140,7 +140,7 @@ GemWarrior._loadSettings = function() {
     if (lsSettings.playSound) {
       GemWarrior.settings.playSound = lsSettings.playSound
 
-      var setting = document.getElementById('button-settings-play-sound')
+      var setting = document.getElementById('button-setting-play-sound')
 
       if (setting) {
         setting.dataset.status = 'true'
@@ -152,7 +152,7 @@ GemWarrior._loadSettings = function() {
 
       GemWarrior.config.avatar._initAvatarDisplay()
 
-      var setting = document.getElementById('button-settings-show-avatar')
+      var setting = document.getElementById('button-setting-show-avatar')
 
       if (setting) {
         setting.dataset.status = 'true'
@@ -325,29 +325,35 @@ GemWarrior._attachEventHandlers = function() {
   $(document).on('keydown', function(event) {
     const code = event.code
 
-    if (GemWarrior.dom.interactive.keyboard.is(':visible')) {
-      if (code == 'Enter') {
-        GemWarrior.__handleEnter()
-      } else if (code == 'Backspace') {
-        GemWarrior.__handleBackspace()
-      } else if (code.startsWith('Key')) {
-        const key = code.charAt(code.length - 1)
+    var excludedKeys = ['Alt', 'Control', 'Meta', 'Shift']
 
-        $('#keyboard button').each(function() {
-          if ($(this).data('key') == key.toLowerCase()) {
-            // update keyCommand
-            GemWarrior.config.keyCommand += key
+    if (!excludedKeys.some(key => event.originalEvent.getModifierState(key))) {
+      if (GemWarrior.dom.interactive.keyboard.is(':visible')) {
+        if (code == 'Enter') {
+          event.preventDefault()
 
-            // sync to DOM display
-            GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+          GemWarrior.__handleEnter()
+        } else if (code == 'Backspace') {
+          GemWarrior.__handleBackspace()
+        } else if (code.startsWith('Key')) {
+          const key = code.charAt(code.length - 1)
 
-            GemWarrior.dom.interactive.keyboardInput.addClass('show')
-          }
-        })
-      }
-    } else {
-      if (['ArrowUp', 'ArrowDown'].includes(code)) {
-        GemWarrior.__traverseHistory(code)
+          $('#keyboard button').each(function() {
+            if ($(this).data('key') == key.toLowerCase()) {
+              // update keyCommand
+              GemWarrior.config.keyCommand += key
+
+              // sync to DOM display
+              GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+
+              GemWarrior.dom.interactive.keyboardInput.addClass('show')
+            }
+          })
+        }
+      } else {
+        if (['ArrowUp', 'ArrowDown'].includes(code)) {
+          GemWarrior.__traverseHistory(code)
+        }
       }
     }
   })
@@ -559,7 +565,7 @@ GemWarrior._evaluator = function(command) {
       if (GemWarrior.settings.playSound) {
         GemWarrior.config.text = 'Playing the song of my people...'
       } else {
-        GemWarrior.config.text = `Sound is not enabled. Try <span class="keyword">settings playSound</span>.`
+        GemWarrior.config.text = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
       }
 
       break;
@@ -746,7 +752,7 @@ GemWarrior.__handleEnter = function() {
     // sync to DOM display
     GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
 
-    //
+    // if keyCommand is empty, hide DOM display
     GemWarrior.dom.interactive.keyboardInput.removeClass('show')
   }
 }
