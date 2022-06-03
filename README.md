@@ -1,6 +1,6 @@
 # Gem Warrior (web)
 
-A web version of [Gem Warrior](https://github.com/michaelchadwick/gemwarrior).
+A web version of [Gem Warrior](https://github.com/michaelchadwick/gemwarrior). Uses [CacheStorage](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) and [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
 
 ## Audio
 
