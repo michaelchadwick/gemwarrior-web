@@ -4,6 +4,7 @@
 
 // settings: saved in LOCAL STORAGE
 GemWarrior.settings = {
+  'textSize': '16',
   'playSound': false,
   'showAvatar': false
 }
@@ -44,6 +45,19 @@ async function modalOpen(type) {
       this.myModal = new Modal('perm', 'Settings',
         `
           <div id="settings">
+          <!-- text size -->
+            <div class="setting-row">
+              <div class="text">
+                <div class="title">Text size</div>
+                <div class="description">Adjust text size of output.</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <input type="number" id="text-size-pixels" max="22" min="4" step="1" value="16" onchange="GemWarrior._changeSetting('textSize')" onkeyup="GemWarrior._changeSetting('textSize', event)" />
+                </div>
+              </div>
+            </div>
+            <!-- play sound -->
             <div class="setting-row">
               <div class="text">
                 <div class="title">Play sound</div>
@@ -57,6 +71,7 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+            <!-- show avatar -->
             <div class="setting-row">
               <div class="text">
                 <div class="title">Show avatar</div>
@@ -134,6 +149,18 @@ GemWarrior._loadSettings = function() {
   const lsSettings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
 
   if (lsSettings) {
+    if (lsSettings.textSize) {
+      GemWarrior.settings.textSize = lsSettings.textSize
+
+      $('#output').css('font-size', GemWarrior.settings.textSize + 'px')
+
+      var setting = document.getElementById('text-size-pixels')
+
+      if (setting) {
+        setting.value = lsSettings.textSize
+      }
+    }
+
     if (lsSettings.playSound) {
       GemWarrior.settings.playSound = lsSettings.playSound
 
@@ -173,6 +200,18 @@ GemWarrior._loadSettings = function() {
 }
 GemWarrior._changeSetting = function(setting, event = null) {
   switch (setting) {
+    case 'textSize':
+      var st = document.getElementById('text-size-pixels').value
+
+      if (st != '') {
+        // sync to DOM
+        $('#output').css('font-size', st + 'px')
+
+        // save to code/LS
+        GemWarrior._saveSetting('textSize', st)
+      }
+      break
+
     case 'playSound':
       var st = document.getElementById('button-setting-play-sound')
 
@@ -267,7 +306,7 @@ GemWarrior._attachEventHandlers = function() {
   $('#keyboard button').click(function (event) {
     const key = event.target.dataset.key
 
-    console.log('key', key)
+    // console.log('key', key)
 
     if (key == '↵') {
       GemWarrior.__handleEnter()
