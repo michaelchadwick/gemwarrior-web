@@ -38,7 +38,11 @@ GemWarrior.config = {
 async function modalOpen(type) {
   switch(type) {
     case 'help':
-      GemWarrior._repl(GemWarrior._evaluator('help'))
+      GemWarrior._repl(`
+        <br />
+        <span class="command-previous">&gt; help</span><br />
+        ${GemWarrior._evaluator('help')}
+      `)
       break
 
     case 'settings':
@@ -333,12 +337,12 @@ GemWarrior._attachEventHandlers = function() {
     const input = GemWarrior.dom.interactive.cmdInput.val()
 
     if (input.length) {
-      // show last entered command
-      GemWarrior._out('')
-      GemWarrior._out(`<span class="command-previous">&gt; ${input}</span>`)
-
-      // evaluate command
-      GemWarrior._repl(GemWarrior._evaluator(input))
+      // show last entered command and display evaluated output
+      GemWarrior._repl(`
+        <br />
+        <span class="command-previous">&gt; ${input}</span><br />
+        ${GemWarrior._evaluator(input)}
+      `)
 
       // clear command bar
       GemWarrior.dom.interactive.cmdInput.val('')
@@ -420,11 +424,11 @@ GemWarrior._repl = function(result) {
 }
 
 // print result of user command
-GemWarrior._out = function(text, lineBreak) {
+GemWarrior._out = function(text, noLineBreak) {
   let $content_to_display = text
 
-  if (!lineBreak) {
-    $content_to_display += '<br />'
+  if (!noLineBreak) {
+    $content_to_display = '<p>' + $content_to_display + '</p>'
   }
 
   // add new text to output
@@ -664,7 +668,6 @@ GemWarrior._resizeFixed = function() {
   // console.log('resized fixed elements')
 
   $('header').width(window.innerWidth - 32)
-  $('#spacer').height($('#interface').height() - 2)
   $('#interface #keyboard').width(window.innerWidth - 16)
 
   GemWarrior._scrollOutput()
@@ -803,10 +806,14 @@ GemWarrior._destroyAvatarDisplay = function() {
 
 GemWarrior.__handleEnter = function() {
   if (GemWarrior.config.keyCommand.length > 0) {
-    // display last command and output
-    GemWarrior._out('')
-    GemWarrior._out(`<span class="command-previous">&gt; ${GemWarrior.config.keyCommand.toLowerCase()}`)
-    GemWarrior._out(GemWarrior._evaluator(GemWarrior.config.keyCommand.toLowerCase()))
+    // display last command and then evaluate and output
+    const input = GemWarrior.config.keyCommand
+
+    GemWarrior._repl(`
+      <br />
+      <span class="command-previous">&gt; ${input}</span><br />
+      ${GemWarrior._evaluator(input)}
+    `)
 
     // reset keyCommand
     GemWarrior.config.keyCommand = ''
@@ -827,7 +834,7 @@ GemWarrior.__handleBackspace = function() {
     // sync to DOM display
     GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
 
-    console.log(GemWarrior.config.keyCommand.length)
+    // console.log(GemWarrior.config.keyCommand.length)
 
     // if keyCommand is empty, hide DOM display
     if (GemWarrior.config.keyCommand.length <= 0) {
@@ -894,13 +901,13 @@ GemWarrior.__getHistoryDisplay = function() {
 
 // display welcome message
 GemWarrior.__displayWelcome = function() {
-  GemWarrior._out('************************')
-  GemWarrior._out('Welcome to Gem Warrior!')
-  GemWarrior._out('')
-  GemWarrior._out('Try <span class="keyword">help</span> if stuck')
-  GemWarrior._out('')
-  GemWarrior._out('<strong>Good luck...</strong>')
-  GemWarrior._out('************************')
+  GemWarrior.dom.output.append(`
+    ************************<br />
+    Welcome to Gem Warrior!<br />
+    Try <span class="keyword">help</span> if stuck<br />
+    <strong>Good luck...</strong><br />
+    ************************
+  `)
 }
 
 GemWarrior.__getAvatarBlinkFreq = function() {
