@@ -430,16 +430,17 @@ header {
   }
 
   #avatar {
-    bottom: 44px;
+    bottom: 72px;
     color: $white;
-    display: none;
+    display: block;
     font-family: 'Lucida Console', monospace;
     font-size: 10px;
     height: 145px;
     margin: 0;
     padding: 0;
     position: fixed;
-    right: 20px;
+    right: 14px;
+    transform: scale(0.28);
     white-space: break-spaces;
     width: 55px;
     z-index: 1;
@@ -549,7 +550,9 @@ header {
     }
 
     #avatar {
-      display: block;
+      bottom: 44px;
+      right: 20px;
+      transform: scale(1.0);
     }
   }
 }
