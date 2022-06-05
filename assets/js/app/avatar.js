@@ -1,7 +1,7 @@
 /* avatar */
 /* js worker for avatar display */
 
-const GW_CACHE_TEXT_KEY = 'gemwarrior-text-cache'
+const GW_CACHE_TEXT_KEY = 'gemwarrior-cache-text'
 const GW_ASSET_DATA_PATH = '/assets/data/avatar'
 
 // Try to get data from the cache, but fall back to fetching it live.
@@ -109,9 +109,9 @@ onmessage = function(msg) {
       const url = `${path}/player-${msg.data.value}.${format}`
 
       if ('caches' in self) {
-        useCache(url)
+        this.useCache(url)
       } else {
-        useFetch(url)
+        this.useFetch(url)
       }
     }
   } else {
