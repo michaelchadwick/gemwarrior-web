@@ -708,7 +708,7 @@ GemWarrior._initAvatarWorker = function() {
     // console.log('creating new web worker for avatar')
 
     // Web Worker created from file
-    GemWarrior.config.avatarWorker = new Worker('assets/js/app/avatar.js')
+    GemWarrior.config.avatarWorker = new Worker('assets/js/app/worker.js')
 
     if (GemWarrior.config.avatarWorker) {
       // console.log('avatarWorker created successfully')

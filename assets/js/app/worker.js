@@ -1,5 +1,5 @@
-/* avatar */
-/* js worker for avatar display */
+/* worker */
+/* js background worker for avatar display */
 
 const GW_CACHE_TEXT_KEY = 'gemwarrior-cache-text'
 const GW_ASSET_DATA_PATH = '/assets/data/avatar'
