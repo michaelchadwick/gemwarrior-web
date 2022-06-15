@@ -22,8 +22,12 @@ const jsAppFiles = [
   'assets/js/app/modal.js',
   'assets/js/app/main.js'
 ]
-const jsVendorFiles = [ 'assets/js/vendor/*.js' ]
-const scssAppFiles = [ 'assets/scss/*.scss' ]
+const jsVendorFiles = [
+  'assets/js/vendor/*.js'
+]
+const scssAppFiles = [
+  'assets/scss/*.scss'
+]
 
 // error function
 const onError = function (err) {
@@ -77,6 +81,7 @@ gulp.task('sub_clean-css', function (cb) {
   ], cb)
 })
 
+// main tasks
 gulp.task('watch-files', function () {
   gulp.watch(jsAppFiles,
     gulp.series(
