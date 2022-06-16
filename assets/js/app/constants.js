@@ -30,13 +30,45 @@ const GW_COMMANDS = {
     '(sl)eep'
   ],
   'meta': [
-    '(pl)ay song',
     '(h)elp',
     '(hist)ory',
     '(a)bout'
+  ],
+  'fx': [
+    '(pl)ay bgm',
+    'stopbgm',
   ]
 }
 const GW_LOCATION = {
   'title': 'Inescapable Hole of Turbidity',
   'objects': ['rock']
+}
+
+const GW_DEFAULTS = {
+  "config": {
+    "player": {
+      "level": 1,
+      "xp": 0,
+      "hp": 10,
+      "rox": 2,
+      "status": 'standing',
+      "inventory": [
+        'broken flashlight',
+        'candlestick holder'
+      ]
+    },
+    "avatarWorker": null,
+    "blinker": null,
+    "history": [],
+    "historyMarker": 0,
+    "keyCommand": '',
+    "soundInterval": null,
+    "synth": null,
+    "text": ''
+  },
+  "settings": {
+    'textSize': '16',
+    'playSound': false,
+    'showAvatar': false
+  }
 }

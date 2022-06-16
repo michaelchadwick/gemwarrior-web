@@ -6,115 +6,129 @@ const GW_ASSET_DATA_PATH = '/assets/data/avatar'
 
 // Try to get data from the cache, but fall back to fetching it live.
 async function getData(cacheName, url) {
-  let cachedData = await this.getCachedData(cacheName, url);
+  let cachedData = await this.getCachedData(cacheName, url)
 
   if (cachedData) {
-    // console.log('Cache full:', cachedData);
+    // console.log('Cache full:', cachedData)
 
-    return cachedData;
+    return cachedData
   }
 
-  // console.log(`Cache empty: fetching fresh data for ${url}`);
+  // console.log(`Cache empty: fetching fresh data for ${url}`)
 
-  const cacheStorage = await caches.open(cacheName);
-  await cacheStorage.add(url);
-  cachedData = await this.getCachedData(cacheName, url);
-  await this.deleteOldCaches(cacheName);
+  const cacheStorage = await caches.open(cacheName)
+  await cacheStorage.add(url)
+  cachedData = await this.getCachedData(cacheName, url)
+  await this.deleteOldCaches(cacheName)
 
-  return cachedData;
+  return cachedData
 }
 
 // Get data from the cache.
 async function getCachedData(cacheName, url) {
-  const cacheStorage = await caches.open(cacheName);
-  const cachedResponse = await cacheStorage.match(url);
+  const cacheStorage = await caches.open(cacheName)
+  const cachedResponse = await cacheStorage.match(url)
 
   if (!cachedResponse || !cachedResponse.ok) {
-    return false;
+    return false
   }
 
-  return cachedResponse;
+  return cachedResponse
 }
 
-// Delete any old caches to respect user's disk space.
-async function deleteOldCaches(currentCache) {
-  const keys = await caches.keys();
+// Delete cache when unused to respect user's disk space
+async function deleteCache(cacheName) {
+  console.log(`web worker: deleting ${cacheName} cache...`)
+
+  const keys = await caches.keys()
 
   for (const key of keys) {
-    const isOurCache = GW_CACHE_TEXT_KEY;
 
-    if (currentCache === key || !isOurCache) {
-      continue;
+    if (cacheName !== key) {
+      continue
+    } else {
+      caches.delete(key)
     }
-
-    caches.delete(key);
   }
 }
 
 // use CacheStorage to check cache
 async function useCache(url) {
   try {
-    // console.log(`Cache Request: '${url}'`)
+    // console.log(`web-worker: Cache Request: '${url}'`)
 
     const cacheResponse = await this.getData(GW_CACHE_TEXT_KEY, url)
     const textBuffer = await cacheResponse.text()
 
-    postMessage(textBuffer)
+    postMessage({ command: 'data', value: textBuffer })
   } catch (error) {
-    console.error('CacheStorage error', error)
+    console.error('web-worker: CacheStorage error', error)
   }
 }
 
 // use direct fetch(url)
 async function useFetch(url) {
+  console.log(`web-worker: Fetch Request: '${url}'`)
+
   const statusText = await fetch(url)
     .then(response => response.text())
 
-  postMessage(statusText)
+  postMessage({ command: 'data', value: statusText })
 }
 
 async function initData() {
-  const path = GW_ASSET_DATA_PATH
-
-  await caches.open(GW_CACHE_TEXT_KEY).then(cache => {
-    cache.keys().then(function(keys) {
+  await caches.open(GW_CACHE_TEXT_KEY).then(async cache => {
+    await cache.keys().then(async function(keys) {
       if (!keys.length) {
-        // console.info(`${GW_CACHE_TEXT_KEY} is empty. Adding files to it...`)
+        // console.log(`web-worker: ${GW_CACHE_TEXT_KEY} is non-existing or empty. Adding files to it...`)
 
-        cache.addAll([
-          `${path}/player-standing.txt`,
-          `${path}/player-standing-blink.txt`,
-          `${path}/player-sitting.txt`,
-          `${path}/player-sitting-blink.txt`,
-          `${path}/player-reclining1.txt`,
-          `${path}/player-reclining2.txt`,
-          `${path}/player-reclining3.txt`
+        await cache.addAll([
+          `${GW_ASSET_DATA_PATH}/player-standing.txt`,
+          `${GW_ASSET_DATA_PATH}/player-standing-blink.txt`,
+          `${GW_ASSET_DATA_PATH}/player-sitting.txt`,
+          `${GW_ASSET_DATA_PATH}/player-sitting-blink.txt`,
+          `${GW_ASSET_DATA_PATH}/player-reclining1.txt`,
+          `${GW_ASSET_DATA_PATH}/player-reclining2.txt`,
+          `${GW_ASSET_DATA_PATH}/player-reclining3.txt`
         ])
+
+        // console.log(`web-worker: Added files to ${GW_CACHE_TEXT_KEY} cache`)
       } else {
-        // console.info(`${GW_CACHE_TEXT_KEY} is full, so need to initialize.`)
+        // console.log(`web-worker: ${GW_CACHE_TEXT_KEY} is full, so no need to initialize.`)
       }
     })
   })
+
+  postMessage({ command: 'status', value: 'standing' })
+}
+
+function changeStatus(val) {
+  const path = GW_ASSET_DATA_PATH
+  const format = 'txt'
+  const url = `${path}/player-${val}.${format}`
+
+  if ('caches' in self) {
+    this.useCache(url)
+  } else {
+    this.useFetch(url)
+  }
 }
 
 onmessage = function(msg) {
-  // console.log('received msg from main js', msg.data)
+  // console.log('web-worker: received msg from main js', msg.data)
+
+  const cmd = msg.data.command
+  const val = msg.data.value
 
   if (msg.isTrusted) {
-    if (msg.data.command == 'init') {
+    if (cmd == 'init') {
       this.initData()
+    } else if (cmd == 'destroy') {
+      this.deleteCache(GW_CACHE_TEXT_KEY)
     } else {
-      const path = GW_ASSET_DATA_PATH
-      const format = 'txt'
-      const url = `${path}/player-${msg.data.value}.${format}`
-
-      if ('caches' in self) {
-        this.useCache(url)
-      } else {
-        this.useFetch(url)
-      }
+      changeStatus(val)
     }
   } else {
-    console.error('untrusted message posted to Web Worker!', msg)
+    console.error('web-worker: untrusted message posted to Web Worker!', msg)
   }
 }

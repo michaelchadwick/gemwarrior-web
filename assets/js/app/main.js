@@ -3,33 +3,10 @@
 /* global $, GemWarrior */
 
 // settings: saved in LOCAL STORAGE
-GemWarrior.settings = {
-  'textSize': '16',
-  'playSound': false,
-  'showAvatar': false
-}
+GemWarrior.settings = GW_DEFAULTS.settings
 
 // config: only saved while game is loaded
-GemWarrior.config = {
-  "player": {
-    "level": 1,
-    "xp": 0,
-    "hp": 10,
-    "rox": 2,
-    "status": 'standing',
-    "inventory": [
-      'broken flashlight',
-      'candlestick holder'
-    ]
-  },
-  "avatarWorker": null,
-  "blinker": null,
-  "history": [],
-  "historyMarker": 0,
-  "keyCommand": '',
-  "synth": null,
-  "text": ''
-}
+GemWarrior.config = GW_DEFAULTS.config
 
 /*************************************************************************
  * public methods *
@@ -168,6 +145,11 @@ GemWarrior._loadSettings = function() {
     if (lsSettings.playSound) {
       GemWarrior.settings.playSound = lsSettings.playSound
 
+      if (GemWarrior.settings.playSound) {
+        // start up background music
+        GemWarrior._initBGM()
+      }
+
       var setting = document.getElementById('button-setting-play-sound')
 
       if (setting) {
@@ -181,7 +163,6 @@ GemWarrior._loadSettings = function() {
       if (GemWarrior.settings.showAvatar) {
         if (!GemWarrior.config.avatarWorker) {
           GemWarrior._initAvatarWorker()
-          GemWarrior._avatarStand()
         }
       }
 
@@ -226,16 +207,19 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'true'
 
-          // initialize synth instance
-          GemWarrior.config.synth = new WebAudioTinySynth()
-
           // save to code/LS
           GemWarrior._saveSetting('playSound', true)
+
+          // start up background music
+          GemWarrior._initBGM()
         } else {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'false'
 
-          // destory synth instance
+          // stop background music playing
+          GemWarrior._stopBGM()
+
+          // destroy synth instance
           GemWarrior.config.synth = null
 
           // save to code/LS
@@ -256,7 +240,6 @@ GemWarrior._changeSetting = function(setting, event = null) {
 
           if (!GemWarrior.config.avatarWorker) {
             GemWarrior._initAvatarWorker()
-            GemWarrior._avatarStand()
           }
 
           // save to code/LS
@@ -601,15 +584,21 @@ GemWarrior._evaluator = function(command) {
 
       break
 
-    case 'playsong':
+    case 'playbgm':
     case 'pl':
-      GemWarrior._playSong()
-
       if (GemWarrior.settings.playSound) {
+        GemWarrior._playBGM()
+
         GemWarrior.config.text = 'Playing the song of my people...'
       } else {
         GemWarrior.config.text = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
       }
+
+      break
+    case 'stopbgm':
+      GemWarrior._stopBGM()
+
+      GemWarrior.config.text = 'The song of my people has concluded.'
 
       break;
 
@@ -688,46 +677,80 @@ GemWarrior._scrollOutput = function() {
   }
 }
 
-// play cute song
-GemWarrior._playSong = function() {
-  if (GemWarrior.settings.playSound) {
-    GemWarrior.config.synth.send([0x90, 60, 100])
-    setTimeout(() => GemWarrior.config.synth.send([0x80, 60, 0]), 500)
-    setTimeout(() => GemWarrior.config.synth.send([0x90, 60, 100]), 500)
-    setTimeout(() => GemWarrior.config.synth.send([0x90, 62, 100]), 1000)
-    setTimeout(() => GemWarrior.config.synth.send([0x90, 64, 100]), 1500)
-    setTimeout(() => GemWarrior.config.synth.send([0x90, 67, 100]), 2000)
-  } else {
-    return 'The <span class="keyword">playSound</span> setting is currently disabled'
+GemWarrior._initBGM = function() {
+  if (!GemWarrior.config.synth) {
+    // initialize synth instance
+    GemWarrior.config.synth = new WebAudioTinySynth({ debug: 1, quality: 1, useReverb: 0, voices: 64 })
   }
+
+  GemWarrior.config.synth.loadMIDIUrl('/assets/audio/gw-midi1.mid')
+  GemWarrior.config.synth.setLoop(1)
+  GemWarrior.config.synth.setMasterVol(0.2)
+
+  // console.log('synth', GemWarrior.config.synth)
+}
+GemWarrior._playBGM = function() {
+  GemWarrior.config.synth.setProgram(0, 2)
+  setTimeout(() => {
+    // console.log('_playBGM()')
+    // setInterval(() => {
+    //   console.log('playStatus', GemWarrior.config.synth.getPlayStatus(), GemWarrior.config.synth)
+    // }, 1000)
+    GemWarrior.config.synth.playMIDI()
+  }, 1)
+}
+GemWarrior._stopBGM = function() {
+  // console.log('stopping BGM...')
+
+  GemWarrior.config.synth.stopMIDI()
 }
 
 // shuttle avatar display workload to Web Worker
 GemWarrior._initAvatarWorker = function() {
   if (window.Worker) {
-    // console.log('creating new web worker for avatar')
-
     // Web Worker created from file
     GemWarrior.config.avatarWorker = new Worker('assets/js/app/worker.js')
 
     if (GemWarrior.config.avatarWorker) {
-      // console.log('avatarWorker created successfully')
+      // console.log('Worker(): avatarWorker created successfully')
 
       // attach event listener to process successful Web Worker responses
       GemWarrior.config.avatarWorker.onmessage = (response) => {
-        GemWarrior.dom.avatar.html(response.data)
+        // console.log('response from web-worker:', response)
+
+        const cmd = response.data.command
+        const val = response.data.value
+
+        if (cmd) {
+          switch (cmd) {
+            case 'data':
+              GemWarrior.dom.avatar.html(val)
+              break
+
+            case 'status':
+              switch (val) {
+                case 'standing':
+                  GemWarrior._avatarStand()
+                  break
+                case 'sitting':
+                  GemWarrior._avatarSit()
+                  break
+              }
+              break
+          }
+        }
       }
 
       // initialize data into CacheStorage, if needed
       GemWarrior.config.avatarWorker.postMessage({ command: 'init' })
 
       // get initial player avatar display
-      GemWarrior._getAvatarDisplay(GemWarrior.config.player.status)
+      GemWarrior._getAvatarDisplay(GemWarrior.config.player.status || 'standing')
     } else {
-      console.error('Web Worker creation failed')
+      console.error('Worker(): creation of Web Worker failed')
     }
   } else {
-    console.error('Web Workers not available', error)
+    console.error('Worker(): not supported by browser')
   }
 }
 
@@ -736,12 +759,10 @@ GemWarrior._getAvatarDisplay = function(type) {
   if (GemWarrior.settings.showAvatar) {
     // do we have a valid Web Worker?
     if (GemWarrior.config.avatarWorker) {
-      // console.log('sending a message to avatarWorker', )
-
       // tell Web Worker which data we want via status key
       GemWarrior.config.avatarWorker.postMessage({ command: 'status', value: type })
     } else {
-      console.error('no valid Web Worker to postMessage')
+      console.error('web-worker: no valid Web Worker to postMessage')
     }
   }
 }
@@ -790,7 +811,9 @@ GemWarrior._avatarBlink = function() {
 
 GemWarrior._destroyAvatarDisplay = function() {
   if (window.Worker) {
-    // console.log('destroying web worker for avatar')
+    console.log('destroying web-worker for avatar')
+
+    GemWarrior.config.avatarWorker.postMessage({ command: 'destroy'})
 
     GemWarrior.config.avatarWorker = null
 
