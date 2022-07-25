@@ -5,7 +5,7 @@ const GW_SETTINGS_KEY = 'gemwarrior-settings'
 const GW_STATE_KEY = 'gemwarrior-state'
 
 const GW_ENV_PROD_URL = [
-  'https://gw.neb.host'
+  'gw.neb.host'
 ]
 
 const GW_COMMANDS = {
