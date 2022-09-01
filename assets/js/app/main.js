@@ -155,7 +155,7 @@ GemWarrior._loadSettings = function() {
 
       if (GemWarrior.settings.playSound) {
         // start up background music
-        GemWarrior._initBGM()
+        GemWarrior._initSynth()
       }
 
       var setting = document.getElementById('button-setting-play-sound')
@@ -218,8 +218,8 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // save to code/LS
           GemWarrior._saveSetting('playSound', true)
 
-          // start up background music
-          GemWarrior._initBGM()
+          // start up synth
+          GemWarrior._initSynth()
         } else {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'false'
@@ -695,13 +695,19 @@ GemWarrior._scrollOutput = function() {
   }
 }
 
-GemWarrior._initBGM = function() {
+GemWarrior._initSynth = function() {
   if (!GemWarrior.config.synth) {
     // initialize synth instance
-    GemWarrior.config.synth = new WebAudioTinySynth({ debug: 1, quality: 1, useReverb: 0, voices: 64 })
+    GemWarrior.config.synth = new WebAudioTinySynth({
+      debug: 0,
+      quality: 1, // 0: chiptune, 1: FM
+      reverbLev: 0.5,
+      useReverb: 1,
+      voices: 8
+    })
   }
 
-  GemWarrior.config.synth.loadMIDIUrl('/assets/audio/gw-midi1.mid')
+  GemWarrior.config.synth.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
   GemWarrior.config.synth.setLoop(1)
   GemWarrior.config.synth.setMasterVol(0.2)
 
@@ -721,6 +727,19 @@ GemWarrior._stopBGM = function() {
   // console.log('stopping BGM...')
 
   GemWarrior.config.synth.stopMIDI()
+}
+GemWarrior._playFX = function(action) {
+  GemWarrior.config.synth.setProgram(0, 3)
+  GemWarrior.config.synth.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
+  GemWarrior.config.synth.setLoop(0)
+  GemWarrior.config.synth.setMasterVol(0.2)
+  setTimeout(() => {
+    // console.log('_playBGM()')
+    // setInterval(() => {
+    //   console.log('playStatus', GemWarrior.config.synth.getPlayStatus(), GemWarrior.config.synth)
+    // }, 1000)
+    GemWarrior.config.synth.playMIDI()
+  }, 20)
 }
 
 // shuttle avatar display workload to Web Worker
