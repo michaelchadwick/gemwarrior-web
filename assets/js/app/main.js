@@ -970,7 +970,7 @@ GemWarrior.__traverseHistory = function(key) {
     }
 
     // set command bar to historical value
-    GemWarrior.dom.cmdInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker])
+    GemWarrior.dom.interactive.cmdInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker])
 
     // move cursor to end of value
     var cmd = GemWarrior.dom.interactive.cmdInput
