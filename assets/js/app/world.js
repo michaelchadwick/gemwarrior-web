@@ -1,5 +1,6 @@
 /* WORLD */
 /* global GemWarrior, Player */
+/* eslint-disable no-unused-vars */
 
 class World {
 
@@ -7,8 +8,6 @@ class World {
     this.player = new Player()
     this.locations = this.create_locations(locations)
     this.cur_location = this.locations[this.player.cur_coords]
-
-    // console.log('World', this)
   }
 
   create_locations(json_locs) {
