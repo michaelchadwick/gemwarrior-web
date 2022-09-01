@@ -1,11 +1,10 @@
 /* PLAYER */
-/* global GemWarrior, Player */
+/* global GemWarrior */
+/* eslint-disable no-unused-vars */
 
 class Player {
   constructor() {
     this.cur_coords = [1, 1, 0]
-
-    // console.log('Player', this)
   }
 
   go(direction) {
