@@ -101,7 +101,7 @@ GemWarrior.initApp = function() {
     .then(response => response.json())
     .then(json => GemWarrior.world = new World(json))
     .then(() => {
-      console.log('GemWarrior.world', GemWarrior.world)
+      // console.log('GemWarrior.world', GemWarrior.world)
 
       GemWarrior._updateStatus()
     })
@@ -155,7 +155,7 @@ GemWarrior._loadSettings = function() {
 
       if (GemWarrior.settings.playSound) {
         // start up background music
-        GemWarrior._initSynth()
+        GemWarrior._initSynths()
       }
 
       var setting = document.getElementById('button-setting-play-sound')
@@ -219,7 +219,7 @@ GemWarrior._changeSetting = function(setting, event = null) {
           GemWarrior._saveSetting('playSound', true)
 
           // start up synth
-          GemWarrior._initSynth()
+          GemWarrior._initSynths()
         } else {
           // update setting DOM
           document.getElementById('button-setting-play-sound').dataset.status = 'false'
@@ -228,7 +228,8 @@ GemWarrior._changeSetting = function(setting, event = null) {
           GemWarrior._stopBGM()
 
           // destroy synth instance
-          GemWarrior.config.synth = null
+          GemWarrior.config.synth_bgm = null
+          GemWarrior.config.synth_fx = null
 
           // save to code/LS
           GemWarrior._saveSetting('playSound', false)
@@ -450,24 +451,28 @@ GemWarrior._evaluator = function(command) {
   switch (verb) {
     case 'go':
     case 'g':
-      GemWarrior.config.text = `You go somewhere else inescapable in the <span class='noun'>${GW_LOCATION.title}</span>.`
+      if (subj) {
+        GemWarrior._evaluator(subj)
+      } else {
+        GemWarrior.config.text = 'You cannot just <span class="keyword">go</span> without a direction.'
+      }
 
       break
     case 'north':
     case 'n':
       GemWarrior.config.text = GemWarrior._try_to_move('north')
-
       break
+
     case 'west':
     case 'w':
       GemWarrior.config.text = GemWarrior._try_to_move('west')
-
       break
+
     case 'south':
     case 's':
       GemWarrior.config.text = GemWarrior._try_to_move('south')
-
       break
+
     case 'east':
     case 'e':
       GemWarrior.config.text = GemWarrior._try_to_move('east')
@@ -478,6 +483,7 @@ GemWarrior._evaluator = function(command) {
       GemWarrior.config.text = GemWarrior.world.describe(GemWarrior.world.player.cur_coords)
 
       break
+
     case 'character':
     case 'char':
     case 'c':
@@ -491,13 +497,16 @@ GemWarrior._evaluator = function(command) {
     case 'inven':
     case 'inv':
     case 'i':
+      let roxCount = ''
+
       if (GemWarrior.config.player.rox === 1) {
         roxCount = ' <strong>1</strong> rock'
       } else {
         roxCount = ` <strong>${GemWarrior.config.player.rox}</strong> rox`
       }
 
-      playerInv = ''
+      let playerInv = ''
+
       GemWarrior.config.player.inventory.forEach((thing) => {
         playerInv += `<span class="noun">a ${thing}</span>, `
       })
@@ -531,6 +540,7 @@ GemWarrior._evaluator = function(command) {
       }
 
       break
+
     case 'throw':
     case 'th':
       if (GemWarrior.config.player.rox > 0) {
@@ -570,6 +580,7 @@ GemWarrior._evaluator = function(command) {
       }
 
       break
+
     case 'stand':
     case 'st':
       if (GemWarrior.config.player.status === 'standing') {
@@ -581,6 +592,7 @@ GemWarrior._evaluator = function(command) {
       }
 
       break
+
     case 'sleep':
     case 'sl':
       GemWarrior.config.player.status = 'reclining'
@@ -601,12 +613,13 @@ GemWarrior._evaluator = function(command) {
       }
 
       break
+
     case 'stopbgm':
       GemWarrior._stopBGM()
 
       GemWarrior.config.text = 'The song of my people has concluded.'
 
-      break;
+      break
 
     case 'help':
     case 'h':
@@ -695,11 +708,12 @@ GemWarrior._scrollOutput = function() {
   }
 }
 
-GemWarrior._initSynth = function() {
-  if (!GemWarrior.config.synth) {
-    // initialize synth instance
-    GemWarrior.config.synth = new WebAudioTinySynth({
+GemWarrior._initSynths = function() {
+  if (!GemWarrior.config.synth_bgm) {
+    // initialize synth_bgm instance
+    GemWarrior.config.synth_bgm = new WebAudioTinySynth({
       debug: 0,
+      loop: 1,
       quality: 1, // 0: chiptune, 1: FM
       reverbLev: 0.5,
       useReverb: 1,
@@ -707,38 +721,51 @@ GemWarrior._initSynth = function() {
     })
   }
 
-  GemWarrior.config.synth.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
-  GemWarrior.config.synth.setLoop(1)
-  GemWarrior.config.synth.setMasterVol(0.2)
+  GemWarrior.config.synth_bgm.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
+  GemWarrior.config.synth_bgm.setLoop(1)
+  GemWarrior.config.synth_bgm.setProgram(0, 2)
+  GemWarrior.config.synth_bgm.setMasterVol(0.2)
 
-  // console.log('synth', GemWarrior.config.synth)
+  if (!GemWarrior.config.synth_fx) {
+    // initialize synth_bgm instance
+    GemWarrior.config.synth_fx = new WebAudioTinySynth({
+      debug: 0,
+      loop: 0,
+      quality: 1, // 0: chiptune, 1: FM
+      reverbLev: 0.5,
+      useReverb: 1,
+      voices: 8
+    })
+  }
 }
 GemWarrior._playBGM = function() {
-  GemWarrior.config.synth.setProgram(0, 2)
   setTimeout(() => {
     // console.log('_playBGM()')
+
     // setInterval(() => {
-    //   console.log('playStatus', GemWarrior.config.synth.getPlayStatus(), GemWarrior.config.synth)
+    //   console.log('playStatus', GemWarrior.config.synth_bgm.getPlayStatus(), GemWarrior.config.synth_bgm)
     // }, 1000)
-    GemWarrior.config.synth.playMIDI()
+
+    GemWarrior.config.synth_bgm.playMIDI()
   }, 1)
 }
 GemWarrior._stopBGM = function() {
   // console.log('stopping BGM...')
 
-  GemWarrior.config.synth.stopMIDI()
+  GemWarrior.config.synth_bgm.stopMIDI()
 }
 GemWarrior._playFX = function(action) {
-  GemWarrior.config.synth.setProgram(0, 3)
-  GemWarrior.config.synth.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
-  GemWarrior.config.synth.setLoop(0)
-  GemWarrior.config.synth.setMasterVol(0.2)
+  GemWarrior.config.synth_fx.setProgram(0, 3)
+  GemWarrior.config.synth_fx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
+
   setTimeout(() => {
-    // console.log('_playBGM()')
+    // console.log('_playFX()')
+
     // setInterval(() => {
-    //   console.log('playStatus', GemWarrior.config.synth.getPlayStatus(), GemWarrior.config.synth)
+    //   console.log('playStatus', GemWarrior.config.synth_bgm.getPlayStatus(), GemWarrior.config.synth_bgm)
     // }, 1000)
-    GemWarrior.config.synth.playMIDI()
+
+    GemWarrior.config.synth_fx.playMIDI()
   }, 20)
 }
 
