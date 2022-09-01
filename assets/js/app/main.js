@@ -91,13 +91,21 @@ GemWarrior.initApp = function() {
 
   GemWarrior._attachEventHandlers()
 
-  GemWarrior._updateStatus()
-
   GemWarrior._loadSettings()
 
   GemWarrior._resizeFixed()
 
   GemWarrior.__displayWelcome()
+
+  fetch('/assets/data/ihot.json')
+    .then(response => response.json())
+    .then(json => GemWarrior.world = new World(json))
+    .then(() => {
+      console.log('GemWarrior.world', GemWarrior.world)
+
+      GemWarrior._updateStatus()
+    })
+
 
   // initial command
   window.scrollTo(0,1)
@@ -447,36 +455,29 @@ GemWarrior._evaluator = function(command) {
       break
     case 'north':
     case 'n':
-      GemWarrior.config.text = `You go <strong>north</strong> a bit. You are still in an inescapable hole.`
+      GemWarrior.config.text = GemWarrior._try_to_move('north')
 
       break
     case 'west':
     case 'w':
-      GemWarrior.config.text = `You go <strong>west</strong> a bit. You are still in an inescapable hole.`
+      GemWarrior.config.text = GemWarrior._try_to_move('west')
 
       break
     case 'south':
     case 's':
-      GemWarrior.config.text = `You go <strong>south</strong> a bit. You are still in an inescapable hole.`
+      GemWarrior.config.text = GemWarrior._try_to_move('south')
 
       break
     case 'east':
     case 'e':
-      GemWarrior.config.text = `You go <strong>east</strong> a bit. You are still in an inescapable hole.`
+      GemWarrior.config.text = GemWarrior._try_to_move('east')
       break
 
     case 'look':
     case 'l':
-      GemWarrior.config.text = `You look around the <span class='noun'>${GW_LOCATION.title}</span>. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`
-
-      if (GW_LOCATION.objects.length > 0) {
-        GemWarrior.config.text += '<br /><br />'
-
-        GemWarrior.config.text += `There are things to pick up here: <span class="noun">${GW_LOCATION.objects.join(', ')}</span>`
-      }
+      GemWarrior.config.text = GemWarrior.world.describe(GemWarrior.world.player.cur_coords)
 
       break
-
     case 'character':
     case 'char':
     case 'c':
@@ -512,13 +513,16 @@ GemWarrior._evaluator = function(command) {
     case 'pickup':
     case 'p':
       if (subj) {
-        if (subj === 'rock' && GW_LOCATION.objects.includes('rock')) {
-          GemWarrior.config.text = 'You pick up a <span class="noun">rock</span>.'
-
-          GW_LOCATION.objects.splice(GW_LOCATION.objects.indexOf('rock'), 1)
-          GemWarrior.config.player.rox++
-        } else {
+        if (!GemWarrior.world.cur_location.items.includes(subj)) {
           GemWarrior.config.text = 'That object is not present, so picking it up is going to be difficult.'
+        } else if (GemWarrior.world.remove_item(GemWarrior.world.player.cur_coords, subj)) {
+          GemWarrior.config.text = `You pick up the <span class="noun">${subj}</span>.`
+
+          if (subj == 'rock') {
+            GemWarrior.config.player.rox++
+          }
+        } else {
+          GemWarrior.config.text = `You fail to pick up the <span class="noun">${subj}</span> for some unforseen reason.`
         }
       } else {
         GemWarrior.config.text = `Since you did not indicate <strong>what</strong> to pick up, you bend down momentarily and attempt to pick up some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
@@ -530,7 +534,7 @@ GemWarrior._evaluator = function(command) {
       if (GemWarrior.config.player.rox > 0) {
         GemWarrior.config.player.rox--
 
-        GW_LOCATION.objects.push('rock')
+        GemWarrior.world.cur_location.items.push('rock')
 
         GemWarrior.config.text = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
       } else {
@@ -632,6 +636,18 @@ GemWarrior._evaluator = function(command) {
   return GemWarrior.config.text
 }
 
+GemWarrior._try_to_move = function(direction) {
+  if (GemWarrior.world.can_move(direction)) {
+    const new_coords = GemWarrior.world.player.go(direction)
+
+    GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[new_coords].name
+
+    return GemWarrior.world.describe(new_coords)
+  } else {
+    return 'Cannot move that way.'
+  }
+}
+
 // display command list
 GemWarrior._displayHelp = function() {
   var cmdList = ''
@@ -649,7 +665,7 @@ GemWarrior._updateStatus = function() {
   GemWarrior.dom.statsXP.text(GemWarrior.config.player.xp)
   GemWarrior.dom.statsHP.text(GemWarrior.config.player.hp)
   GemWarrior.dom.statsROX.text(GemWarrior.config.player.rox)
-  GemWarrior.dom.statsLOC.text(GW_LOCATION.title)
+  GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[GemWarrior.world.player.cur_coords].name
 }
 
 // resize fixed elements when viewport changes
