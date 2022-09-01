@@ -97,15 +97,7 @@ GemWarrior.initApp = function() {
 
   GemWarrior.__displayWelcome()
 
-  fetch('/assets/data/ihot.json')
-    .then(response => response.json())
-    .then(json => GemWarrior.world = new World(json))
-    .then(() => {
-      // console.log('GemWarrior.world', GemWarrior.world)
-
-      GemWarrior._updateStatus()
-    })
-
+  GemWarrior.__loadWorld()
 
   // initial command
   window.scrollTo(0,1)
@@ -1001,6 +993,13 @@ GemWarrior.__displayWelcome = function() {
     <strong>Good luck...</strong><br />
     ************************
   `)
+}
+
+GemWarrior.__loadWorld = function() {
+  fetch(GW_WORLD_JSON)
+    .then(response => response.json())
+    .then(json => GemWarrior.world = new World(json))
+    .then(() => GemWarrior._updateStatus())
 }
 
 GemWarrior.__getAvatarBlinkFreq = function() {
