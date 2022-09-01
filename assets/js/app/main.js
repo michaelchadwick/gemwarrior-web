@@ -605,9 +605,13 @@ GemWarrior._evaluator = function(command) {
     case 'playbgm':
     case 'pl':
       if (GemWarrior.settings.playSound) {
-        GemWarrior._playBGM()
+        if (GemWarrior.config.synth_bgm.getPlayStatus().play != 1) {
+          GemWarrior._playBGM()
 
-        GemWarrior.config.text = 'Playing the song of my people...'
+          GemWarrior.config.text = 'Playing background music.'
+        } else {
+          GemWarrior.config.text = 'Background music is already playing.'
+        }
       } else {
         GemWarrior.config.text = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
       }
@@ -617,7 +621,7 @@ GemWarrior._evaluator = function(command) {
     case 'stopbgm':
       GemWarrior._stopBGM()
 
-      GemWarrior.config.text = 'The song of my people has concluded.'
+      GemWarrior.config.text = 'Background music has stopped.'
 
       break
 
@@ -750,10 +754,12 @@ GemWarrior._playBGM = function() {
   }, 1)
 }
 GemWarrior._stopBGM = function() {
-  // console.log('stopping BGM...')
-
   GemWarrior.config.synth_bgm.stopMIDI()
+  GemWarrior.config.synth_bgm.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
+
+  // clearInterval(GemWarrior.bgmTicker)
 }
+
 GemWarrior._playFX = function(action) {
   GemWarrior.config.synth_fx.setProgram(0, 3)
   GemWarrior.config.synth_fx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
