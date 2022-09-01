@@ -8,6 +8,7 @@ GemWarrior.dom = {
   'navContent': ('$nav-content'),
   'output': $('#output'),
   'interface': $('#interface'),
+  'interactive': {},
   'stats': $('#interface #stats'),
   'statsLV': $('#interface #stats #level'),
   'statsXP': $('#interface #stats #xp'),
