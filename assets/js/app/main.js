@@ -512,6 +512,8 @@ GemWarrior._evaluator = function(command) {
 
     case 'pickup':
     case 'p':
+    case 'take':
+    case 't':
       if (subj) {
         if (!GemWarrior.world.cur_location.items.includes(subj)) {
           GemWarrior.config.text = 'That object is not present, so picking it up is going to be difficult.'

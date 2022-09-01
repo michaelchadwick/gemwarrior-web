@@ -23,6 +23,7 @@ const GW_COMMANDS = {
   'action': [
     '(l)ook',
     '(p)ickup',
+    '(t)ake',
     '(th)row',
     '(u)se',
     '(si)t',
