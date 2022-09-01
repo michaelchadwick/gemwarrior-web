@@ -99,6 +99,8 @@ GemWarrior.initApp = function() {
 
   GemWarrior.__loadWorld()
 
+  GemWarrior._initAvatarWorker()
+
   // initial command
   window.scrollTo(0,1)
 }

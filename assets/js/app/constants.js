@@ -9,6 +9,8 @@ const GW_ENV_PROD_URL = [
   'gw.neb.host'
 ]
 
+const GW_WORLD_JSON = '/assets/data/ihot.json'
+
 const GW_COMMANDS = {
   'travel': [
     '(g)o',
@@ -68,6 +70,6 @@ const GW_DEFAULTS = {
   'settings': {
     'textSize': '16',
     'playSound': false,
-    'showAvatar': false
+    'showAvatar': true
   }
 }
