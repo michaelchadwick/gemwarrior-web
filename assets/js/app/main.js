@@ -832,26 +832,34 @@ GemWarrior._getAvatarDisplay = function(type) {
 }
 
 GemWarrior._avatarStand = function() {
+  clearTimeout(GemWarrior._reclineTimer)
+
   GemWarrior.config.player.status = 'standing'
   GemWarrior._getAvatarDisplay('standing')
   GemWarrior._avatarBlink()
 }
 GemWarrior._avatarSit = function() {
+  clearTimeout(GemWarrior._reclineTimer)
+
   GemWarrior.config.player.status = 'sitting'
   GemWarrior._getAvatarDisplay('sitting')
   GemWarrior._avatarBlink()
 }
 GemWarrior._avatarRecline = function() {
-  reclineTimer = null
-
   if (GemWarrior.config.player.status === 'reclining') {
     clearInterval(GemWarrior.config.blinker)
+
     GemWarrior._getAvatarDisplay('reclining1')
-    reclineTimer = setTimeout(() => {
+
+    GemWarrior._reclineTimer = setTimeout(() => {
       GemWarrior._getAvatarDisplay('reclining2')
-      setTimeout(() => {
+
+      GemWarrior._reclineTimer = setTimeout(() => {
         GemWarrior._getAvatarDisplay('reclining3')
-        setTimeout(() => GemWarrior._avatarRecline(), 1000)
+
+        GemWarrior._reclineTimer = setTimeout(() => {
+          GemWarrior._avatarRecline()
+        }, 1000)
       }, 1000)
     }, 1000)
   }
