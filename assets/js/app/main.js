@@ -989,11 +989,12 @@ GemWarrior.__getHistoryDisplay = function() {
 // display welcome message
 GemWarrior.__displayWelcome = function() {
   GemWarrior.dom.output.append(`
-    ************************<br />
+    *******************************<br />
     Welcome to Gem Warrior!<br />
-    Try <span class="keyword">help</span> if stuck<br />
+    * Try <span class="keyword">help</span> if stuck<br />
+    * Gear has options to configure<br />
     <strong>Good luck...</strong><br />
-    ************************
+    *******************************
   `)
 }
 
