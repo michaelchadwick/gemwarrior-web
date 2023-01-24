@@ -2,3 +2,4 @@
 !assets/audio/*.mid
 !assets/icons/
 !assets/js/vendor
+*.logicx
