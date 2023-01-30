@@ -73,3 +73,5 @@ const GW_DEFAULTS = {
     'showAvatar': true
   }
 }
+
+const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'
