@@ -101,6 +101,8 @@ GemWarrior.initApp = function() {
 
   GemWarrior._initAvatarWorker()
 
+  GemWarrior._getNebyooApps()
+
   // initial command
   window.scrollTo(0,1)
 }
@@ -893,6 +895,20 @@ GemWarrior._destroyAvatarDisplay = function() {
   } else {
     console.error('could not destroy avatar', error)
   }
+}
+
+GemWarrior._getNebyooApps = async function() {
+  const response = await fetch('https://dave.neb.host/?sites')
+  const json = await response.json()
+  const apps = json.body
+  const appList = document.querySelector('.nav-list')
+
+  Object.values(apps).forEach(app => {
+    const appLink = document.createElement('a')
+    appLink.href = app.url
+    appLink.innerText = app.title
+    appList.appendChild(appLink)
+  })
 }
 
 /************************************************************************
