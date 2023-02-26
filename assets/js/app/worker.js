@@ -19,7 +19,8 @@ async function getData(cacheName, url) {
   const cacheStorage = await caches.open(cacheName)
   await cacheStorage.add(url)
   cachedData = await this.getCachedData(cacheName, url)
-  await this.deleteCache(cacheName)
+
+  // await this.deleteCache(cacheName)
 
   return cachedData
 }
