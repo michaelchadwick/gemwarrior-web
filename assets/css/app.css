@@ -38,7 +38,7 @@ button {
   font-family: inherit;
   font-size: 1rem;
   font-weight: 400;
-  height: 30px;
+  height: 26px;
   justify-content: center;
   line-height: 1.5;
   margin: 0 3px 0 0;
@@ -50,30 +50,32 @@ button {
   vertical-align: middle;
   white-space: nowrap;
 }
-button:disabled {
-  background-color: #eee;
-  color: #ddd;
-  cursor: not-allowed;
-}
-button.icon {
-  background: none;
-  border: none;
-  color: #fffca3;
-  cursor: pointer;
-  font-size: 24px;
-  padding: 0 4px;
-  text-shadow: 1px 1px 1px #111111;
-}
-button.icon:hover {
-  color: #fcfcfc;
-}
-button.inline {
-  display: inline-flex;
-  font-size: 0.75rem;
-  height: 20px;
-  margin-right: 0;
-  padding: 0.2rem;
-}
+  button:disabled {
+    background-color: #eee;
+    color: #ddd;
+    cursor: not-allowed;
+  }
+  button.icon {
+    background: none;
+    border: none;
+    color: #fffca3;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 0 4px;
+    text-shadow: 1px 1px 1px #111111;
+  }
+    @media (hover: hover) {
+      button.icon:hover {
+        color: #fcfcfc;
+      }
+    }
+  button.inline {
+    display: inline-flex;
+    font-size: 0.75rem;
+    height: 20px;
+    margin-right: 0;
+    padding: 0.2rem;
+  }
 
 .half {
   flex: 0.5;
@@ -373,7 +375,7 @@ header {
     #interface #keyboard .row {
       display: flex;
       justify-content: center;
-      margin: 0 auto 8px;
+      margin: 0 auto 3px;
       padding: 0 8px;
       touch-action: manipulation;
       width: 100%;

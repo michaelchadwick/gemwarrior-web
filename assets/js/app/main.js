@@ -294,22 +294,28 @@ GemWarrior._attachEventHandlers = function() {
   GemWarrior.dom.interactive.btnSettings.click(() => modalOpen('settings'))
 
   // catch the mobile keyboard buttons
-  // TODO: show visual display of keys pressed
   $('#keyboard button').click(function (event) {
-    const key = event.target.dataset.key
+    let key = event.target.dataset.key
 
-    // console.log('key', key)
+    if (key == undefined) {
+      key = event.target.parentElement.dataset.key
+    }
 
-    if (key == '↵') {
-      GemWarrior.__handleEnter()
-    } else if (key == '<') {
-      GemWarrior.__handleBackspace()
-    } else {
-      // update keyCommand
-      GemWarrior.config.keyCommand += key
+    switch (key) {
+      case '↵':
+        GemWarrior.__handleEnter()
+        break
+      case '<':
+        GemWarrior.__handleBackspace()
+        break
+      default:
+        // update keyCommand
+        GemWarrior.config.keyCommand += key
 
-      // make sure DOM display is visible
-      GemWarrior.dom.interactive.keyboardInput.addClass('show')
+        // make sure DOM display is visible
+        GemWarrior.dom.interactive.keyboardInput.addClass('show')
+
+        break
     }
 
     // sync to DOM display
@@ -356,6 +362,8 @@ GemWarrior._attachEventHandlers = function() {
   $(document).on('keydown', function(event) {
     const code = event.code
 
+    // console.log('keyboard code', code)
+
     var excludedKeys = ['Alt', 'Control', 'Meta', 'Shift']
 
     if (!excludedKeys.some(key => event.originalEvent.getModifierState(key))) {
@@ -366,8 +374,17 @@ GemWarrior._attachEventHandlers = function() {
           GemWarrior.__handleEnter()
         } else if (code == 'Backspace') {
           GemWarrior.__handleBackspace()
+        } else if (code == 'Space') {
+          GemWarrior.config.keyCommand += '_'
+
+          // sync to DOM display
+          GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+
+          GemWarrior.dom.interactive.keyboardInput.addClass('show')
         } else if (code.startsWith('Key')) {
           const key = code.charAt(code.length - 1)
+
+          // console.log('key', key)
 
           $('#keyboard button').each(function() {
             if ($(this).data('key') == key.toLowerCase()) {
@@ -757,18 +774,20 @@ GemWarrior._stopBGM = function() {
 }
 
 GemWarrior._playFX = function(action) {
-  GemWarrior.config.synth_fx.setProgram(0, 3)
-  GemWarrior.config.synth_fx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
+  if (GemWarrior.settings.playSound) {
+    GemWarrior.config.synth_fx.setProgram(0, 3)
+    GemWarrior.config.synth_fx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
 
-  setTimeout(() => {
-    // console.log('_playFX()')
+    setTimeout(() => {
+      // console.log('_playFX()')
 
-    // setInterval(() => {
-    //   console.log('playStatus', GemWarrior.config.synth_bgm.getPlayStatus(), GemWarrior.config.synth_bgm)
-    // }, 1000)
+      // setInterval(() => {
+      //   console.log('playStatus', GemWarrior.config.synth_bgm.getPlayStatus(), GemWarrior.config.synth_bgm)
+      // }, 1000)
 
-    GemWarrior.config.synth_fx.playMIDI()
-  }, 20)
+      GemWarrior.config.synth_fx.playMIDI()
+    }, 20)
+  }
 }
 
 // shuttle avatar display workload to Web Worker
@@ -885,7 +904,7 @@ GemWarrior._avatarBlink = function() {
 
 GemWarrior._destroyAvatarDisplay = function() {
   if (window.Worker) {
-    console.log('destroying web-worker for avatar')
+    // console.log('destroying web-worker for avatar')
 
     GemWarrior.config.avatarWorker.postMessage({ command: 'destroy'})
 
@@ -919,7 +938,10 @@ GemWarrior._getNebyooApps = async function() {
 GemWarrior.__handleEnter = function() {
   if (GemWarrior.config.keyCommand.length > 0) {
     // display last command and then evaluate and output
-    const input = GemWarrior.config.keyCommand
+    let input = GemWarrior.config.keyCommand
+
+    // fix on-screen keyboard "spaces"
+    input = input.toString().replaceAll('_', ' ')
 
     GemWarrior._repl(`
       <br />
