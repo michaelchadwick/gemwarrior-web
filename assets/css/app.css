@@ -357,7 +357,7 @@ header {
     margin: 0;
     padding: 0;
     position: fixed;
-    right: 14px;
+    right: -14px;
     transform: scale(0.28);
     white-space: break-spaces;
     width: 55px;
