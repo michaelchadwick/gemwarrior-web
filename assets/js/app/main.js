@@ -1040,6 +1040,7 @@ GemWarrior.__displayWelcome = function() {
     Welcome to Gem Warrior!<br />
     * Try <span class="keyword">help</span> if stuck<br />
     * Gear has options to configure<br />
+    * Currently only one room...or?
     <strong>Good luck...</strong><br />
     *******************************
   `)
