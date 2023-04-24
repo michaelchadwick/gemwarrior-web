@@ -1035,15 +1035,15 @@ GemWarrior.__getHistoryDisplay = function() {
 
 // display welcome message
 GemWarrior.__displayWelcome = function() {
-  GemWarrior.dom.output.append(`
-    *******************************<br />
-    Welcome to Gem Warrior!<br />
-    * Try <span class="keyword">help</span> if stuck<br />
-    * Gear has options to configure<br />
-    * Currently only one room...or?
-    <strong>Good luck...</strong><br />
-    *******************************
-  `)
+  GemWarrior.dom.output.append(`<pre>
+***********************************
+* Welcome to Gem Warrior!         *
+* - Try <span class="keyword">help</span> if stuck             *
+* - Gear has options to configure *
+* - Currently only one room...or? *
+* <strong>Good luck...</strong>                    *
+***********************************
+</pre>`)
 }
 
 GemWarrior.__loadWorld = function() {
