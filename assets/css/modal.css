@@ -137,23 +137,23 @@
   }
 
 .modal-button-primary {
-  color: #fcfcfc;
   background-color: #f4f085;
+  color: #000000;
 }
 
 .modal-button-secondary {
-  color: #111111;
   background-color: #f2ed6e;
+  color: #111111;
 }
 
 .modal-button-neutral {
-  color: #111111;
   background-color: #7d7d7d;
+  color: #111111;
 }
 
 .modal-button-action {
-  color: #fcfcfc;
   background-color: var(--action);
+  color: #fcfcfc;
 }
 
 .modal-button-mini {
