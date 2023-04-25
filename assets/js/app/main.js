@@ -1026,6 +1026,7 @@ GemWarrior._avatarStand = function() {
   GemWarrior.config.player.status = 'standing'
   GemWarrior._getAvatarDisplay('standing')
   GemWarrior._playFX('sfx-stand')
+
   GemWarrior._avatarBlink()
 }
 GemWarrior._avatarSit = function() {
@@ -1207,20 +1208,9 @@ GemWarrior.__traverseHistory = function(key) {
     }
 
     // set command bar to historical value
-    GemWarrior.dom.interactive.cmdInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker])
+    GemWarrior.dom.interactive.cmdInput.focus().val('')
 
-    // move cursor to end of value
-    var cmd = GemWarrior.dom.interactive.cmdInput
-
-    if (cmd.setSelectionRange) {
-      var len = GemWarrior.dom.interactive.cmdInput.val().length * 2
-
-      setTimeout(function() {
-        cmd.setSelectionRange(len, len)
-      }, 1)
-    } else {
-      GemWarrior.dom.interactive.cmdInput.val(GemWarrior.dom.interactive.cmdInput.val())
-    }
+    setTimeout(() => GemWarrior.dom.interactive.cmdInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker]), 20)
   }
 }
 
