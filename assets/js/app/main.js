@@ -8,6 +8,9 @@ GemWarrior.settings = GW_DEFAULTS.settings
 // config: only saved while game is loaded
 GemWarrior.config = GW_DEFAULTS.config
 
+// set env
+GemWarrior.config.env = GW_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
+
 /*************************************************************************
  * public methods *
  *************************************************************************/
@@ -20,6 +23,29 @@ async function modalOpen(type) {
         <span class="command-previous">&gt; help</span><br />
         ${GemWarrior._evaluator('help')}
       `)
+      break
+
+    case 'start':
+      const playConfirm = new Modal('confirm', 'Welcome to Gem Warrior',
+        `
+          Welcome to a world of mystery and single-room-ness (because I haven't programmed more than that yet). See if you can escape the Inescapable Hole of Turbidity (spoiler: you cannot...yet)!.
+        `,
+        'Let\'s gooo!',
+        'I\m ready!'
+      )
+
+      try {
+        // wait for modal confirmation
+        await playConfirm.question()
+
+        GemWarrior._saveSetting('firstTime', false)
+
+        // fake confirmation, show welcome message (and play fx, optionally)
+        GemWarrior._displayWelcome()
+      } catch (err) {
+        console.error('something went very wrong', err)
+      }
+
       break
 
     case 'settings':
@@ -38,15 +64,15 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
-            <!-- play sound -->
+            <!-- enable sound -->
             <div class="setting-row">
               <div class="text">
-                <div class="title">Play sound</div>
-                <div class="description">Allow GemWarrior to play music and sound effects.</div>
+                <div class="title">Enable sound</div>
+                <div class="description">Enable GemWarrior to play music and sound effects.</div>
               </div>
               <div class="control">
                 <div class="container">
-                  <div id="button-setting-play-sound" data-status="" class="switch" onclick="GemWarrior._changeSetting('playSound')">
+                  <div id="button-setting-enable-sound" data-status="" class="switch" onclick="GemWarrior._changeSetting('enableSound')">
                     <span class="knob"></span>
                   </div>
                 </div>
@@ -78,30 +104,30 @@ async function modalOpen(type) {
   }
 }
 
-GemWarrior.initApp = function() {
-  // set env
-  GemWarrior.env = GW_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
-
+GemWarrior.initApp = async function() {
   // if local dev, show debug stuff
-  if (GemWarrior.env == 'local') {
+  if (GemWarrior.config.env == 'local') {
     GemWarrior._initDebug()
 
     document.title = '(LH) ' + document.title
   }
 
-  GemWarrior._attachEventHandlers()
-
   GemWarrior._loadSettings()
 
   GemWarrior._resizeFixed()
 
-  GemWarrior.__displayWelcome()
+  GemWarrior._getNebyooApps()
 
-  GemWarrior.__loadWorld()
+  if (GemWarrior.settings.firstTime) {
+    await modalOpen('start')
+    // GemWarrior._displayWelcome()
+  }
+
+  GemWarrior._loadWorld()
 
   GemWarrior._initAvatarWorker()
 
-  GemWarrior._getNebyooApps()
+  GemWarrior._attachEventHandlers()
 
   // initial command
   window.scrollTo(0,1)
@@ -146,15 +172,15 @@ GemWarrior._loadSettings = function() {
       }
     }
 
-    if (lsSettings.playSound) {
-      GemWarrior.settings.playSound = lsSettings.playSound
+    if (lsSettings.enableSound) {
+      GemWarrior.settings.enableSound = lsSettings.enableSound
 
-      if (GemWarrior.settings.playSound) {
+      if (GemWarrior.settings.enableSound) {
         // start up background music
         GemWarrior._initSynths()
       }
 
-      var setting = document.getElementById('button-setting-play-sound')
+      var setting = document.getElementById('button-setting-enable-sound')
 
       if (setting) {
         setting.dataset.status = 'true'
@@ -201,24 +227,24 @@ GemWarrior._changeSetting = function(setting, event = null) {
       }
       break
 
-    case 'playSound':
-      var st = document.getElementById('button-setting-play-sound')
+    case 'enableSound':
+      var st = document.getElementById('button-setting-enable-sound')
 
       if (st) {
         st = st.dataset.status
 
         if (st == '' || st == 'false') {
           // update setting DOM
-          document.getElementById('button-setting-play-sound').dataset.status = 'true'
+          document.getElementById('button-setting-enable-sound').dataset.status = 'true'
 
           // save to code/LS
-          GemWarrior._saveSetting('playSound', true)
+          GemWarrior._saveSetting('enableSound', true)
 
           // start up synth
           GemWarrior._initSynths()
         } else {
           // update setting DOM
-          document.getElementById('button-setting-play-sound').dataset.status = 'false'
+          document.getElementById('button-setting-enable-sound').dataset.status = 'false'
 
           // stop background music playing
           GemWarrior._stopBGM()
@@ -228,7 +254,7 @@ GemWarrior._changeSetting = function(setting, event = null) {
           GemWarrior.config.synth_fx = null
 
           // save to code/LS
-          GemWarrior._saveSetting('playSound', false)
+          GemWarrior._saveSetting('enableSound', false)
         }
       }
       break
@@ -617,7 +643,7 @@ GemWarrior._evaluator = function(command) {
 
     case 'playbgm':
     case 'pl':
-      if (GemWarrior.settings.playSound) {
+      if (GemWarrior.settings.enableSound) {
         if (GemWarrior.config.synth_bgm.getPlayStatus().play != 1) {
           GemWarrior._playBGM()
 
@@ -676,6 +702,8 @@ GemWarrior._try_to_move = function(direction) {
 
     return GemWarrior.world.describe(new_coords)
   } else {
+    GemWarrior._playFX('go-bonk')
+
     return 'Cannot move that way.'
   }
 }
@@ -774,8 +802,11 @@ GemWarrior._stopBGM = function() {
 }
 
 GemWarrior._playFX = function(action) {
-  if (GemWarrior.settings.playSound) {
+  if (GemWarrior.settings.enableSound) {
+    console.log('_playFX', action)
+
     GemWarrior.config.synth_fx.setProgram(0, 3)
+    GemWarrior.config.synth_fx.setMasterVol(0.1)
     GemWarrior.config.synth_fx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
 
     setTimeout(() => {
@@ -916,6 +947,29 @@ GemWarrior._destroyAvatarDisplay = function() {
   }
 }
 
+// display welcome message and play fx (optionally)
+GemWarrior._displayWelcome = function() {
+  GemWarrior._playFX('welcome')
+
+  GemWarrior.dom.output.append(`<pre>
+***********************************
+* Welcome to Gem Warrior!         *
+* - Try <span class="keyword">help</span> if stuck             *
+* - Gear has options to configure *
+* - Currently only one room...or? *
+* <strong>Good luck...</strong>                    *
+***********************************
+</pre>`)
+}
+
+// load entire GemWarrior world into existence
+GemWarrior._loadWorld = function() {
+  fetch(GW_WORLD_JSON)
+    .then(response => response.json())
+    .then(json => GemWarrior.world = new World(json))
+    .then(() => GemWarrior._updateStatus())
+}
+
 GemWarrior._getNebyooApps = async function() {
   const response = await fetch(NEBYOOAPPS_SOURCE_URL)
   const json = await response.json()
@@ -1033,25 +1087,6 @@ GemWarrior.__getHistoryDisplay = function() {
   return `<strong>Command history</strong>: ${GemWarrior.config.history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
 }
 
-// display welcome message
-GemWarrior.__displayWelcome = function() {
-  GemWarrior.dom.output.append(`<pre>
-***********************************
-* Welcome to Gem Warrior!         *
-* - Try <span class="keyword">help</span> if stuck             *
-* - Gear has options to configure *
-* - Currently only one room...or? *
-* <strong>Good luck...</strong>                    *
-***********************************
-</pre>`)
-}
-
-GemWarrior.__loadWorld = function() {
-  fetch(GW_WORLD_JSON)
-    .then(response => response.json())
-    .then(json => GemWarrior.world = new World(json))
-    .then(() => GemWarrior._updateStatus())
-}
 
 GemWarrior.__getAvatarBlinkFreq = function() {
   var min = 2000

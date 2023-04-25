@@ -6,6 +6,8 @@ const GW_SETTINGS_KEY = 'gemwarrior-settings'
 const GW_STATE_KEY = 'gemwarrior-state'
 
 const GW_ENV_PROD_URL = [
+  'gemwarrior.com',
+  'gemwarrior.neb.host',
   'gw.neb.host'
 ]
 
@@ -68,9 +70,10 @@ const GW_DEFAULTS = {
     'text': ''
   },
   'settings': {
-    'textSize': '16',
-    'playSound': false,
-    'showAvatar': true
+    'enableSound': false,
+    'firstTime': true,
+    'showAvatar': true,
+    'textSize': '16'
   }
 }
 
