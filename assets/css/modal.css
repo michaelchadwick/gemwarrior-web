@@ -13,23 +13,23 @@
   width: 100%;
   z-index: 10;
 }
-.modal-dialog * {
-  box-sizing: border-box;
-}
-.modal-dialog.temp {
-  background-color: transparent;
-}
-.modal-dialog.temp .modal-window {
-  background-color: #f4f085;
-  border: 2px solid #111111;
-  border-radius: 8px;
-  box-shadow: none;
-  color: #fcfcfc;
-  pointer-events: none;
-  position: absolute;
-  top: 25%;
-  width: fit-content;
-}
+  .modal-dialog * {
+    box-sizing: border-box;
+  }
+  .modal-dialog.temp {
+    background-color: transparent;
+  }
+    .modal-dialog.temp .modal-window {
+      background-color: #f4f085;
+      border: 2px solid #111111;
+      border-radius: 8px;
+      box-shadow: none;
+      color: #fcfcfc;
+      pointer-events: none;
+      position: absolute;
+      top: 25%;
+      width: fit-content;
+    }
 
 .modal-window {
   --animate-duration: 100ms;
@@ -45,9 +45,9 @@
   max-width: 500px;
   width: 90%;
 }
-.modal-window .modal-window.debug {
-  border-color: #715ec7;
-}
+  .modal-window .modal-window.debug {
+    border-color: #715ec7;
+  }
 
 .modal-title {
   align-items: center;
@@ -59,9 +59,9 @@
   padding: 4px 16px;
   width: 100%;
 }
-.modal-title.debug {
-  background-color: #715ec7;
-}
+  .modal-title.debug {
+    background-color: #715ec7;
+  }
 
 .modal-close {
   background: none;
@@ -77,45 +77,43 @@
 }
 
 .modal-text {
-  margin: 10px 0;
+  list-style-type: none;
+  margin: 0;
   max-height: 500px;
   overflow-y: auto;
-  padding: 0 16px;
+  padding: 10px;
   width: 100%;
-  list-style-type: none;
-  margin: 0;
-  padding: 10px;
 }
-.modal-text ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 10px;
-}
-.modal-text ul ul {
-  padding: 2px 10px;
-}
-.modal-text ul li {
-  padding: 0;
-}
-.modal-text dl dt {
-  margin-left: 1em;
-  min-height: 20px;
-}
-.modal-text dl dl {
-  margin-left: 1em;
-}
+  .modal-text ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+  }
+    .modal-text ul ul {
+      padding: 2px 10px;
+    }
+    .modal-text ul li {
+      padding: 0;
+    }
+  .modal-text dl dt {
+    margin-left: 1em;
+    min-height: 20px;
+  }
+  .modal-text dl dl {
+    margin-left: 1em;
+  }
 
 .modal-button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   margin: auto 0 16px 0;
   padding: 0 10px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
 }
-.modal-button-group button {
-  font-weight: inherit;
-  font-family: inherit;
-}
+  .modal-button-group button {
+    font-weight: inherit;
+    font-family: inherit;
+  }
 
 .modal-button {
   font-family: inherit;
@@ -131,10 +129,12 @@
   border-radius: 2px;
   line-height: 1.3;
 }
-.modal-button:hover {
-  box-shadow: inset 0 99px 0 rgba(0, 0, 0, 0.05);
-  text-decoration: none;
-}
+  @media(hover: hover) {
+    .modal-button:hover {
+      box-shadow: inset 0 99px 0 rgba(0, 0, 0, 0.05);
+      text-decoration: none;
+    }
+  }
 
 .modal-button-primary {
   color: #fcfcfc;
@@ -167,7 +167,7 @@
 }
 
 .modal-button-regular {
-  padding: 8px 24px;
+  padding: 4px 24px;
   font-size: 14px;
 }
 
@@ -207,29 +207,27 @@
   flex-direction: column;
   justify-content: center;
 }
-#settings .setting-row {
-  align-items: center;
-  border-bottom: 1px solid #444444;
-  display: flex;
-  justify-content: space-between;
-  padding: 0;
-}
-#settings .setting-row:last-of-type {
-  border-bottom: none;
-}
-#settings .setting-row .text {
-  padding: 8px 8px 8px 0;
-}
-#settings .setting-row .text .title {
-  font-size: 18px;
-}
-#settings .setting-row .text .description {
-  color: #444444;
-  font-size: 12px;
-}
-#settings .setting-row .control {
-  display: block;
-  margin-left: 1em;
-}
-
-/*# sourceMappingURL=modal.css.map */
+  #settings .setting-row {
+    align-items: center;
+    border-bottom: 1px solid #444444;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+  }
+    #settings .setting-row:last-of-type {
+      border-bottom: none;
+    }
+  #settings .setting-row .text {
+    padding: 8px 8px 8px 0;
+  }
+    #settings .setting-row .text .title {
+      font-size: 18px;
+    }
+    #settings .setting-row .text .description {
+      color: #444444;
+      font-size: 12px;
+    }
+    #settings .setting-row .control {
+      display: block;
+      margin-left: 1em;
+    }
