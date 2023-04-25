@@ -614,7 +614,9 @@ GemWarrior._evaluator = function(command) {
     case 'use':
     case 'u':
       if (subj) {
-        if (GemWarrior.config.player.inventory.includes(subj)) {
+        const itemExists = GemWarrior.config.player.inventory.filter(item => item.split(' ').includes(subj)).length
+
+        if (itemExists) {
           GemWarrior.config.text = `You use the <span class="keyword">${subj}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
         } else {
           GemWarrior.config.text = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, so...well, nothing happens.`
