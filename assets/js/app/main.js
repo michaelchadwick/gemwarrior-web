@@ -838,7 +838,7 @@ GemWarrior._try_to_move = function(direction) {
 
     return GemWarrior.world.describe(new_coords)
   } else {
-    GemWarrior._playFX('go-bonk')
+    GemWarrior._playFX('sfx-bonk')
 
     return 'Cannot move that way.'
   }
@@ -1025,6 +1025,7 @@ GemWarrior._avatarStand = function() {
 
   GemWarrior.config.player.status = 'standing'
   GemWarrior._getAvatarDisplay('standing')
+  GemWarrior._playFX('sfx-sit')
   GemWarrior._avatarBlink()
 }
 GemWarrior._avatarSit = function() {
@@ -1032,6 +1033,8 @@ GemWarrior._avatarSit = function() {
 
   GemWarrior.config.player.status = 'sitting'
   GemWarrior._getAvatarDisplay('sitting')
+  GemWarrior._playFX('sfx-sit')
+
   GemWarrior._avatarBlink()
 }
 GemWarrior._avatarRecline = function() {
@@ -1098,7 +1101,7 @@ GemWarrior._displayWelcome = function() {
 }
 
 GemWarrior._playWelcomeTheme = function() {
-  GemWarrior._playFX('welcome')
+  GemWarrior._playFX('sfx-start')
 }
 
 // load entire GemWarrior world into existence
