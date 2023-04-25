@@ -1025,7 +1025,7 @@ GemWarrior._avatarStand = function() {
 
   GemWarrior.config.player.status = 'standing'
   GemWarrior._getAvatarDisplay('standing')
-  GemWarrior._playFX('sfx-sit')
+  GemWarrior._playFX('sfx-stand')
   GemWarrior._avatarBlink()
 }
 GemWarrior._avatarSit = function() {
