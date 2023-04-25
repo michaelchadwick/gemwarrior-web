@@ -59,6 +59,7 @@ const GW_DEFAULTS = {
         'broken flashlight',
         'candlestick holder'
       ],
+      'inventory_checks': 0,
       'level': 1,
       'rox': 2,
       'status': 'standing',

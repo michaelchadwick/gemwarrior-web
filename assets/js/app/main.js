@@ -556,7 +556,15 @@ GemWarrior._evaluator = function(command) {
       })
 
       if (GemWarrior.config.player.inventory.length !== 0) {
-        GemWarrior.config.text = `You have the clothes on your back, ${playerInv} <span class="noun">${roxCount}</span>, and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".`
+        GemWarrior.config.text = `You have the clothes on your back, ${playerInv} <span class="noun">${roxCount}</span>`
+
+        if (GemWarrior.config.player.inventory_checks >= 1) {
+          GemWarrior.config.text += '.'
+        } else {
+          GemWarrior.config.text += ', and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
+
+          GemWarrior.config.player.inventory_checks++
+        }
       } else {
         GemWarrior.config.text = `You have nothing on your person except the clothes on your back and ${roxCount}`
       }
