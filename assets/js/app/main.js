@@ -158,9 +158,10 @@ GemWarrior._initDebug = function() {
 
 GemWarrior._loadSettings = function() {
   const lsSettings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
+  let setting = null
 
   if (lsSettings) {
-    if (lsSettings.enableSound !== 'undefined') {
+    if (lsSettings.enableSound !== undefined) {
       GemWarrior.settings.enableSound = lsSettings.enableSound
 
       if (GemWarrior.settings.enableSound) {
@@ -168,18 +169,18 @@ GemWarrior._loadSettings = function() {
         GemWarrior._initSynths()
       }
 
-      var setting = document.getElementById('button-setting-enable-sound')
+      setting = document.getElementById('button-setting-enable-sound')
 
       if (setting) {
-        setting.dataset.status = 'true'
+        setting.dataset.status = GemWarrior.settings.enableSound
       }
     }
 
-    if (lsSettings.firstTime !== 'undefined') {
+    if (lsSettings.firstTime !== undefined) {
       GemWarrior.settings.firstTime = lsSettings.firstTime
     }
 
-    if (lsSettings.showAvatar !== 'undefined') {
+    if (lsSettings.showAvatar !== undefined) {
       GemWarrior.settings.showAvatar = lsSettings.showAvatar
 
       if (GemWarrior.settings.showAvatar) {
@@ -188,19 +189,19 @@ GemWarrior._loadSettings = function() {
         }
       }
 
-      var setting = document.getElementById('button-setting-show-avatar')
+      setting = document.getElementById('button-setting-show-avatar')
 
       if (setting) {
-        setting.dataset.status = 'true'
+        setting.dataset.status = GemWarrior.settings.showAvatar
       }
     }
 
-    if (lsSettings.textSize !== 'undefined') {
+    if (lsSettings.textSize !== undefined) {
       GemWarrior.settings.textSize = lsSettings.textSize
 
       $('#output').css('font-size', GemWarrior.settings.textSize + 'px')
 
-      var setting = document.getElementById('text-size-pixels')
+      setting = document.getElementById('text-size-pixels')
 
       if (setting) {
         setting.value = lsSettings.textSize
@@ -575,6 +576,8 @@ GemWarrior._evaluator = function(command) {
           if (subj == 'rock') {
             GemWarrior.config.player.rox++
           }
+
+          GemWarrior._playFX('sfx-take')
         } else {
           GemWarrior.config.text = `You fail to pick up the <span class="noun">${subj}</span> for some unforseen reason.`
         }
@@ -592,6 +595,8 @@ GemWarrior._evaluator = function(command) {
         GemWarrior.world.cur_location.items.push('rock')
 
         GemWarrior.config.text = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
+
+        GemWarrior._playFX('sfx-drop')
       } else {
         GemWarrior.config.text = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
       }
