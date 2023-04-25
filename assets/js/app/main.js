@@ -791,7 +791,7 @@ GemWarrior._initSynths = function() {
   GemWarrior.config.synth_bgm.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
   GemWarrior.config.synth_bgm.setLoop(1)
   GemWarrior.config.synth_bgm.setProgram(0, 2)
-  GemWarrior.config.synth_bgm.setMasterVol(0.2)
+  GemWarrior.config.synth_bgm.setMasterVol(0.1)
 
   if (!GemWarrior.config.synth_fx) {
     // initialize synth_bgm instance
@@ -828,7 +828,7 @@ GemWarrior._playFX = function(action) {
     console.log('_playFX', action)
 
     GemWarrior.config.synth_fx.setProgram(0, 3)
-    GemWarrior.config.synth_fx.setMasterVol(0.1)
+    GemWarrior.config.synth_fx.setMasterVol(0.2)
     GemWarrior.config.synth_fx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
 
     setTimeout(() => {
