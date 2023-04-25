@@ -63,6 +63,32 @@ async function modalOpen(type) {
               </div>
             </div>
 
+            <!-- sound: bgm -->
+            <div class="setting-row requires-sound">
+              <div class="text">
+                <div class="title">BGM Volume</div>
+                <div class="description">How loud should the background music be?</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <input type="range" min="0" max="100" value="10" id="range-setting-bgm-level" onchange="GemWarrior._changeSetting('soundBGMLevel', event)">
+                </div>
+              </div>
+            </div>
+
+            <!-- sound: fx -->
+            <div class="setting-row requires-sound">
+              <div class="text">
+                <div class="title">SFX Volume</div>
+                <div class="description">How loud should the sound effects be?</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <input type="range" min="0" max="100" value="20" id="range-setting-sfx-level" onchange="GemWarrior._changeSetting('soundSFXLevel', event)">
+                </div>
+              </div>
+            </div>
+
             <!-- show avatar -->
             <div class="setting-row">
               <div class="text">
@@ -104,6 +130,8 @@ async function modalOpen(type) {
 }
 
 GemWarrior.initApp = async function() {
+  console.log('[INITIALIZING] app')
+
   // if local dev, show debug stuff
   if (GemWarrior.config.env == 'local') {
     GemWarrior._initDebug()
@@ -139,7 +167,10 @@ GemWarrior.initApp = async function() {
 
 // add debug stuff if local
 GemWarrior._initDebug = function() {
-  var qd = {};
+  console.log('[INITIALIZING] debug')
+
+  var qd = {}
+
   if (location.search) location.search.substr(1).split("&").forEach(function(item) {
     var s = item.split("="),
         k = s[0],
@@ -157,6 +188,8 @@ GemWarrior._initDebug = function() {
 }
 
 GemWarrior._loadSettings = function() {
+  console.log('[LOADING] settings')
+
   const lsSettings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
   let setting = null
 
@@ -165,8 +198,18 @@ GemWarrior._loadSettings = function() {
       GemWarrior.settings.enableSound = lsSettings.enableSound
 
       if (GemWarrior.settings.enableSound) {
-        // start up background music
-        GemWarrior._initSynths()
+        // create synths
+        if (!GemWarrior.config.synth_bgm || !GemWarrior.config.synth_sfx) {
+          GemWarrior._initSynths()
+        }
+
+        for (elem of document.getElementsByClassName('requires-sound')) {
+          elem.classList.add('enabled')
+        }
+      } else {
+        for (elem of document.getElementsByClassName('requires-sound')) {
+          elem.classList.remove('enabled')
+        }
       }
 
       setting = document.getElementById('button-setting-enable-sound')
@@ -196,6 +239,37 @@ GemWarrior._loadSettings = function() {
       }
     }
 
+    if (lsSettings.soundBGMLevel !== undefined) {
+      if (GemWarrior.config.synth_bgm) {
+        GemWarrior.settings.soundBGMLevel = lsSettings.soundBGMLevel
+
+        GemWarrior.config.synth_bgm.setMasterVol(GemWarrior.settings.soundBGMLevel)
+
+        setting = document.getElementById('range-setting-bgm-level')
+
+        if (setting) {
+          setting.value = GemWarrior.settings.soundBGMLevel * 100
+        }
+      } else {
+        console.error('no synth_bgm found, so cannot set level')
+      }
+    }
+    if (lsSettings.soundSFXLevel !== undefined) {
+      if (GemWarrior.config.synth_sfx) {
+        GemWarrior.settings.soundSFXLevel = lsSettings.soundSFXLevel
+
+        GemWarrior.config.synth_sfx.setMasterVol(GemWarrior.settings.soundSFXLevel)
+
+        setting = document.getElementById('range-setting-sfx-level')
+
+        if (setting) {
+          setting.value = GemWarrior.settings.soundSFXLevel * 100
+        }
+      } else {
+        console.error('no synth_sfx found, so cannot set level')
+      }
+    }
+
     if (lsSettings.textSize !== undefined) {
       GemWarrior.settings.textSize = lsSettings.textSize
 
@@ -220,18 +294,6 @@ GemWarrior._loadSettings = function() {
 }
 GemWarrior._changeSetting = function(setting, event = null) {
   switch (setting) {
-    case 'textSize':
-      var st = document.getElementById('text-size-pixels').value
-
-      if (st != '') {
-        // sync to DOM
-        $('#output').css('font-size', st + 'px')
-
-        // save to code/LS
-        GemWarrior._saveSetting('textSize', st)
-      }
-      break
-
     case 'enableSound':
       var st = document.getElementById('button-setting-enable-sound')
 
@@ -242,11 +304,15 @@ GemWarrior._changeSetting = function(setting, event = null) {
           // update setting DOM
           document.getElementById('button-setting-enable-sound').dataset.status = 'true'
 
-          // save to code/LS
-          GemWarrior._saveSetting('enableSound', true)
-
           // start up synth
           GemWarrior._initSynths()
+
+          for (elem of document.getElementsByClassName('requires-sound')) {
+            elem.classList.add('enabled')
+          }
+
+          // save to code/LS
+          GemWarrior._saveSetting('enableSound', true)
         } else {
           // update setting DOM
           document.getElementById('button-setting-enable-sound').dataset.status = 'false'
@@ -256,12 +322,17 @@ GemWarrior._changeSetting = function(setting, event = null) {
 
           // destroy synth instance
           GemWarrior.config.synth_bgm = null
-          GemWarrior.config.synth_fx = null
+          GemWarrior.config.synth_sfx = null
+
+          for (elem of document.getElementsByClassName('requires-sound')) {
+            elem.classList.remove('enabled')
+          }
 
           // save to code/LS
           GemWarrior._saveSetting('enableSound', false)
         }
       }
+
       break
 
     case 'showAvatar':
@@ -291,6 +362,49 @@ GemWarrior._changeSetting = function(setting, event = null) {
           GemWarrior._saveSetting('showAvatar', false)
         }
       }
+      break
+
+    case 'soundBGMLevel':
+      // set config
+      const newBGMLevel = parseInt(event.target.value) / 100
+
+      if (GemWarrior.config.synth_bgm) {
+        GemWarrior.config.synth_bgm.setMasterVol(newBGMLevel)
+      } else {
+        console.error('no synth_bgm found, so cannot set level')
+      }
+
+      // save to code/LS
+      GemWarrior._saveSetting('soundBGMLevel', newBGMLevel)
+
+      break
+
+    case 'soundSFXLevel':
+      // set config
+      const newSFXLevel = parseInt(event.target.value) / 100
+
+      if (GemWarrior.config.synth_sfx) {
+        GemWarrior.config.synth_sfx.setMasterVol(newSFXLevel)
+      } else {
+        console.error('no synth_sfx found, so cannot set level')
+      }
+
+      // save to code/LS
+      GemWarrior._saveSetting('soundSFXLevel', newSFXLevel)
+
+      break
+
+    case 'textSize':
+      var st = document.getElementById('text-size-pixels').value
+
+      if (st != '') {
+        // sync to DOM
+        $('#output').css('font-size', st + 'px')
+
+        // save to code/LS
+        GemWarrior._saveSetting('textSize', st)
+      }
+
       break
   }
 }
@@ -776,6 +890,8 @@ GemWarrior._scrollOutput = function() {
 }
 
 GemWarrior._initSynths = function() {
+  console.log('[INITIALIZING] synths')
+
   if (!GemWarrior.config.synth_bgm) {
     // initialize synth_bgm instance
     GemWarrior.config.synth_bgm = new WebAudioTinySynth({
@@ -791,11 +907,11 @@ GemWarrior._initSynths = function() {
   GemWarrior.config.synth_bgm.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
   GemWarrior.config.synth_bgm.setLoop(1)
   GemWarrior.config.synth_bgm.setProgram(0, 2)
-  GemWarrior.config.synth_bgm.setMasterVol(0.1)
+  GemWarrior.config.synth_bgm.setMasterVol(GemWarrior.settings.soundBGMLevel)
 
-  if (!GemWarrior.config.synth_fx) {
+  if (!GemWarrior.config.synth_sfx) {
     // initialize synth_bgm instance
-    GemWarrior.config.synth_fx = new WebAudioTinySynth({
+    GemWarrior.config.synth_sfx = new WebAudioTinySynth({
       debug: 0,
       loop: 0,
       quality: 1, // 0: chiptune, 1: FM
@@ -825,11 +941,10 @@ GemWarrior._stopBGM = function() {
 
 GemWarrior._playFX = function(action) {
   if (GemWarrior.settings.enableSound) {
-    console.log('_playFX', action)
-
-    GemWarrior.config.synth_fx.setProgram(0, 3)
-    GemWarrior.config.synth_fx.setMasterVol(0.2)
-    GemWarrior.config.synth_fx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
+    GemWarrior.config.synth_sfx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
+    GemWarrior.config.synth_sfx.setLoop(0)
+    GemWarrior.config.synth_sfx.setMasterVol(GemWarrior.settings.soundSFXLevel)
+    GemWarrior.config.synth_sfx.setProgram(0, 3)
 
     setTimeout(() => {
       // console.log('_playFX()')
@@ -838,7 +953,7 @@ GemWarrior._playFX = function(action) {
       //   console.log('playStatus', GemWarrior.config.synth_bgm.getPlayStatus(), GemWarrior.config.synth_bgm)
       // }, 1000)
 
-      GemWarrior.config.synth_fx.playMIDI()
+      GemWarrior.config.synth_sfx.playMIDI()
     }, 20)
   }
 }

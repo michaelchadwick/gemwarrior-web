@@ -67,13 +67,15 @@ const GW_DEFAULTS = {
     },
     'soundInterval': null,
     'synth_bgm': null,
-    'synth_fx': null,
+    'synth_sfx': null,
     'text': ''
   },
   'settings': {
     'enableSound': false,
     'firstTime': true,
     'showAvatar': true,
+    'soundBGMLevel': 10,
+    'soundSFXLevel': 20,
     'textSize': '16'
   }
 }

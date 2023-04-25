@@ -214,6 +214,12 @@
     justify-content: space-between;
     padding: 0;
   }
+    #settings .setting-row.requires-sound {
+      display: none;
+    }
+      #settings .setting-row.requires-sound.enabled {
+        display: flex;
+      }
     #settings .setting-row:last-of-type {
       border-bottom: none;
     }
