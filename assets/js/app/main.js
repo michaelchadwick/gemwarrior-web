@@ -2,12 +2,6 @@
 /* app entry point and main functions */
 /* global $, GemWarrior */
 
-// settings: saved in LOCAL STORAGE
-GemWarrior.settings = GW_DEFAULTS.settings
-
-// config: only saved while game is loaded
-GemWarrior.config = GW_DEFAULTS.config
-
 // set env
 GemWarrior.config.env = GW_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
 
@@ -40,8 +34,9 @@ async function modalOpen(type) {
 
         GemWarrior._saveSetting('firstTime', false)
 
-        // fake confirmation, show welcome message (and play fx, optionally)
+        // fake confirmation, show welcome message
         GemWarrior._displayWelcome()
+        GemWarrior._playWelcomeTheme()
       } catch (err) {
         console.error('something went very wrong', err)
       }
@@ -52,18 +47,7 @@ async function modalOpen(type) {
       this.myModal = new Modal('perm', 'Settings',
         `
           <div id="settings">
-          <!-- text size -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Text size</div>
-                <div class="description">Adjust text size of output.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <input type="number" id="text-size-pixels" max="22" min="4" step="1" value="16" onchange="GemWarrior._changeSetting('textSize')" onkeyup="GemWarrior._changeSetting('textSize', event)" />
-                </div>
-              </div>
-            </div>
+
             <!-- enable sound -->
             <div class="setting-row">
               <div class="text">
@@ -78,6 +62,7 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+
             <!-- show avatar -->
             <div class="setting-row">
               <div class="text">
@@ -92,6 +77,20 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+
+            <!-- text size -->
+            <div class="setting-row">
+              <div class="text">
+                <div class="title">Text size</div>
+                <div class="description">Adjust text size of output.</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <input type="number" id="text-size-pixels" max="22" min="4" step="1" value="16" onchange="GemWarrior._changeSetting('textSize')" onkeyup="GemWarrior._changeSetting('textSize', event)" />
+                </div>
+              </div>
+            </div>
+
           </div>
         `,
         null,
@@ -120,7 +119,8 @@ GemWarrior.initApp = async function() {
 
   if (GemWarrior.settings.firstTime) {
     await modalOpen('start')
-    // GemWarrior._displayWelcome()
+  } else {
+    GemWarrior._displayWelcome()
   }
 
   GemWarrior._loadWorld()
@@ -160,19 +160,7 @@ GemWarrior._loadSettings = function() {
   const lsSettings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
 
   if (lsSettings) {
-    if (lsSettings.textSize) {
-      GemWarrior.settings.textSize = lsSettings.textSize
-
-      $('#output').css('font-size', GemWarrior.settings.textSize + 'px')
-
-      var setting = document.getElementById('text-size-pixels')
-
-      if (setting) {
-        setting.value = lsSettings.textSize
-      }
-    }
-
-    if (lsSettings.enableSound) {
+    if (lsSettings.enableSound !== 'undefined') {
       GemWarrior.settings.enableSound = lsSettings.enableSound
 
       if (GemWarrior.settings.enableSound) {
@@ -187,7 +175,11 @@ GemWarrior._loadSettings = function() {
       }
     }
 
-    if (lsSettings.showAvatar) {
+    if (lsSettings.firstTime !== 'undefined') {
+      GemWarrior.settings.firstTime = lsSettings.firstTime
+    }
+
+    if (lsSettings.showAvatar !== 'undefined') {
       GemWarrior.settings.showAvatar = lsSettings.showAvatar
 
       if (GemWarrior.settings.showAvatar) {
@@ -200,6 +192,18 @@ GemWarrior._loadSettings = function() {
 
       if (setting) {
         setting.dataset.status = 'true'
+      }
+    }
+
+    if (lsSettings.textSize !== 'undefined') {
+      GemWarrior.settings.textSize = lsSettings.textSize
+
+      $('#output').css('font-size', GemWarrior.settings.textSize + 'px')
+
+      var setting = document.getElementById('text-size-pixels')
+
+      if (setting) {
+        setting.value = lsSettings.textSize
       }
     }
   } else {
@@ -947,19 +951,21 @@ GemWarrior._destroyAvatarDisplay = function() {
   }
 }
 
-// display welcome message and play fx (optionally)
+// display welcome message
 GemWarrior._displayWelcome = function() {
-  GemWarrior._playFX('welcome')
-
   GemWarrior.dom.output.append(`<pre>
-***********************************
-* Welcome to Gem Warrior!         *
-* - Try <span class="keyword">help</span> if stuck             *
-* - Gear has options to configure *
-* - Currently only one room...or? *
-* <strong>Good luck...</strong>                    *
-***********************************
+*************************************
+* Welcome to Gem Warrior!           *
+* - Try <span class="keyword">help</span> if stuck               *
+* - Top-right gear icon for options *
+* - Currently only one room...or?   *
+* <strong>Good luck...</strong>                      *
+*************************************
 </pre>`)
+}
+
+GemWarrior._playWelcomeTheme = function() {
+  GemWarrior._playFX('welcome')
 }
 
 // load entire GemWarrior world into existence

@@ -48,22 +48,22 @@ const GW_COMMANDS = {
 
 const GW_DEFAULTS = {
   'config': {
-    'player': {
-      'level': 1,
-      'xp': 0,
-      'hp': 10,
-      'rox': 2,
-      'status': 'standing',
-      'inventory': [
-        'broken flashlight',
-        'candlestick holder'
-      ]
-    },
     'avatarWorker': null,
     'blinker': null,
     'history': [],
     'historyMarker': 0,
     'keyCommand': '',
+    'player': {
+      'hp': 10,
+      'inventory': [
+        'broken flashlight',
+        'candlestick holder'
+      ],
+      'level': 1,
+      'rox': 2,
+      'status': 'standing',
+      'xp': 0
+    },
     'soundInterval': null,
     'synth_bgm': null,
     'synth_fx': null,
@@ -78,3 +78,9 @@ const GW_DEFAULTS = {
 }
 
 const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'
+
+// settings: saved in LOCAL STORAGE
+GemWarrior.settings = {...GW_DEFAULTS.settings}
+
+// config: only saved while game is loaded
+GemWarrior.config = {...GW_DEFAULTS.config}
