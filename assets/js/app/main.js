@@ -614,10 +614,13 @@ GemWarrior._evaluator = function(command) {
     case 'use':
     case 'u':
       if (subj) {
-        const itemExists = GemWarrior.config.player.inventory.filter(item => item.split(' ').includes(subj)).length
+        const itemExists = GemWarrior.config.player.inventory.filter(item => item == subj)
+        const itemExistsToken = GemWarrior.config.player.inventory.filter(item => item.split(' ').includes(subj))
 
-        if (itemExists) {
+        if (itemExists.length) {
           GemWarrior.config.text = `You use the <span class="keyword">${subj}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
+        } else if (itemExistsToken.length) {
+          GemWarrior.config.text = `You use the <span class="keyword">${itemExistsToken[0]}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
         } else {
           GemWarrior.config.text = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, so...well, nothing happens.`
         }
