@@ -39,7 +39,7 @@ async function getCachedData(cacheName, url) {
 
 // Delete cache when unused to respect user's disk space
 async function deleteCache(cacheName) {
-  console.log(`web worker: deleting ${cacheName} cache...`)
+  // console.log(`web worker: deleting ${cacheName} cache...`)
 
   const keys = await caches.keys()
 
@@ -69,7 +69,7 @@ async function useCache(url) {
 
 // use direct fetch(url)
 async function useFetch(url) {
-  console.log(`web-worker: Fetch Request: '${url}'`)
+  // console.log(`web-worker: Fetch Request: '${url}'`)
 
   const statusText = await fetch(url)
     .then(response => response.text())
@@ -100,7 +100,7 @@ async function initData() {
     })
   })
 
-  postMessage({ command: 'status', value: 'standing' })
+  postMessage({ command: 'status', value: 'standing-quiet' })
 }
 
 function changeStatus(val) {

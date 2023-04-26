@@ -27,9 +27,15 @@ GemWarrior._initAvatarWorker = function() {
             case 'status':
               switch (val) {
                 case 'standing':
+                  GemWarrior._avatarStand({ sound: true })
+                  break
+                case 'standing-quiet':
                   GemWarrior._avatarStand()
                   break
                 case 'sitting':
+                  GemWarrior._avatarSit({ sound: true })
+                  break
+                case 'sitting-quiet':
                   GemWarrior._avatarSit()
                   break
               }
@@ -64,26 +70,34 @@ GemWarrior._getAvatarDisplay = function(type) {
   }
 }
 
-GemWarrior._avatarStand = function() {
+GemWarrior._avatarStand = function(options = null) {
   clearTimeout(GemWarrior._sleepTimer)
 
   if (GemWarrior.config.player.status == 'sleeping') {
-    GemWarrior._playBGM('main')
+    if (options && options.sound) {
+      GemWarrior._playBGM('main')
+    }
   } else {
-    GemWarrior._playSFX('sfx-stand')
+    if (options && options.sound) {
+      GemWarrior._playSFX('sfx-stand')
+    }
   }
 
   GemWarrior.config.player.status = 'standing'
   GemWarrior._getAvatarDisplay('standing')
   GemWarrior._avatarBlink()
 }
-GemWarrior._avatarSit = function() {
+GemWarrior._avatarSit = function(options = null) {
   clearTimeout(GemWarrior._sleepTimer)
 
   if (GemWarrior.config.player.status == 'sleeping') {
-    GemWarrior._playBGM('main')
+    if (options && options.sound) {
+      GemWarrior._playBGM('main')
+    }
   } else {
-    GemWarrior._playSFX('sfx-sit')
+    if (options && options.sound) {
+      GemWarrior._playSFX('sfx-sit')
+    }
   }
 
   GemWarrior.config.player.status = 'sitting'

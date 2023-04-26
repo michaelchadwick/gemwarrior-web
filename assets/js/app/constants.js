@@ -74,8 +74,8 @@ const GW_DEFAULTS = {
     'enableSound': false,
     'firstTime': true,
     'showAvatar': true,
-    'soundBGMLevel': 10,
-    'soundSFXLevel': 20,
+    'soundBGMLevel': 0.1,
+    'soundSFXLevel': 0.2,
     'textSize': '16'
   }
 }

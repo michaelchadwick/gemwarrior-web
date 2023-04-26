@@ -22,21 +22,26 @@ async function modalOpen(type) {
     case 'start':
       const playConfirm = new Modal('confirm', 'Welcome to Gem Warrior',
         `
-          Welcome to a world of mystery and single-room-ness (because I haven't programmed more than that yet). See if you can escape the Inescapable Hole of Turbidity (spoiler: you cannot...yet)!.
+          Welcome to a world of mystery and single-room-ness (because I haven't programmed more than that yet). See if you can escape the Inescapable Hole of Turbidity (spoiler: you cannot...yet)! However, there are plenty of the usual text adventure command fare to experiment with for now.
         `,
-        'Let\'s gooo!',
-        'I\m ready!'
+        'Play w/ sound',
+        'Play quietly'
       )
 
       try {
         // wait for modal confirmation
-        await playConfirm.question()
+        const answer = await playConfirm.question()
 
         GemWarrior._saveSetting('firstTime', false)
 
-        // fake confirmation, show welcome message
+        if (answer) {
+          GemWarrior._saveSetting('enableSound', true)
+          GemWarrior._initSynths()
+
+          GemWarrior._playSFX('sfx-start')
+        }
+
         GemWarrior._displayWelcome()
-        GemWarrior._playWelcomeTheme()
       } catch (err) {
         console.error('something went very wrong', err)
       }
@@ -507,8 +512,6 @@ GemWarrior._attachEventHandlers = function() {
   $(document).on('keydown', function(event) {
     const code = event.code
 
-    // console.log('keyboard code', code)
-
     var excludedKeys = ['Alt', 'Control', 'Meta', 'Shift']
 
     if (!excludedKeys.some(key => event.originalEvent.getModifierState(key))) {
@@ -528,8 +531,6 @@ GemWarrior._attachEventHandlers = function() {
           GemWarrior.dom.interactive.keyboardInput.addClass('show')
         } else if (code.startsWith('Key')) {
           const key = code.charAt(code.length - 1)
-
-          // console.log('key', key)
 
           $('#keyboard button').each(function() {
             if ($(this).data('key') == key.toLowerCase()) {
@@ -616,6 +617,7 @@ GemWarrior._evaluator = function(command) {
       }
 
       break
+
     case 'north':
     case 'n':
       GemWarrior.config.text = GemWarrior._try_to_move('north')
@@ -749,7 +751,7 @@ GemWarrior._evaluator = function(command) {
       if (GemWarrior.config.player.status === 'sitting') {
         GemWarrior.config.text = `You are already ${GemWarrior.config.player.status}.`
       } else {
-        GemWarrior._avatarSit()
+        GemWarrior._avatarSit({ sound: true })
         GemWarrior.config.text = 'You sit down.'
       }
 
@@ -760,7 +762,7 @@ GemWarrior._evaluator = function(command) {
       if (GemWarrior.config.player.status === 'standing') {
         GemWarrior.config.text = `You are already ${GemWarrior.config.player.status}.`
       } else {
-        GemWarrior._avatarStand()
+        GemWarrior._avatarStand({ sound: true })
         GemWarrior.config.text = 'You stand up.'
       }
 
@@ -993,7 +995,6 @@ GemWarrior._playSFX = function(action) {
   }
 }
 
-// display welcome message
 GemWarrior._displayWelcome = function() {
   GemWarrior.dom.output.append(`<pre>
 *************************************
@@ -1004,10 +1005,6 @@ GemWarrior._displayWelcome = function() {
 * <strong>Good luck...</strong>                      *
 *************************************
 </pre>`)
-}
-
-GemWarrior._playWelcomeTheme = function() {
-  GemWarrior._playSFX('sfx-start')
 }
 
 // load entire GemWarrior world into existence
