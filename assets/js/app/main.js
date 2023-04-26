@@ -770,8 +770,8 @@ GemWarrior._evaluator = function(command) {
 
     case 'sleep':
     case 'sl':
-      GemWarrior.config.player.status = 'reclining'
-      GemWarrior._avatarRecline()
+      GemWarrior.config.player.status = 'sleeping'
+      GemWarrior._avatarSleep(true)
 
       GemWarrior.config.text = 'You lie down to rest.'
 
@@ -781,7 +781,7 @@ GemWarrior._evaluator = function(command) {
     case 'pl':
       if (GemWarrior.settings.enableSound) {
         if (GemWarrior.config.synth_bgm.getPlayStatus().play != 1) {
-          GemWarrior._playBGM()
+          GemWarrior._playBGM('main')
 
           GemWarrior.config.text = 'Playing background music.'
         } else {
@@ -892,10 +892,12 @@ GemWarrior._scrollOutput = function() {
 GemWarrior._initSynths = function() {
   console.log('[INITIALIZING] synths')
 
+  const filename = '/assets/audio/gw-bgm-main.mid'
+
   if (!GemWarrior.config.synth_bgm) {
     // initialize synth_bgm instance
     GemWarrior.config.synth_bgm = new WebAudioTinySynth({
-      debug: 0,
+      debug: 1,
       loop: 1,
       quality: 1, // 0: chiptune, 1: FM
       reverbLev: 0.5,
@@ -904,10 +906,10 @@ GemWarrior._initSynths = function() {
     })
   }
 
-  GemWarrior.config.synth_bgm.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
+  GemWarrior.config.synth_bgm.loadMIDI(filename)
   GemWarrior.config.synth_bgm.setLoop(1)
-  GemWarrior.config.synth_bgm.setProgram(0, 2)
   GemWarrior.config.synth_bgm.setMasterVol(GemWarrior.settings.soundBGMLevel)
+  GemWarrior.config.synth_bgm.setProgram(0, 2)
 
   if (!GemWarrior.config.synth_sfx) {
     // initialize synth_bgm instance
@@ -921,27 +923,31 @@ GemWarrior._initSynths = function() {
     })
   }
 }
-GemWarrior._playBGM = function() {
+GemWarrior._playBGM = function(action) {
+  const filename = `/assets/audio/gw-bgm-${action}.mid`
+
   setTimeout(() => {
-    // console.log('_playBGM()')
+    console.log('_playBGM()', filename)
 
-    // setInterval(() => {
-    //   console.log('playStatus', GemWarrior.config.synth_bgm.getPlayStatus(), GemWarrior.config.synth_bgm)
-    // }, 1000)
+    setInterval(() => {
+      console.log('playStatus',
+        GemWarrior.config.synth_bgm.getPlayStatus()
+      )
+    }, 1000)
 
+    GemWarrior.config.synth_bgm.loadMIDI(filename)
     GemWarrior.config.synth_bgm.playMIDI()
   }, 1)
 }
 GemWarrior._stopBGM = function() {
   GemWarrior.config.synth_bgm.stopMIDI()
-  GemWarrior.config.synth_bgm.loadMIDIUrl('/assets/audio/gw-bgm1.mid')
-
-  // clearInterval(GemWarrior.bgmTicker)
 }
 
 GemWarrior._playFX = function(action) {
   if (GemWarrior.settings.enableSound) {
-    GemWarrior.config.synth_sfx.loadMIDIUrl(`/assets/audio/gw-${action}.mid`)
+    const filename = `/assets/audio/gw-${action}.mid`
+
+    GemWarrior.config.synth_sfx.loadMIDIUrl(filename)
     GemWarrior.config.synth_sfx.setLoop(0)
     GemWarrior.config.synth_sfx.setMasterVol(GemWarrior.settings.soundSFXLevel)
     GemWarrior.config.synth_sfx.setProgram(0, 3)
@@ -1021,7 +1027,12 @@ GemWarrior._getAvatarDisplay = function(type) {
 }
 
 GemWarrior._avatarStand = function() {
-  clearTimeout(GemWarrior._reclineTimer)
+  if (GemWarrior.config.player.status === 'sleeping') {
+    GemWarrior._stopBGM()
+    GemWarrior._playBGM('main')
+  }
+
+  clearTimeout(GemWarrior._sleepTimer)
 
   GemWarrior.config.player.status = 'standing'
   GemWarrior._getAvatarDisplay('standing')
@@ -1030,7 +1041,12 @@ GemWarrior._avatarStand = function() {
   GemWarrior._avatarBlink()
 }
 GemWarrior._avatarSit = function() {
-  clearTimeout(GemWarrior._reclineTimer)
+  if (GemWarrior.config.player.status === 'sleeping') {
+    GemWarrior._stopBGM()
+    GemWarrior._playBGM('main')
+  }
+
+  clearTimeout(GemWarrior._sleepTimer)
 
   GemWarrior.config.player.status = 'sitting'
   GemWarrior._getAvatarDisplay('sitting')
@@ -1038,20 +1054,25 @@ GemWarrior._avatarSit = function() {
 
   GemWarrior._avatarBlink()
 }
-GemWarrior._avatarRecline = function() {
-  if (GemWarrior.config.player.status === 'reclining') {
+GemWarrior._avatarSleep = function(init = null) {
+  if (GemWarrior.config.player.status === 'sleeping') {
+    if (init) {
+      // GemWarrior._stopBGM()
+      GemWarrior._playBGM('sleep')
+    }
+
     clearInterval(GemWarrior.config.blinker)
 
-    GemWarrior._getAvatarDisplay('reclining1')
+    GemWarrior._getAvatarDisplay('sleeping1')
 
-    GemWarrior._reclineTimer = setTimeout(() => {
-      GemWarrior._getAvatarDisplay('reclining2')
+    GemWarrior._sleepTimer = setTimeout(() => {
+      GemWarrior._getAvatarDisplay('sleeping2')
 
-      GemWarrior._reclineTimer = setTimeout(() => {
-        GemWarrior._getAvatarDisplay('reclining3')
+      GemWarrior._sleepTimer = setTimeout(() => {
+        GemWarrior._getAvatarDisplay('sleeping3')
 
-        GemWarrior._reclineTimer = setTimeout(() => {
-          GemWarrior._avatarRecline()
+        GemWarrior._sleepTimer = setTimeout(() => {
+          GemWarrior._avatarSleep()
         }, 1000)
       }, 1000)
     }, 1000)
@@ -1231,6 +1252,10 @@ GemWarrior.__getAvatarBlinkSpeed = function() {
   var max = 600
 
   return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+GemWarrior.__isBGMPlaying = function() {
+  return GemWarrior.config.synth_bgm.playing
 }
 
 /*************************************************************************

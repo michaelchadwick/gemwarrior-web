@@ -88,9 +88,9 @@ async function initData() {
           `${GW_ASSET_DATA_PATH}/player-standing-blink.txt`,
           `${GW_ASSET_DATA_PATH}/player-sitting.txt`,
           `${GW_ASSET_DATA_PATH}/player-sitting-blink.txt`,
-          `${GW_ASSET_DATA_PATH}/player-reclining1.txt`,
-          `${GW_ASSET_DATA_PATH}/player-reclining2.txt`,
-          `${GW_ASSET_DATA_PATH}/player-reclining3.txt`
+          `${GW_ASSET_DATA_PATH}/player-sleeping1.txt`,
+          `${GW_ASSET_DATA_PATH}/player-sleeping2.txt`,
+          `${GW_ASSET_DATA_PATH}/player-sleeping3.txt`
         ])
 
         // console.log(`web-worker: Added files to ${GW_CACHE_TEXT_KEY} cache`)

@@ -787,11 +787,13 @@ function WebAudioTinySynthCore(target) {
       if(!url)
         return;
       var xhr=new XMLHttpRequest();
+      console.log('loading MIDI via xhr', url)
       xhr.open("GET",url,true);
       xhr.responseType="arraybuffer";
       xhr.loadMIDI=this.loadMIDI.bind(this);
       xhr.onload=function(e){
         if(this.status==200){
+          console.log('successfully loaded midi');
           this.loadMIDI(this.response);
         }
       };
