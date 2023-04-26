@@ -158,3 +158,16 @@ GemWarrior._destroyAvatarDisplay = function() {
     console.error('could not destroy avatar', error)
   }
 }
+
+GemWarrior.__getAvatarBlinkFreq = function() {
+  var min = 2000
+  var max = 20000
+
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+GemWarrior.__getAvatarBlinkSpeed = function() {
+  var min = 100
+  var max = 600
+
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
