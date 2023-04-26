@@ -620,22 +620,22 @@ GemWarrior._evaluator = function(command) {
 
     case 'north':
     case 'n':
-      GemWarrior.config.text = GemWarrior._try_to_move('north')
+      GemWarrior.config.text = GemWarrior._move('north')
       break
 
     case 'west':
     case 'w':
-      GemWarrior.config.text = GemWarrior._try_to_move('west')
+      GemWarrior.config.text = GemWarrior._move('west')
       break
 
     case 'south':
     case 's':
-      GemWarrior.config.text = GemWarrior._try_to_move('south')
+      GemWarrior.config.text = GemWarrior._move('south')
       break
 
     case 'east':
     case 'e':
-      GemWarrior.config.text = GemWarrior._try_to_move('east')
+      GemWarrior.config.text = GemWarrior._move('east')
       break
 
     case 'look':
@@ -848,17 +848,21 @@ GemWarrior._evaluator = function(command) {
   return GemWarrior.config.text
 }
 
-GemWarrior._try_to_move = function(direction) {
-  if (GemWarrior.world.can_move(direction)) {
-    const new_coords = GemWarrior.world.player.go(direction)
+GemWarrior._move = function(direction) {
+  if (GemWarrior.config.player.status !== 'sleeping') {
+    if (GemWarrior.world.can_move(direction)) {
+      const new_coords = GemWarrior.world.player.go(direction)
 
-    GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[new_coords].name
+      GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[new_coords].name
 
-    return GemWarrior.world.describe(new_coords)
+      return GemWarrior.world.describe(new_coords)
+    } else {
+      GemWarrior._playSFX('sfx-bonk')
+
+      return 'Cannot move that way.'
+    }
   } else {
-    GemWarrior._playSFX('sfx-bonk')
-
-    return 'Cannot move that way.'
+    return 'You cannot move while sleeping.'
   }
 }
 
