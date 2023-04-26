@@ -36,9 +36,10 @@ async function modalOpen(type) {
 
         if (answer) {
           GemWarrior._saveSetting('enableSound', true)
+
           GemWarrior._initSynths()
 
-          GemWarrior._playSFX('sfx-start')
+          setTimeout(() => GemWarrior._playSFX('start'), 200)
         }
 
         GemWarrior._displayWelcome()
@@ -701,7 +702,7 @@ GemWarrior._evaluator = function(command) {
             GemWarrior.config.player.rox++
           }
 
-          GemWarrior._playSFX('sfx-take')
+          GemWarrior._playSFX('take')
         } else {
           GemWarrior.config.text = `You fail to pick up the <span class="noun">${subj}</span> for some unforseen reason.`
         }
@@ -720,7 +721,7 @@ GemWarrior._evaluator = function(command) {
 
         GemWarrior.config.text = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
 
-        GemWarrior._playSFX('sfx-drop')
+        GemWarrior._playSFX('drop')
       } else {
         GemWarrior.config.text = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
       }
@@ -858,7 +859,7 @@ GemWarrior._move = function(direction) {
 
       return GemWarrior.world.describe(new_coords)
     } else {
-      GemWarrior._playSFX('sfx-bonk')
+      GemWarrior._playSFX('bonk')
 
       return 'Cannot move that way.'
     }

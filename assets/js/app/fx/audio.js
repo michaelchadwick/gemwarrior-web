@@ -71,7 +71,7 @@ GemWarrior._stopBGM = function() {
 
 GemWarrior._playSFX = function(action) {
   if (GemWarrior.settings.enableSound) {
-    const filename = `/assets/audio/gw-${action}.mid`
+    const filename = `/assets/audio/gw-sfx-${action}.mid`
 
     GemWarrior.config.synth_sfx.loadMIDIUrl(filename)
     GemWarrior.config.synth_sfx.setLoop(0)
