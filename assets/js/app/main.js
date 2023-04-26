@@ -853,6 +853,7 @@ GemWarrior._move = function(direction) {
     if (GemWarrior.world.can_move(direction)) {
       const new_coords = GemWarrior.world.player.go(direction)
 
+      GemWarrior.world.cur_location = GemWarrior.world.locations[new_coords]
       GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[new_coords].name
 
       return GemWarrior.world.describe(new_coords)
