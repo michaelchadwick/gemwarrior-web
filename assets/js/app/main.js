@@ -504,7 +504,7 @@ GemWarrior._attachEventHandlers = function() {
     if (!isTextSelected) {
       setTimeout(function() {
         GemWarrior.dom.interactive.cmdInput.focus()
-      }, 1000)
+      }, GW_SNAPBACK_DELAY)
     }
   })
 

@@ -11,6 +11,7 @@ const GW_ENV_PROD_URL = [
   'gw.neb.host'
 ]
 
+const GW_SNAPBACK_DELAY = 500
 const GW_WORLD_JSON = '/assets/data/ihot.json'
 
 const GW_COMMANDS = {
