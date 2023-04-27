@@ -498,10 +498,14 @@ GemWarrior._attachEventHandlers = function() {
   GemWarrior.dom.interactive.cmdInput.focus()
 
   // if we leave command bar form, return after a second
-  $('*').on('mouseup', function() {
-    setTimeout(function() {
-      GemWarrior.dom.interactive.cmdInput.focus()
-    }, 1000)
+  $('*').on('mouseup', (event) => {
+    const isTextSelected = window.getSelection().toString() != ''
+
+    if (!isTextSelected) {
+      setTimeout(function() {
+        GemWarrior.dom.interactive.cmdInput.focus()
+      }, 1000)
+    }
   })
 
   // $('#output').scroll(function() {
