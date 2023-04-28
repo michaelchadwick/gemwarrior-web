@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 
 const GW_SETTINGS_KEY = 'gemwarrior-settings'
-const GW_STATE_KEY = 'gemwarrior-state'
+const GW_WORLD_KEY = 'gemwarrior-world'
 
 const GW_ENV_PROD_URL = [
   'gemwarrior.com',

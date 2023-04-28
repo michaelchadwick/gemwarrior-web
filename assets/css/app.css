@@ -343,6 +343,7 @@ header {
   #interface #stats {
     background: #3d083c;
     color: #deaddd;
+    display: flex;
     height: 20px;
   }
   #interface #location {

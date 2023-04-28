@@ -437,40 +437,51 @@ GemWarrior._saveSetting = function(setting, value) {
 GemWarrior._loadWorld = async function() {
   console.log('[INITIALIZING] world')
 
-  const response = await fetch(GW_WORLD_IHOT_JSON_URL)
+  const lsWorld = localStorage.getItem(GW_WORLD_KEY)
 
-  if (response) {
-    const json = await response.json()
+  if (lsWorld) {
+    GemWarrior.world = JSON.parse(lsWorld)
+    GemWarrior._updateStatus()
 
-    if (json) {
-      GemWarrior.world = new World(json)
+    console.log('Saved world has been loaded')
+  } else {
+    console.log('No saved world found. Loading default world data...')
 
-      // create name for player inside world
-      const ng = new NameGenerator('fantasy')
-      const ng_name_set = await ng.get_name_set()
+    const response = await fetch(GW_WORLD_IHOT_JSON_URL)
 
-      if (ng_name_set) {
-        const rand_name = ng.generate_name()
+    if (response) {
+      const json = await response.json()
 
-        if (rand_name) {
-          GemWarrior.world.player.name = rand_name
+      if (json) {
+        GemWarrior.world = new World(json)
+
+        // create name for player inside world
+        const ng = new NameGenerator('fantasy')
+        const ng_name_set = await ng.get_name_set()
+
+        if (ng_name_set) {
+          const rand_name = ng.generate_name()
+
+          if (rand_name) {
+            GemWarrior.world.player.name = rand_name
+          } else {
+            GemWarrior.world.player.name = GemWarrior.world.player.generate_name()
+
+            console.warn('NameGenerator generate_name() failed; defaulting to terrible random name generator')
+          }
         } else {
           GemWarrior.world.player.name = GemWarrior.world.player.generate_name()
 
-          console.warn('NameGenerator generate_name() failed; defaulting to terrible random name generator')
+          console.warn('NameGenerator name_set load failed; defaulting to terrible random name generator')
         }
+
+        GemWarrior._updateStatus()
       } else {
-        GemWarrior.world.player.name = GemWarrior.world.player.generate_name()
-
-        console.warn('NameGenerator name_set load failed; defaulting to terrible random name generator')
+        console.error('could not load initial world data')
       }
-
-      GemWarrior._updateStatus()
     } else {
-      console.error('could not load world data')
+      console.error('could not load initial world data url')
     }
-  } else {
-    console.error('could not load world data url')
   }
 }
 
@@ -928,14 +939,18 @@ GemWarrior._displayHelp = function() {
   return `HELP: The following commands are valid: ${cmdList}`
 }
 
-// update DOM stats
+// update DOM stats and save to localStorage
 GemWarrior._updateStatus = function() {
+  console.log('_updateStatus()')
+
   GemWarrior.dom.statsNM.text(GemWarrior.world.player.name)
   GemWarrior.dom.statsLV.text(GemWarrior.world.player.level)
   GemWarrior.dom.statsXP.text(GemWarrior.world.player.xp)
   GemWarrior.dom.statsHP.text(GemWarrior.world.player.hp)
   GemWarrior.dom.statsROX.text(GemWarrior.world.player.rox)
   GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[GemWarrior.world.player.cur_coords].name
+
+  GemWarrior._saveWorld()
 }
 
 // resize fixed elements when viewport changes
@@ -974,6 +989,18 @@ GemWarrior._displayWelcome = function() {
 * <strong>Good luck...</strong>                      *
 *************************************
 </pre>`)
+}
+
+GemWarrior._saveWorld = function() {
+  console.log('saving world state and global settings to localStorage...')
+
+  try {
+    localStorage.setItem(GW_WORLD_KEY, JSON.stringify(GemWarrior.world))
+
+    // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_KEY)))
+  } catch(error) {
+    console.error('localStorage world state save failed', error)
+  }
 }
 
 GemWarrior._getNebyooApps = async function() {
