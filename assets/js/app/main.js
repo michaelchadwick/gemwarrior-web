@@ -767,6 +767,16 @@ GemWarrior._evaluator = function(command) {
           }
 
           GemWarrior._playSFX('take')
+
+          if (
+            GemWarrior.world.player.rox > 10 &&
+            !GemWarrior.world.locations['2,2,0'].items.includes('indentation')
+          ) {
+            GemWarrior.config.outText = `After you pick up the final rock in this dark, desolate dungeon of a space, you hear a faint noise towards the northeast, almost as if something slightly shifted.`
+
+            GemWarrior.world.locations['2,2,0'].description += ` If you look very closely at the wall nearby, you can make out an indentation that wasn't there before...maybe. It's so turbid in here that you may be imagining it.`
+            GemWarrior.world.locations['2,2,0'].items.push('indentation')
+          }
         } else {
           GemWarrior.config.outText = `You fail to pick up the <span class="noun">${subj}</span> for some unforseen reason.`
         }
@@ -795,15 +805,21 @@ GemWarrior._evaluator = function(command) {
     case 'use':
     case 'u':
       if (subj) {
-        const itemExists = GemWarrior.world.player.inventory.filter(item => item == subj)
-        const itemExistsToken = GemWarrior.world.player.inventory.filter(item => item.split(' ').includes(subj))
+        const itemExistsInv = GemWarrior.world.player.inventory.filter(item => item == subj)
+        const itemExistsLoc = GemWarrior.world.cur_location.items.filter(item => item == subj)
+        const itemExistsInvToken = GemWarrior.world.player.inventory.filter(item => item.split(' ').includes(subj))
+        const itemExistsLocToken = GemWarrior.world.cur_location.items.filter(item => item.split(' ').includes(subj))
 
-        if (itemExists.length) {
+        if (itemExistsInv.length) {
           GemWarrior.config.outText = `You use the <span class="keyword">${subj}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
-        } else if (itemExistsToken.length) {
-          GemWarrior.config.outText = `You use the <span class="keyword">${itemExistsToken[0]}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
+        } else if (itemExistsInvToken.length) {
+          GemWarrior.config.outText = `You use the <span class="keyword">${itemExistsInvToken[0]}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
+        } else if (itemExistsLoc.length) {
+          GemWarrior.config.outText = `You use the <span class="keyword">${subj}</span> at this location. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
+        } else if (itemExistsLocToken.length) {
+          GemWarrior.config.outText = `You use the <span class="keyword">${itemExistsLocToken[0]}</span> at this location. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
         } else {
-          GemWarrior.config.outText = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, so...well, nothing happens.`
+          GemWarrior.config.outText = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, and <span class="keyword">${subj}</span> does not appear to exist in this location, so...well, nothing happens.`
         }
       } else {
         GemWarrior.config.outText = `Use <em>what</em>, exactly?`
