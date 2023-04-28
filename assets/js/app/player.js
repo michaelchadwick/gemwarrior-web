@@ -26,7 +26,8 @@ class Player {
     // Math.floor((Math.random() * (max - min + 1) - min))
     min = Math.ceil(5)
     max = Math.floor(10)
-    const letter_max = Math.floor((Math.random() * (max - min + 1) + min))
+    // const letter_max = Math.floor((Math.random() * (max - min + 1) + min))
+    const letter_max = 8
 
     // index 0 to 25 (min inclusive, max exclusive)
     // Math.random() * (max - min) + min
