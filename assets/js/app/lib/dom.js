@@ -10,6 +10,7 @@ GemWarrior.dom = {
   'interface': $('#interface'),
   'interactive': {},
   'stats': $('#interface #stats'),
+  'statsNM': $('#interface #stats #name'),
   'statsLV': $('#interface #stats #level'),
   'statsXP': $('#interface #stats #xp'),
   'statsROX': $('#interface #stats #rox'),

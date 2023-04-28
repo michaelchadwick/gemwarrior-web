@@ -11,8 +11,12 @@ const GW_ENV_PROD_URL = [
   'gw.neb.host'
 ]
 
+const GW_WORKER_JS_URL = '/assets/js/app/lib/worker.js'
+const GW_WORLD_IHOT_JSON_URL = '/assets/data/world/ihot.json'
+const GW_WORLD_JOOL_JSON_URL = '/assets/data/world/jool.json'
+const GW_WORLD_IHOT_JOOL_JSON_URL = '/assets/data/world/ihot_jool.json'
+
 const GW_SNAPBACK_DELAY = 500
-const GW_WORLD_JSON = '/assets/data/ihot.json'
 
 const GW_COMMANDS = {
   'travel': [
@@ -54,22 +58,9 @@ const GW_DEFAULTS = {
     'history': [],
     'historyMarker': 0,
     'keyCommand': '',
-    'player': {
-      'hp': 10,
-      'inventory': [
-        'broken flashlight',
-        'candlestick holder'
-      ],
-      'inventory_checks': 0,
-      'level': 1,
-      'rox': 2,
-      'status': 'standing',
-      'xp': 0
-    },
-    'soundInterval': null,
+    'outText': '',
     'synth_bgm': null,
-    'synth_sfx': null,
-    'text': ''
+    'synth_sfx': null
   },
   'settings': {
     'enableSound': false,
@@ -80,6 +71,10 @@ const GW_DEFAULTS = {
     'textSize': '16'
   }
 }
+
+const CHAR_UPPER_POOL = [...Array(26)].map((val, i) => String.fromCharCode(i + 65))
+const CHAR_LOWER_POOL = [...Array(26)].map((val, i) => String.fromCharCode(i + 97))
+const CHAR_LOWER_VOWEL_POOL = ['a', 'e', 'i', 'o', 'u', 'y']
 
 const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'
 

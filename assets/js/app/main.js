@@ -157,11 +157,11 @@ GemWarrior.initApp = async function() {
     GemWarrior._displayWelcome()
   }
 
-  GemWarrior._loadWorld()
-
   GemWarrior._initAvatarWorker()
 
   GemWarrior._attachEventHandlers()
+
+  GemWarrior._loadWorld()
 
   // initial command
   window.scrollTo(0,1)
@@ -433,6 +433,47 @@ GemWarrior._saveSetting = function(setting, value) {
   // console.log('!global setting saved!', GemWarrior.settings)
 }
 
+// load entire GemWarrior world into existence
+GemWarrior._loadWorld = async function() {
+  console.log('[INITIALIZING] world')
+
+  const response = await fetch(GW_WORLD_IHOT_JSON_URL)
+
+  if (response) {
+    const json = await response.json()
+
+    if (json) {
+      GemWarrior.world = new World(json)
+
+      // create name for player inside world
+      const ng = new NameGenerator('fantasy')
+      const ng_name_set = await ng.get_name_set()
+
+      if (ng_name_set) {
+        const rand_name = ng.generate_name()
+
+        if (rand_name) {
+          GemWarrior.world.player.name = rand_name
+        } else {
+          GemWarrior.world.player.name = GemWarrior.world.player.generate_name()
+
+          console.warn('NameGenerator generate_name() failed; defaulting to terrible random name generator')
+        }
+      } else {
+        GemWarrior.world.player.name = GemWarrior.world.player.generate_name()
+
+        console.warn('NameGenerator name_set load failed; defaulting to terrible random name generator')
+      }
+
+      GemWarrior._updateStatus()
+    } else {
+      console.error('could not load world data')
+    }
+  } else {
+    console.error('could not load world data url')
+  }
+}
+
 GemWarrior._attachEventHandlers = function() {
   // {} header icons to open modals
   GemWarrior.dom.interactive.btnNav.click(() => {
@@ -618,43 +659,47 @@ GemWarrior._evaluator = function(command) {
       if (subj) {
         GemWarrior._evaluator(subj)
       } else {
-        GemWarrior.config.text = 'You cannot just <span class="keyword">go</span> without a direction.'
+        GemWarrior.config.outText = 'You cannot just <span class="keyword">go</span> without a direction.'
       }
 
       break
 
     case 'north':
     case 'n':
-      GemWarrior.config.text = GemWarrior._move('north')
+      GemWarrior.config.outText = GemWarrior._move('north')
       break
 
     case 'west':
     case 'w':
-      GemWarrior.config.text = GemWarrior._move('west')
+      GemWarrior.config.outText = GemWarrior._move('west')
       break
 
     case 'south':
     case 's':
-      GemWarrior.config.text = GemWarrior._move('south')
+      GemWarrior.config.outText = GemWarrior._move('south')
       break
 
     case 'east':
     case 'e':
-      GemWarrior.config.text = GemWarrior._move('east')
+      GemWarrior.config.outText = GemWarrior._move('east')
       break
 
     case 'look':
     case 'l':
-      GemWarrior.config.text = GemWarrior.world.describe(GemWarrior.world.player.cur_coords)
+      GemWarrior.config.outText = GemWarrior.world.describe(GemWarrior.world.player.cur_coords)
 
       break
 
     case 'character':
     case 'char':
     case 'c':
-      GemWarrior.config.text = `You assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.<br />
-      <p>You are <strong>${GemWarrior.config.player.status}</strong>.</p>
-      You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.`
+      GemWarrior.config.outText = `
+        <p>You, the mighty warrior ${GemWarrior.world.player.name}, assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.</p>
+        <p>You are <strong>${GemWarrior.world.player.status}</strong>.</p>
+        <p>
+        You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.
+        </p>
+      `
 
       break
 
@@ -664,30 +709,30 @@ GemWarrior._evaluator = function(command) {
     case 'i':
       let roxCount = ''
 
-      if (GemWarrior.config.player.rox === 1) {
+      if (GemWarrior.world.player.rox === 1) {
         roxCount = ' <strong>1</strong> rock'
       } else {
-        roxCount = ` <strong>${GemWarrior.config.player.rox}</strong> rox`
+        roxCount = ` <strong>${GemWarrior.world.player.rox}</strong> rox`
       }
 
       let playerInv = ''
 
-      GemWarrior.config.player.inventory.forEach((thing) => {
+      GemWarrior.world.player.inventory.forEach((thing) => {
         playerInv += `<span class="noun">a ${thing}</span>, `
       })
 
-      if (GemWarrior.config.player.inventory.length !== 0) {
-        GemWarrior.config.text = `You have the clothes on your back, ${playerInv} <span class="noun">${roxCount}</span>`
+      if (GemWarrior.world.player.inventory.length !== 0) {
+        GemWarrior.config.outText = `You have the clothes on your back, ${playerInv} <span class="noun">${roxCount}</span>`
 
-        if (GemWarrior.config.player.inventory_checks >= 1) {
-          GemWarrior.config.text += '.'
+        if (GemWarrior.world.player.inventory_checks >= 1) {
+          GemWarrior.config.outText += '.'
         } else {
-          GemWarrior.config.text += ', and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
+          GemWarrior.config.outText += ', and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
 
-          GemWarrior.config.player.inventory_checks++
+          GemWarrior.world.player.inventory_checks++
         }
       } else {
-        GemWarrior.config.text = `You have nothing on your person except the clothes on your back and ${roxCount}`
+        GemWarrior.config.outText = `You have nothing on your person except the clothes on your back and ${roxCount}`
       }
 
       break
@@ -698,36 +743,36 @@ GemWarrior._evaluator = function(command) {
     case 't':
       if (subj) {
         if (!GemWarrior.world.cur_location.items.includes(subj)) {
-          GemWarrior.config.text = 'That object is not present, so picking it up is going to be difficult.'
+          GemWarrior.config.outText = 'That object is not present, so picking it up is going to be difficult.'
         } else if (GemWarrior.world.remove_item(GemWarrior.world.player.cur_coords, subj)) {
-          GemWarrior.config.text = `You pick up the <span class="noun">${subj}</span>.`
+          GemWarrior.config.outText = `You pick up the <span class="noun">${subj}</span>.`
 
           if (subj == 'rock') {
-            GemWarrior.config.player.rox++
+            GemWarrior.world.player.rox++
           }
 
           GemWarrior._playSFX('take')
         } else {
-          GemWarrior.config.text = `You fail to pick up the <span class="noun">${subj}</span> for some unforseen reason.`
+          GemWarrior.config.outText = `You fail to pick up the <span class="noun">${subj}</span> for some unforseen reason.`
         }
       } else {
-        GemWarrior.config.text = `Since you did not indicate <strong>what</strong> to pick up, you bend down momentarily and attempt to pick up some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
+        GemWarrior.config.outText = `Since you did not indicate <strong>what</strong> to pick up, you bend down momentarily and attempt to pick up some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
       }
 
       break
 
     case 'throw':
     case 'th':
-      if (GemWarrior.config.player.rox > 0) {
-        GemWarrior.config.player.rox--
+      if (GemWarrior.world.player.rox > 0) {
+        GemWarrior.world.player.rox--
 
         GemWarrior.world.cur_location.items.push('rock')
 
-        GemWarrior.config.text = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
+        GemWarrior.config.outText = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
 
         GemWarrior._playSFX('drop')
       } else {
-        GemWarrior.config.text = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
+        GemWarrior.config.outText = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
       }
 
       break
@@ -735,53 +780,53 @@ GemWarrior._evaluator = function(command) {
     case 'use':
     case 'u':
       if (subj) {
-        const itemExists = GemWarrior.config.player.inventory.filter(item => item == subj)
-        const itemExistsToken = GemWarrior.config.player.inventory.filter(item => item.split(' ').includes(subj))
+        const itemExists = GemWarrior.world.player.inventory.filter(item => item == subj)
+        const itemExistsToken = GemWarrior.world.player.inventory.filter(item => item.split(' ').includes(subj))
 
         if (itemExists.length) {
-          GemWarrior.config.text = `You use the <span class="keyword">${subj}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
+          GemWarrior.config.outText = `You use the <span class="keyword">${subj}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
         } else if (itemExistsToken.length) {
-          GemWarrior.config.text = `You use the <span class="keyword">${itemExistsToken[0]}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
+          GemWarrior.config.outText = `You use the <span class="keyword">${itemExistsToken[0]}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
         } else {
-          GemWarrior.config.text = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, so...well, nothing happens.`
+          GemWarrior.config.outText = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, so...well, nothing happens.`
         }
       } else {
-        GemWarrior.config.text = `Use <em>what</em>, exactly?`
+        GemWarrior.config.outText = `Use <em>what</em>, exactly?`
       }
 
       break
 
     case 'sit':
     case 'si':
-      if (GemWarrior.config.player.status === 'sitting') {
-        GemWarrior.config.text = `You are already ${GemWarrior.config.player.status}.`
+      if (GemWarrior.world.player.status === 'sitting') {
+        GemWarrior.config.outText = `You are already ${GemWarrior.world.player.status}.`
       } else {
         GemWarrior._avatarSit({ sound: true })
-        GemWarrior.config.text = 'You sit down.'
+        GemWarrior.config.outText = 'You sit down.'
       }
 
       break
 
     case 'stand':
     case 'st':
-      if (GemWarrior.config.player.status === 'standing') {
-        GemWarrior.config.text = `You are already ${GemWarrior.config.player.status}.`
+      if (GemWarrior.world.player.status === 'standing') {
+        GemWarrior.config.outText = `You are already ${GemWarrior.world.player.status}.`
       } else {
         GemWarrior._avatarStand({ sound: true })
-        GemWarrior.config.text = 'You stand up.'
+        GemWarrior.config.outText = 'You stand up.'
       }
 
       break
 
     case 'sleep':
     case 'sl':
-      if (GemWarrior.config.player.status == 'sleeping') {
-        GemWarrior.config.text = 'You are already resting.'
+      if (GemWarrior.world.player.status == 'sleeping') {
+        GemWarrior.config.outText = 'You are already resting.'
       } else {
-        GemWarrior.config.player.status = 'sleeping'
+        GemWarrior.world.player.status = 'sleeping'
         GemWarrior._avatarSleep(true)
 
-        GemWarrior.config.text = 'You lie down to rest.'
+        GemWarrior.config.outText = 'You lie down to rest.'
       }
 
       break
@@ -791,18 +836,18 @@ GemWarrior._evaluator = function(command) {
     case 'pl':
       if (GemWarrior.settings.enableSound) {
         if (!GemWarrior.config.synth_bgm.playing) {
-          if (GemWarrior.config.player.status == 'sleeping') {
+          if (GemWarrior.world.player.status == 'sleeping') {
             GemWarrior._playBGM('sleep')
           } else {
             GemWarrior._playBGM('main')
           }
 
-          GemWarrior.config.text = 'Playing background music.'
+          GemWarrior.config.outText = 'Playing background music.'
         } else {
-          GemWarrior.config.text = 'Background music is already playing.'
+          GemWarrior.config.outText = 'Background music is already playing.'
         }
       } else {
-        GemWarrior.config.text = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
+        GemWarrior.config.outText = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
       }
 
       break
@@ -813,12 +858,12 @@ GemWarrior._evaluator = function(command) {
         if (GemWarrior.config.synth_bgm.playing) {
           GemWarrior._stopBGM()
 
-          GemWarrior.config.text = 'Background music has stopped.'
+          GemWarrior.config.outText = 'Background music has stopped.'
         } else {
-          GemWarrior.config.text = 'Background is not playing, so this has no effect.'
+          GemWarrior.config.outText = 'Background is not playing, so this has no effect.'
         }
       } else {
-        GemWarrior.config.text = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
+        GemWarrior.config.outText = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
       }
 
       break
@@ -826,35 +871,35 @@ GemWarrior._evaluator = function(command) {
     case 'help':
     case 'h':
     case '?':
-      GemWarrior.config.text = GemWarrior._displayHelp()
+      GemWarrior.config.outText = GemWarrior._displayHelp()
 
       break
 
     case 'history':
     case 'hist':
-      GemWarrior.config.text = GemWarrior.__getHistoryDisplay()
+      GemWarrior.config.outText = GemWarrior.__getHistoryDisplay()
 
       break
 
     case 'about':
     case 'a':
-      GemWarrior.config.text = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
+      GemWarrior.config.outText = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
 
       <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
 
       break
 
     default:
-      GemWarrior.config.text = 'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
+      GemWarrior.config.outText = 'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
 
       break
   }
 
-  return GemWarrior.config.text
+  return GemWarrior.config.outText
 }
 
 GemWarrior._move = function(direction) {
-  if (GemWarrior.config.player.status !== 'sleeping') {
+  if (GemWarrior.world.player.status !== 'sleeping') {
     if (GemWarrior.world.can_move(direction)) {
       const new_coords = GemWarrior.world.player.go(direction)
 
@@ -885,10 +930,11 @@ GemWarrior._displayHelp = function() {
 
 // update DOM stats
 GemWarrior._updateStatus = function() {
-  GemWarrior.dom.statsLV.text(GemWarrior.config.player.level)
-  GemWarrior.dom.statsXP.text(GemWarrior.config.player.xp)
-  GemWarrior.dom.statsHP.text(GemWarrior.config.player.hp)
-  GemWarrior.dom.statsROX.text(GemWarrior.config.player.rox)
+  GemWarrior.dom.statsNM.text(GemWarrior.world.player.name)
+  GemWarrior.dom.statsLV.text(GemWarrior.world.player.level)
+  GemWarrior.dom.statsXP.text(GemWarrior.world.player.xp)
+  GemWarrior.dom.statsHP.text(GemWarrior.world.player.hp)
+  GemWarrior.dom.statsROX.text(GemWarrior.world.player.rox)
   GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[GemWarrior.world.player.cur_coords].name
 }
 
@@ -917,6 +963,7 @@ GemWarrior._scrollOutput = function() {
   }
 }
 
+// write welcome message to main output
 GemWarrior._displayWelcome = function() {
   GemWarrior.dom.output.append(`<pre>
 *************************************
@@ -927,14 +974,6 @@ GemWarrior._displayWelcome = function() {
 * <strong>Good luck...</strong>                      *
 *************************************
 </pre>`)
-}
-
-// load entire GemWarrior world into existence
-GemWarrior._loadWorld = function() {
-  fetch(GW_WORLD_JSON)
-    .then(response => response.json())
-    .then(json => GemWarrior.world = new World(json))
-    .then(() => GemWarrior._updateStatus())
 }
 
 GemWarrior._getNebyooApps = async function() {
