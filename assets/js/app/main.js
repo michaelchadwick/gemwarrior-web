@@ -157,12 +157,6 @@ GemWarrior.initApp = async function() {
 
   GemWarrior._loadWorld()
 
-  if (GemWarrior.settings.firstTime) {
-    await modalOpen('start')
-  } else {
-    GemWarrior._displayWelcome()
-  }
-
   // initial command
   window.scrollTo(0,1)
 }
@@ -440,7 +434,11 @@ GemWarrior._loadWorld = async function() {
   const lsWorld = localStorage.getItem(GW_WORLD_KEY)
 
   if (lsWorld) {
-    GemWarrior.world = JSON.parse(lsWorld)
+    const lsWorldObj = JSON.parse(lsWorld)
+
+    GemWarrior.world = new World(lsWorldObj.locations, lsWorldObj.player)
+    GemWarrior.world.cur_location = lsWorldObj.cur_location
+
     GemWarrior._updateStatus()
 
     console.log('Saved world has been loaded')
@@ -482,6 +480,12 @@ GemWarrior._loadWorld = async function() {
     } else {
       console.error('could not load initial world data url')
     }
+  }
+
+  if (GemWarrior.settings.firstTime) {
+    await modalOpen('start')
+  } else {
+    GemWarrior._displayWelcome()
   }
 }
 
@@ -930,7 +934,7 @@ GemWarrior._move = function(direction) {
 
 // update DOM stats and save to localStorage
 GemWarrior._updateStatus = function() {
-  console.log('_updateStatus()')
+  // console.log('_updateStatus()')
 
   GemWarrior.dom.statsNM.text(GemWarrior.world.player.name)
   GemWarrior.dom.statsLV.text(GemWarrior.world.player.level)
@@ -992,7 +996,7 @@ GemWarrior._displayWelcome = function() {
 }
 
 GemWarrior._saveWorld = function() {
-  console.log('saving world state and global settings to localStorage...')
+  // console.log('saving world state and global settings to localStorage...')
 
   try {
     localStorage.setItem(GW_WORLD_KEY, JSON.stringify(GemWarrior.world))

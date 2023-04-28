@@ -3,8 +3,8 @@
 /* eslint-disable no-unused-vars */
 
 class World {
-  constructor(locations) {
-    this.player = new Player()
+  constructor(locations, player = null) {
+    this.player = new Player(player)
 
     this.locations = this.create_locations(locations)
     this.cur_location = this.locations[this.player.cur_coords]

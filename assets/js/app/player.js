@@ -3,19 +3,31 @@
 /* eslint-disable no-unused-vars */
 
 class Player {
-  constructor() {
-    this.name = ''
-    this.level = 1
-    this.xp = 0
-    this.hp = 10
-    this.rox = 2
-    this.inventory = [
-      'broken flashlight',
-      'candlestick holder'
-    ]
-    this.inventory_checks = 0
-    this.cur_coords = [1, 1, 0]
-    this.status = 'standing'
+  constructor(player = null) {
+    if (player) {
+      this.name = player.name
+      this.level = player.level
+      this.xp = player.xp
+      this.hp = player.hp
+      this.rox = player.rox
+      this.inventory = player.inventory
+      this.inventory_checks = player.inventory_checks
+      this.cur_coords = player.cur_coords
+      this.status = player.status
+    } else {
+      this.name = ''
+      this.level = 1
+      this.xp = 0
+      this.hp = 10
+      this.rox = 2
+      this.inventory = [
+        'broken flashlight',
+        'candlestick holder'
+      ]
+      this.inventory_checks = 0
+      this.cur_coords = [1, 1, 0]
+      this.status = 'standing'
+    }
   }
 
   generate_name() {
