@@ -151,17 +151,17 @@ GemWarrior.initApp = async function() {
 
   GemWarrior._getNebyooApps()
 
-  if (GemWarrior.settings.firstTime) {
-    await modalOpen('start')
-  } else {
-    GemWarrior._displayWelcome()
-  }
-
   GemWarrior._initAvatarWorker()
 
   GemWarrior._attachEventHandlers()
 
   GemWarrior._loadWorld()
+
+  if (GemWarrior.settings.firstTime) {
+    await modalOpen('start')
+  } else {
+    GemWarrior._displayWelcome()
+  }
 
   // initial command
   window.scrollTo(0,1)
@@ -705,7 +705,7 @@ GemWarrior._evaluator = function(command) {
     case 'char':
     case 'c':
       GemWarrior.config.outText = `
-        <p>You, the mighty warrior ${GemWarrior.world.player.name}, assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.</p>
+        <p>You, the mighty warrior <span class="noun">${GemWarrior.world.player.name}</a>, assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.</p>
         <p>You are <strong>${GemWarrior.world.player.status}</strong>.</p>
         <p>
         You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.
@@ -928,17 +928,6 @@ GemWarrior._move = function(direction) {
   }
 }
 
-// display command list
-GemWarrior._displayHelp = function() {
-  var cmdList = ''
-
-  Object.keys(GW_COMMANDS).forEach((key) => {
-    cmdList += `<br />&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${GW_COMMANDS[key].join(', ')}</span><br />`
-  })
-
-  return `HELP: The following commands are valid: ${cmdList}`
-}
-
 // update DOM stats and save to localStorage
 GemWarrior._updateStatus = function() {
   console.log('_updateStatus()')
@@ -978,6 +967,17 @@ GemWarrior._scrollOutput = function() {
   }
 }
 
+// display command list
+GemWarrior._displayHelp = function() {
+  var cmdList = ''
+
+  Object.keys(GW_COMMANDS).forEach((key) => {
+    cmdList += `<br />&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${GW_COMMANDS[key].join(', ')}</span><br />`
+  })
+
+  return `HELP: The following commands are valid: ${cmdList}`
+}
+
 // write welcome message to main output
 GemWarrior._displayWelcome = function() {
   GemWarrior.dom.output.append(`<pre>
@@ -986,7 +986,7 @@ GemWarrior._displayWelcome = function() {
 * - Try <span class="keyword">help</span> if stuck               *
 * - Top-right gear icon for options *
 * - Currently only one room...or?   *
-* <strong>Good luck...</strong>                      *
+* <strong>Good luck, <span class="noun">${GemWarrior.world.player.name}</span>...</strong>           *
 *************************************
 </pre>`)
 }
