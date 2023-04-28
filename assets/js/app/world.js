@@ -40,7 +40,7 @@ class World {
     let description = loc.description
 
     if (loc.items.length) {
-      description += `\n >> Thing(s):    <span class="noun">${loc.items.join(', ')}</span>`
+      description += `<br /> >> Thing(s):    <span class="noun">${loc.items.join(', ')}</span>`
     }
 
     return description
