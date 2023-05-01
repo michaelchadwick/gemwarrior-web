@@ -8,7 +8,15 @@ GemWarrior.dom = {
   'navContent': ('$nav-content'),
   'output': $('#output'),
   'interface': $('#interface'),
-  'interactive': {},
+  'interactive': {
+    'btnNav': $('#button-nav'),
+    'btnNavClose': $('#button-nav-close'),
+    'btnHelp': $('#button-help'),
+    'btnSettings': $('#button-settings'),
+    'cmdInput': $('#command-input'),
+    'keyboard': $('#keyboard'),
+    'keyboardInput': $('#keyboard-input')
+  },
   'stats': $('#interface #stats'),
   'statsNM': $('#interface #stats #name'),
   'statsLV': $('#interface #stats #level'),
@@ -19,13 +27,4 @@ GemWarrior.dom = {
   'avatar': $('#interface #avatar')
 }
 
-// DOM > interactive elements
-GemWarrior.dom.interactive = {
-  'btnNav': $('#button-nav'),
-  'btnNavClose': $('#button-nav-close'),
-  'btnHelp': $('#button-help'),
-  'btnSettings': $('#button-settings'),
-  'cmdInput': $('#command-input'),
-  'keyboard': $('#keyboard'),
-  'keyboardInput': $('#keyboard-input')
-}
+console.log('[LOADED] /app/dom')

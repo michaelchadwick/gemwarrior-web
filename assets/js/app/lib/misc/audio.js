@@ -1,9 +1,9 @@
-/* AUDIO */
+/* /app/lib/misc/audio */
 /* global GemWarrior */
 /* eslint-disable no-unused-vars */
 
 GemWarrior._initSynths = function() {
-  console.log('[INITIALIZING] synths')
+  // console.log('[INITIALIZING] synths')
 
   if (!GemWarrior.config.synth_bgm) {
     // initialize synth_bgm instance
@@ -23,7 +23,7 @@ GemWarrior._initSynths = function() {
   GemWarrior.config.synth_bgm.setProgram(0, 2)
 
   if (GemWarrior.config.synth_bgm) {
-    console.log('* synth_bgm initialized!')
+    // console.log('* synth_bgm initialized!')
   } else {
     console.error('* synth_bgm could not be initialized')
   }
@@ -41,10 +41,12 @@ GemWarrior._initSynths = function() {
   }
 
   if (GemWarrior.config.synth_sfx) {
-    console.log('* synth_sfx initialized!')
+    // console.log('* synth_sfx initialized!')
   } else {
     console.error('* synth_sfx could not be initialized')
   }
+
+  console.log('[LOADED] /app/lib/misc/audio(synths)')
 }
 GemWarrior._playBGM = function(action) {
   if (GemWarrior.settings.enableSound) {
@@ -90,6 +92,6 @@ GemWarrior._playSFX = function(action) {
   }
 }
 
-GemWarrior.__isBGMPlaying = function() {
+GemWarrior._isBGMPlaying = function() {
   return GemWarrior.config.synth_bgm.playing
 }

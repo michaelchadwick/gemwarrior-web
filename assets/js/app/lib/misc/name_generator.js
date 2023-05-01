@@ -8,10 +8,12 @@ class NameGenerator {
     this.type = type
     this.name_set = {}
     this.chain_cache = {}
+
+    console.log('[LOADED] /app/lib/misc/name_generator')
   }
 
   async get_name_set() {
-    const names_promise = await fetch(`/assets/data/${this.type}_names.json`)
+    const names_promise = await fetch(`/assets/data/names/${this.type}.json`)
     const names_data = await names_promise.json()
 
     this.name_set = names_data

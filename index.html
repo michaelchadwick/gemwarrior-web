@@ -96,6 +96,10 @@
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
+  <section id="log-container">
+    <pre id="log"></pre>
+  </section>
+
   <section id="game">
     <div id="output"></div>
   </section>
@@ -148,17 +152,34 @@
   <script type="text/javascript" src='./assets/js/vendor/webaudio-tinysynth.js'></script>
   <!-- CUSTOM -->
   <script type="text/javascript" src="./assets/js/app.js"></script>
+  <script type="text/javascript" src="./assets/js/app/dom.js"></script>
+  <script type="text/javascript" src="./assets/js/app/evaluator.js"></script>
+  <script type="text/javascript" src="./assets/js/app/game_options.js"></script>
+  <script type="text/javascript" src="./assets/js/app/inventory.js"></script>
+  <script type="text/javascript" src="./assets/js/app/modal.js"></script>
+  <script type="text/javascript" src="./assets/js/app/worker.js"></script>
   <!-- CUSTOM LIBRARIES -->
-  <script type="text/javascript" src="./assets/js/app/lib/audio.js"></script>
-  <script type="text/javascript" src="./assets/js/app/lib/avatar.js"></script>
-  <script type="text/javascript" src="./assets/js/app/lib/constants.js"></script>
-  <script type="text/javascript" src="./assets/js/app/lib/dom.js"></script>
-  <script type="text/javascript" src="./assets/js/app/lib/modal.js"></script>
-  <script type="text/javascript" src="./assets/js/app/lib/name_generator.js"></script>
-  <script type="text/javascript" src="./assets/js/app/lib/worker.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/constants/general.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/constants/errors.js"></script>
+
+  <script type="text/javascript" src="./assets/js/app/lib/misc/audio.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/misc/avatar.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/misc/name_generator.js"></script>
+
+  <script type="text/javascript" src="./assets/js/app/lib/entities/entity.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/creature.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/item.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/location.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/player.js"></script>
+
+  <script type="text/javascript" src="./assets/js/app/lib/entities/items/bucket.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/items/cloth.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/items/indentation.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/items/resin.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/items/rock.js"></script>
+  <script type="text/javascript" src="./assets/js/app/lib/entities/items/stick.js"></script>
 
   <script type="text/javascript" src="./assets/js/app/world.js"></script>
-  <script type="text/javascript" src="./assets/js/app/player.js"></script>
   <script type="text/javascript" src="./assets/js/app/main.js"></script>
 </body>
 </html>

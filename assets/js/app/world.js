@@ -1,62 +1,131 @@
-/* WORLD */
-/* global GemWarrior, Player */
+// /assets/js/app/world.js
+/* global GemWarrior, Item, Location, Player */
 /* eslint-disable no-unused-vars */
 
 class World {
-  constructor(locations, player = null) {
-    this.player = new Player(player)
+  constructor(initObj) {
+    this.player = new Player(initObj.player || null)
 
-    this.locations = this.create_locations(locations)
-    this.cur_location = this.locations[this.player.cur_coords]
+    this.locations = this._create_locations(initObj.locations)
+
+    this.location = this.get_location()
   }
 
-  create_locations(json_locs) {
-    let locs = {}
+  describe_entity(loc, entity_name) {
+    let entity = entity_name.toLowerCase()
+    let result
 
-    Object.keys(json_locs).forEach(i => {
-      const coords = json_locs[i].coords
-      const index = Object.values(coords).join(',')
+    // check location items->monster->boss, inventory->items
+    if (loc.has_item(entity)) {
+      Object.values(loc.items).forEach(i => {
+        if (i.name.toLowerCase() == entity) {
+          if (GemWarrior.options.debug_mode) {
+            result = i.describe_detailed()
+          } else {
+            result = i.describe()
+          }
+        }
+      })
+    // } else if (loc.has_monster(entity)) {
+    //   Object.values(loc.monsters_abounding).forEach(m => {
+    //     if (m.name.toLowerCase() == entity) {
+    //       if (GemWarrior.options.debug_mode) {
+    //         result = m.describe_detailed()
+    //       } else {
+    //         result = m.describe()
+    //       }
+    //     }
+    //   })
+    // } else if (loc.has_boss(entity)) {
+    //   Object.values(loc.bosses_abounding).forEach(b => {
+    //     if (b.name.toLowerCase() == entity) {
+    //       if (GemWarrior.options.debug_mode) {
+    //         result = b.describe_detailed()
+    //       } else {
+    //         result = b.describe()
+    //       }
+    //     }
+    //   })
+    } else if (this.player.inventory.has_item(entity)) {
+      result = this.player.inventory.describe_item(entity)
+    } else {
+      result = ERROR_DESCRIBE_ENTITY_INVALID
+    }
 
-      locs[index] = {}
+    return result
+  }
 
-      locs[index]['name'] = json_locs[i].name
-      locs[index]['description'] = json_locs[i].description
-      locs[index]['coords'] = json_locs[i].coords
-      locs[index]['items'] = json_locs[i].items
-      locs[index]['paths'] = json_locs[i].paths
-      locs[index]['danger_level'] = json_locs[i].danger_level
+  create_custom_item(item_name) {
+    console.log(`create_custom_item(${item_name})`)
+
+    switch (item_name) {
+      case 'bucket': return new Bucket()
+      case 'cloth': return new Cloth()
+      case 'indentation': return new Indentation()
+      case 'resin': return new Resin()
+      case 'rock': return new Rock()
+      case 'stick': return new Stick()
+      default:
+        return false
+    }
+  }
+
+  can_move_in_direction(direction) {
+    return GemWarrior.world.location.paths[direction]
+  }
+
+  get_location(point = null) {
+    const place = point ? point : this.player.coords
+
+    return this.locations.filter(
+      loc => Object.values(loc.coords).join(',') == Object.values(place).join(',')
+    )[0]
+  }
+
+  set_location() {
+    this.location = this.locations.filter(
+      loc => Object.values(loc.coords).join(',') == Object.values(this.player.coords).join(',')
+    )[0]
+  }
+
+  save = function() {
+    // console.log('saving world state and global settings to localStorage...')
+
+    try {
+      // localStorage.setItem(GW_WORLD_KEY, JSON.stringify(this))
+
+      // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_KEY)))
+    } catch(error) {
+      console.error('localStorage world state save failed', error)
+    }
+  }
+
+  /* private */
+
+  _create_locations(loc_data) {
+    let locs = []
+
+    Object.values(loc_data).forEach(loc => {
+      // console.log('loc', loc.items)
+
+      locs.push(new Location(
+        {
+          name: loc.name,
+          description: loc.description,
+          coords: loc.coords,
+          paths: loc.paths,
+          danger_level: loc.danger_level,
+          monster_level_range: loc.monster_level_range || null,
+          items: loc.items.map(item => this.create_custom_item(item)) || [],
+          monsters_abounding: loc.monsters_abounding || [],
+          bosses_abounding: loc.bosses_abounding || [],
+          checked_for_monsters: loc.checked_for_monsters || false,
+          visited: loc.visited || false
+        }
+      ))
     })
 
     return locs
   }
 
-  can_move(direction) {
-    return GemWarrior.world.locations[this.player.cur_coords].paths[direction]
-  }
-
-  describe(point) {
-    const loc = GemWarrior.world.locations[point]
-
-    let description = loc.description
-
-    if (loc.items.length) {
-      description += `<br /> >> Thing(s):    <span class="noun">${loc.items.join(', ')}</span>`
-    }
-
-    return description
-  }
-
-  remove_item(point, item) {
-    if (this.locations[point].items.includes(item)) {
-      const index = this.locations[point].items.indexOf(item)
-
-      if (index !== -1) {
-        this.locations[point].items.splice(index, 1)
-      }
-
-      return true
-    } else {
-      return false
-    }
-  }
 }

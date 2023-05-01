@@ -94,7 +94,7 @@ button {
 }
 
 code {
-  background-color: #eff1d1;
+  background-color: #dadda2;
   color: #b90eb6;
   display: inline-block;
   padding: 0 2px;
@@ -105,6 +105,24 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
   text-transform: uppercase;
 }
+
+@counter-style dagger-emoji {
+  system: cyclic;
+  symbols: U+1F5E1;
+  suffix: " ";
+}
+
+ul {
+  list-style: none;
+  margin-left: 0.6em;
+}
+  ul li {
+    text-indent: -0.7rem;
+  }
+    ul li::before {
+      content: "🗡 ";
+      font-size: 0.75rem;
+    }
 
 header {
   align-items: center;
@@ -269,6 +287,10 @@ header {
   }
 }
 
+section#log-container {
+  display: none;
+}
+
 #game {
   height: 100%;
   margin: 0 auto;
@@ -415,49 +437,49 @@ header {
     padding: 5px 0;
     width: 100%;
   }
-    #interface #cli label {
-      float: left;
-      padding-left: 8px;
-      position: relative;
-      top: 5px;
+    #interface #cli form {
+      display: flex;
     }
-    #interface #cli input {
-      background: #222222;
-      border: 0;
-      color: #eeeeee;
-      float: left;
-      font-family: "Lucida Console", "Consolas", monospace;
-      font-size: 0.9rem;
-      max-width: 100%;
-      outline: none;
-      padding: 5px;
-      position: relative;
-      top: 2px;
-    }
+      #interface #cli form label {
+        padding-left: 8px;
+        position: relative;
+        top: 5px;
+      }
+      #interface #cli form input {
+        background: #222222;
+        border: 0;
+        color: #eeeeee;
+        font-family: "Lucida Console", "Consolas", monospace;
+        font-size: 0.9rem;
+        min-width: 300px;
+        outline: none;
+        padding: 5px;
+      }
 
 @media (min-width: 768px) {
   #game #output {
     font-size: 1rem;
     margin-bottom: 92px;
   }
+
   #interface {
     height: 92px;
   }
-  #interface #keyboard {
-    display: none;
-  }
-  #interface #cli {
-    display: block;
-  }
-  #interface #stats,
-#interface #location {
-    font-size: 1rem;
-  }
-  #interface #avatar {
-    bottom: 44px;
-    right: 20px;
-    transform: scale(1);
-  }
+    #interface #keyboard {
+      display: none;
+    }
+    #interface #cli {
+      display: flex;
+    }
+    #interface #stats,
+    #interface #location {
+      font-size: 1rem;
+    }
+    #interface #avatar {
+      bottom: 44px;
+      right: 20px;
+      transform: scale(1);
+    }
 }
 
 .noun {
@@ -473,6 +495,12 @@ header {
   .keyword.true {
     color: #32ce32;
   }
+
+.argument {
+  background-color: #dddddd;
+  color: #100210;
+  padding: 0 2px;
+}
 
 .command-previous {
   color: #7d7d7d;

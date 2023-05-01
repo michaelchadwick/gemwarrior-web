@@ -14,9 +14,7 @@
       "south": true,
       "west": true
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["cloth", "rock"]
   },
   {
     "name": "Inescapable Hole of Turbidity (North)",
@@ -33,9 +31,7 @@
       "south": true,
       "west": true
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["rock"]
   },
   {
     "name": "Inescapable Hole of Turbidity (North/East)",
@@ -52,9 +48,7 @@
       "south": true,
       "west": true
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["rock"]
   },
   {
     "name": "Inescapable Hole of Turbidity (East)",
@@ -71,9 +65,7 @@
       "south": true,
       "west": true
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["rock"]
   },
   {
     "name": "Inescapable Hole of Turbidity (South/East)",
@@ -90,9 +82,7 @@
       "south": false,
       "west": true
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["rock"]
   },
   {
     "name": "Inescapable Hole of Turbidity (South)",
@@ -109,9 +99,7 @@
       "south": false,
       "west": true
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["rock"]
   },
   {
     "name": "Inescapable Hole of Turbidity (South/West)",
@@ -128,9 +116,7 @@
       "south": false,
       "west": false
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["bucket", "rock", "resin"]
   },
   {
     "name": "Inescapable Hole of Turbidity (West)",
@@ -147,9 +133,7 @@
       "south": true,
       "west": false
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["rock"]
   },
   {
     "name": "Inescapable Hole of Turbidity (North/West)",
@@ -161,13 +145,11 @@
       "z": 0
     },
     "paths": {
-      "north": true,
+      "north": false,
       "east": true,
       "south": true,
       "west": false
     },
-    "items": [
-      "rock"
-    ]
+    "items": ["rock", "stick"]
   }
 ]

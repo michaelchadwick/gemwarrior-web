@@ -101,6 +101,8 @@ async function initData() {
   })
 
   postMessage({ command: 'status', value: 'standing-quiet' })
+
+  console.log('[LOADED] /app/worker')
 }
 
 function changeStatus(val) {

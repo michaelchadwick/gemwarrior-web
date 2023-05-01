@@ -5,56 +5,60 @@
 // shuttle avatar display workload to Web Worker
 GemWarrior._initAvatarWorker = function() {
   if (window.Worker) {
-    // Web Worker created from file
-    GemWarrior.config.avatarWorker = new Worker(GW_WORKER_JS_URL)
+    if (!GemWarrior.config.avatarWorker) {
+      // Web Worker created from file
+      GemWarrior.config.avatarWorker = new Worker(GW_WORKER_JS_URL)
 
-    if (GemWarrior.config.avatarWorker) {
-      // console.log('Worker(): avatarWorker created successfully')
+      if (GemWarrior.config.avatarWorker) {
+        // console.log('Worker(): avatarWorker created successfully')
 
-      // attach event listener to process successful Web Worker responses
-      GemWarrior.config.avatarWorker.onmessage = (response) => {
-        // console.log('response from web-worker:', response)
+        // attach event listener to process successful Web Worker responses
+        GemWarrior.config.avatarWorker.onmessage = (response) => {
+          // console.log('response from web-worker:', response)
 
-        const cmd = response.data.command
-        const val = response.data.value
+          const cmd = response.data.command
+          const val = response.data.value
 
-        if (cmd) {
-          switch (cmd) {
-            case 'data':
-              GemWarrior.dom.avatar.html(val)
-              break
+          if (cmd) {
+            switch (cmd) {
+              case 'data':
+                GemWarrior.dom.avatar.html(val)
+                break
 
-            case 'status':
-              switch (val) {
-                case 'standing':
-                  GemWarrior._avatarStand({ sound: true })
-                  break
-                case 'standing-quiet':
-                  GemWarrior._avatarStand()
-                  break
-                case 'sitting':
-                  GemWarrior._avatarSit({ sound: true })
-                  break
-                case 'sitting-quiet':
-                  GemWarrior._avatarSit()
-                  break
-              }
-              break
+              case 'status':
+                switch (val) {
+                  case 'standing':
+                    GemWarrior._avatarStand({ sound: true })
+                    break
+                  case 'standing-quiet':
+                    GemWarrior._avatarStand()
+                    break
+                  case 'sitting':
+                    GemWarrior._avatarSit({ sound: true })
+                    break
+                  case 'sitting-quiet':
+                    GemWarrior._avatarSit()
+                    break
+                }
+                break
+            }
           }
         }
-      }
 
-      // initialize data into CacheStorage, if needed
-      GemWarrior.config.avatarWorker.postMessage({ command: 'init' })
+        // initialize data into CacheStorage, if needed
+        GemWarrior.config.avatarWorker.postMessage({ command: 'init' })
 
-      // get initial player avatar display
-      if (GemWarrior.world) {
-        GemWarrior._getAvatarDisplay(GemWarrior.world.player.status)
+        // get initial player avatar display
+        if (GemWarrior.world) {
+          GemWarrior._getAvatarDisplay(GemWarrior.world.player.status)
+        } else {
+          GemWarrior._getAvatarDisplay('standing')
+        }
+
+        console.log('[LOADED] /app/lib/misc/avatar')
       } else {
-        GemWarrior._getAvatarDisplay('standing')
+        console.error('Worker(): creation of Web Worker failed')
       }
-    } else {
-      console.error('Worker(): creation of Web Worker failed')
     }
   } else {
     console.error('Worker(): not supported by browser')
@@ -78,13 +82,13 @@ GemWarrior._avatarStand = function(options = null) {
   clearTimeout(GemWarrior._sleepTimer)
 
   if (GemWarrior.world) {
-    if (GemWarrior.world.player.status == 'sleeping') {
-      if (options && options.sound) {
+    if (GemWarrior.world.player.status === 'sleeping') {
+      if (options && options.sound && GemWarrior._isBGMPlaying()) {
         GemWarrior._playBGM('main')
       }
     } else {
       if (options && options.sound) {
-        GemWarrior._playSFX('sfx-stand')
+        GemWarrior._playSFX('stand')
       }
     }
 
@@ -97,13 +101,13 @@ GemWarrior._avatarSit = function(options = null) {
   clearTimeout(GemWarrior._sleepTimer)
 
   if (GemWarrior.world) {
-    if (GemWarrior.world.player.status == 'sleeping') {
-      if (options && options.sound) {
+    if (GemWarrior.world.player.status === 'sleeping') {
+      if (options && options.sound && GemWarrior._isBGMPlaying()) {
         GemWarrior._playBGM('main')
       }
     } else {
       if (options && options.sound) {
-        GemWarrior._playSFX('sfx-sit')
+        GemWarrior._playSFX('sit')
       }
     }
 
@@ -116,7 +120,9 @@ GemWarrior._avatarSleep = function(init = null) {
   if (GemWarrior.world) {
     if (GemWarrior.world.player.status === 'sleeping') {
       if (init) {
-        GemWarrior._playBGM('sleep')
+        if (GemWarrior._isBGMPlaying()) {
+          GemWarrior._playBGM('sleep')
+        }
 
         clearInterval(GemWarrior.config.blinker)
       }
@@ -137,8 +143,8 @@ GemWarrior._avatarSleep = function(init = null) {
       }, 1000)
     }
 
-    GemWarrior.world.player.status = 'sitting'
-    GemWarrior._getAvatarDisplay('sitting')
+    GemWarrior.world.player.status = 'sleeping'
+    GemWarrior._getAvatarDisplay('sleeping1')
     GemWarrior._avatarBlink()
   }
 }

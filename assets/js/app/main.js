@@ -1,9 +1,21 @@
-﻿/* main */
+﻿/* /assets/js/app/main.js */
 /* app entry point and main functions */
 /* global $, GemWarrior */
 
+// settings: saved in LOCAL STORAGE
+GemWarrior.settings = {...GW_DEFAULTS.settings}
+
+// config: only saved while game is loaded
+GemWarrior.config = {...GW_DEFAULTS.config}
+
 // set env
 GemWarrior.config.env = GW_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
+
+// create new instance of Evaluator class to parse commands
+GemWarrior.evaluator = new Evaluator()
+
+// create new instance of GameOptions class for global internal options
+GemWarrior.options = new GameOptions()
 
 /*************************************************************************
  * public methods *
@@ -15,7 +27,7 @@ async function modalOpen(type) {
       GemWarrior._repl(`
         <br />
         <span class="command-previous">&gt; help</span><br />
-        ${GemWarrior._evaluator('help')}
+        ${GemWarrior.evaluator.parse('help')}
       `)
       break
 
@@ -136,7 +148,7 @@ async function modalOpen(type) {
 }
 
 GemWarrior.initApp = async function() {
-  console.log('[INITIALIZING] app')
+  // console.log('[INITIALIZING] app')
 
   // if local dev, show debug stuff
   if (GemWarrior.config.env == 'local') {
@@ -149,16 +161,18 @@ GemWarrior.initApp = async function() {
 
   GemWarrior._resizeFixed()
 
-  GemWarrior._getNebyooApps()
-
   GemWarrior._initAvatarWorker()
 
   GemWarrior._attachEventHandlers()
 
   GemWarrior._loadWorld()
 
+  GemWarrior._getNebyooApps()
+
   // initial command
   window.scrollTo(0,1)
+
+  console.log('[LOADED] /app/main')
 }
 
 /*************************************************************************
@@ -167,28 +181,32 @@ GemWarrior.initApp = async function() {
 
 // add debug stuff if local
 GemWarrior._initDebug = function() {
-  console.log('[INITIALIZING] debug')
+  // console.log('[INITIALIZING] debug')
 
-  var qd = {}
-
-  if (location.search) location.search.substr(1).split("&").forEach(function(item) {
-    var s = item.split("="),
-        k = s[0],
-        v = s[1] && decodeURIComponent(s[1]); //  null-coalescing / short-circuit
-    //(k in qd) ? qd[k].push(v) : qd[k] = [v]
-    (qd[k] = qd[k] || []).push(v) // null-coalescing / short-circuit
+  const params = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop)
   })
 
-  if (qd.debugCSS && qd.debugCSS == 1) {
-    var debugStyles = document.createElement('link')
-    debugStyles.rel = 'stylesheet'
-    debugStyles.href = './public/build/css/debug.css'
-    document.head.appendChild(debugStyles)
+  if (params) {
+    if (params.debug) {
+      const debugStylesheet = document.createElement('link')
+      debugStylesheet.rel = 'stylesheet'
+      debugStylesheet.href = './assets/css/logger.css'
+      document.head.appendChild(debugStylesheet)
+
+      const debugScript = document.createElement('script')
+      debugScript.src = './assets/js/app/lib/misc/logger.js'
+      document.body.appendChild(debugScript)
+
+      document.getElementById('log-container').style.display = 'block'
+
+      console.log('[LOADED] /app/main(debug)')
+    }
   }
 }
 
 GemWarrior._loadSettings = function() {
-  console.log('[LOADING] settings')
+  // console.log('[LOADING] settings')
 
   const lsSettings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
   let setting = null
@@ -291,6 +309,8 @@ GemWarrior._loadSettings = function() {
       console.error('localStorage global settings save failed', error)
     }
   }
+
+  console.log('[LOADED] /app/main(settings)')
 }
 GemWarrior._changeSetting = function(setting, event = null) {
   switch (setting) {
@@ -429,29 +449,31 @@ GemWarrior._saveSetting = function(setting, value) {
 
 // load entire GemWarrior world into existence
 GemWarrior._loadWorld = async function() {
-  console.log('[INITIALIZING] world')
+  console.log('[INITIALIZING] /app/world')
 
   const lsWorld = localStorage.getItem(GW_WORLD_KEY)
 
   if (lsWorld) {
+    console.log('Saved world data found. Loading...')
+
     const lsWorldObj = JSON.parse(lsWorld)
 
-    GemWarrior.world = new World(lsWorldObj.locations, lsWorldObj.player)
-    GemWarrior.world.cur_location = lsWorldObj.cur_location
+    GemWarrior.world = new World(lsWorldObj)
 
-    GemWarrior._updateStatus()
+    console.log('[LOADED] /app/world(saved)')
 
-    console.log('Saved world has been loaded')
+    GemWarrior._updateInterface()
   } else {
-    console.log('No saved world found. Loading default world data...')
+    console.log('No saved world data found. Loading default world data...')
 
-    const response = await fetch(GW_WORLD_IHOT_JSON_URL)
+    const jsonLocations = await fetch(GW_WORLD_IHOT_JSON_URL)
 
-    if (response) {
-      const json = await response.json()
+    if (jsonLocations) {
+      const worldObj = {}
+      worldObj.locations = await jsonLocations.json()
 
-      if (json) {
-        GemWarrior.world = new World(json)
+      if (worldObj) {
+        GemWarrior.world = new World(worldObj)
 
         // create name for player inside world
         const ng = new NameGenerator('fantasy')
@@ -463,22 +485,24 @@ GemWarrior._loadWorld = async function() {
           if (rand_name) {
             GemWarrior.world.player.name = rand_name
           } else {
-            GemWarrior.world.player.name = GemWarrior.world.player.generate_name()
+            GemWarrior.world.player.name = GemWarrior.world.player._generate_name()
 
             console.warn('NameGenerator generate_name() failed; defaulting to terrible random name generator')
           }
         } else {
-          GemWarrior.world.player.name = GemWarrior.world.player.generate_name()
+          GemWarrior.world.player.name = GemWarrior.world.player._generate_name()
 
           console.warn('NameGenerator name_set load failed; defaulting to terrible random name generator')
         }
 
-        GemWarrior._updateStatus()
+        console.log('[LOADED] /app/world(default)')
+
+        GemWarrior._updateInterface()
       } else {
-        console.error('could not load initial world data')
+        console.error('could not load default world data')
       }
     } else {
-      console.error('could not load initial world data url')
+      console.error('could not load default world data url')
     }
   }
 
@@ -542,7 +566,7 @@ GemWarrior._attachEventHandlers = function() {
       GemWarrior._repl(`
         <br />
         <span class="command-previous">&gt; ${input}</span><br />
-        ${GemWarrior._evaluator(input)}
+        ${GemWarrior.evaluator.parse(input)}
       `)
 
       // clear command bar
@@ -631,7 +655,7 @@ GemWarrior._attachEventHandlers = function() {
 
 // update user stats and send command result to display function
 GemWarrior._repl = function(result) {
-  GemWarrior._updateStatus()
+  GemWarrior._updateInterface()
   GemWarrior._out(result)
 }
 
@@ -650,316 +674,16 @@ GemWarrior._out = function(text, noLineBreak) {
   GemWarrior._scrollOutput()
 }
 
-// process the user command input
-GemWarrior._evaluator = function(command) {
-  // console.log('command', command)
-
-  GemWarrior.config.history.push(command)
-  GemWarrior.config.historyMarker = GemWarrior.config.history.length
-
-  let cmds = command.split(' ')
-
-  let verb = cmds[0].toLowerCase()
-  let subj = cmds[1]
-
-  if (subj) {
-    subj = cmds.slice(1, cmds.length)
-    subj = subj.filter((i) => !['a', 'the', 'my'].includes(i))
-    subj = subj.join(' ').toLowerCase()
-  }
-
-  switch (verb) {
-    case 'go':
-    case 'g':
-      if (subj) {
-        GemWarrior._evaluator(subj)
-      } else {
-        GemWarrior.config.outText = 'You cannot just <span class="keyword">go</span> without a direction.'
-      }
-
-      break
-
-    case 'north':
-    case 'n':
-      GemWarrior.config.outText = GemWarrior._move('north')
-      break
-
-    case 'west':
-    case 'w':
-      GemWarrior.config.outText = GemWarrior._move('west')
-      break
-
-    case 'south':
-    case 's':
-      GemWarrior.config.outText = GemWarrior._move('south')
-      break
-
-    case 'east':
-    case 'e':
-      GemWarrior.config.outText = GemWarrior._move('east')
-      break
-
-    case 'look':
-    case 'l':
-      GemWarrior.config.outText = GemWarrior.world.describe(GemWarrior.world.player.cur_coords)
-
-      break
-
-    case 'character':
-    case 'char':
-    case 'c':
-      GemWarrior.config.outText = `
-        <p>You, the mighty warrior <span class="noun">${GemWarrior.world.player.name}</a>, assess yourself: wearing a shirt, pants, socks, and shoes, your fashion sense is satisfactory, without being notable.</p>
-        <p>You are <strong>${GemWarrior.world.player.status}</strong>.</p>
-        <p>
-        You are reasonably healthy, but due to your current location and station, that feeling of heartiness diminishes as your hunger increases.
-        </p>
-      `
-
-      break
-
-    case 'inventory':
-    case 'inven':
-    case 'inv':
-    case 'i':
-      let roxCount = ''
-
-      if (GemWarrior.world.player.rox === 1) {
-        roxCount = ' <strong>1</strong> rock'
-      } else {
-        roxCount = ` <strong>${GemWarrior.world.player.rox}</strong> rox`
-      }
-
-      let playerInv = ''
-
-      GemWarrior.world.player.inventory.forEach((thing) => {
-        playerInv += `<span class="noun">a ${thing}</span>, `
-      })
-
-      if (GemWarrior.world.player.inventory.length !== 0) {
-        GemWarrior.config.outText = `You have the clothes on your back, ${playerInv} <span class="noun">${roxCount}</span>`
-
-        if (GemWarrior.world.player.inventory_checks >= 1) {
-          GemWarrior.config.outText += '.'
-        } else {
-          GemWarrior.config.outText += ', and a lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
-
-          GemWarrior.world.player.inventory_checks++
-        }
-      } else {
-        GemWarrior.config.outText = `You have nothing on your person except the clothes on your back and ${roxCount}`
-      }
-
-      break
-
-    case 'pickup':
-    case 'p':
-    case 'take':
-    case 't':
-      if (subj) {
-        if (!GemWarrior.world.cur_location.items.includes(subj)) {
-          GemWarrior.config.outText = 'That object is not present, so picking it up is going to be difficult.'
-        } else if (GemWarrior.world.remove_item(GemWarrior.world.player.cur_coords, subj)) {
-          GemWarrior.config.outText = `You pick up the <span class="noun">${subj}</span>.`
-
-          if (subj == 'rock') {
-            GemWarrior.world.player.rox++
-          }
-
-          GemWarrior._playSFX('take')
-
-          if (
-            GemWarrior.world.player.rox > 10 &&
-            !GemWarrior.world.locations['2,2,0'].items.includes('indentation')
-          ) {
-            GemWarrior.config.outText = `After you pick up the final rock in this dark, desolate dungeon of a space, you hear a faint noise towards the northeast, almost as if something slightly shifted.`
-
-            GemWarrior.world.locations['2,2,0'].description += ` If you look very closely at the wall nearby, you can make out an indentation that wasn't there before...maybe. It's so turbid in here that you may be imagining it.`
-            GemWarrior.world.locations['2,2,0'].items.push('indentation')
-          }
-        } else {
-          GemWarrior.config.outText = `You fail to pick up the <span class="noun">${subj}</span> for some unforseen reason.`
-        }
-      } else {
-        GemWarrior.config.outText = `Since you did not indicate <strong>what</strong> to pick up, you bend down momentarily and attempt to pick up some dirt from the floor. You then drop it back on the ground once you realize having dirt on your person while in an inescapable hole is inconsequential.`
-      }
-
-      break
-
-    case 'throw':
-    case 'th':
-      if (GemWarrior.world.player.rox > 0) {
-        GemWarrior.world.player.rox--
-
-        GemWarrior.world.cur_location.items.push('rock')
-
-        GemWarrior.config.outText = 'You throw a <span class="noun">rock</span> on the ground, because that is definitely a productive move.'
-
-        GemWarrior._playSFX('drop')
-      } else {
-        GemWarrior.config.outText = 'You have no <span class="noun">rox</span> to throw, so your hand just makes the motion with no effect, sadly.'
-      }
-
-      break
-
-    case 'use':
-    case 'u':
-      if (subj) {
-        const itemExistsInv = GemWarrior.world.player.inventory.filter(item => item == subj)
-        const itemExistsLoc = GemWarrior.world.cur_location.items.filter(item => item == subj)
-        const itemExistsInvToken = GemWarrior.world.player.inventory.filter(item => item.split(' ').includes(subj))
-        const itemExistsLocToken = GemWarrior.world.cur_location.items.filter(item => item.split(' ').includes(subj))
-
-        if (itemExistsInv.length) {
-          GemWarrior.config.outText = `You use the <span class="keyword">${subj}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
-        } else if (itemExistsInvToken.length) {
-          GemWarrior.config.outText = `You use the <span class="keyword">${itemExistsInvToken[0]}</span> from your inventory. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
-        } else if (itemExistsLoc.length) {
-          GemWarrior.config.outText = `You use the <span class="keyword">${subj}</span> at this location. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
-        } else if (itemExistsLocToken.length) {
-          GemWarrior.config.outText = `You use the <span class="keyword">${itemExistsLocToken[0]}</span> at this location. Unfortunately, nothing interesting happens because item usage has not been coded yet.`
-        } else {
-          GemWarrior.config.outText = `You don't have a <span class="keyword">${subj}</span>, let alone <em>the</em> <span class="keyword">${subj}</span>, and <span class="keyword">${subj}</span> does not appear to exist in this location, so...well, nothing happens.`
-        }
-      } else {
-        GemWarrior.config.outText = `Use <em>what</em>, exactly?`
-      }
-
-      break
-
-    case 'sit':
-    case 'si':
-      if (GemWarrior.world.player.status === 'sitting') {
-        GemWarrior.config.outText = `You are already ${GemWarrior.world.player.status}.`
-      } else {
-        GemWarrior._avatarSit({ sound: true })
-        GemWarrior.config.outText = 'You sit down.'
-      }
-
-      break
-
-    case 'stand':
-    case 'st':
-      if (GemWarrior.world.player.status === 'standing') {
-        GemWarrior.config.outText = `You are already ${GemWarrior.world.player.status}.`
-      } else {
-        GemWarrior._avatarStand({ sound: true })
-        GemWarrior.config.outText = 'You stand up.'
-      }
-
-      break
-
-    case 'sleep':
-    case 'sl':
-      if (GemWarrior.world.player.status == 'sleeping') {
-        GemWarrior.config.outText = 'You are already resting.'
-      } else {
-        GemWarrior.world.player.status = 'sleeping'
-        GemWarrior._avatarSleep(true)
-
-        GemWarrior.config.outText = 'You lie down to rest.'
-      }
-
-      break
-
-    case 'playbgm':
-    case 'play':
-    case 'pl':
-      if (GemWarrior.settings.enableSound) {
-        if (!GemWarrior.config.synth_bgm.playing) {
-          if (GemWarrior.world.player.status == 'sleeping') {
-            GemWarrior._playBGM('sleep')
-          } else {
-            GemWarrior._playBGM('main')
-          }
-
-          GemWarrior.config.outText = 'Playing background music.'
-        } else {
-          GemWarrior.config.outText = 'Background music is already playing.'
-        }
-      } else {
-        GemWarrior.config.outText = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
-      }
-
-      break
-
-    case 'stopbgm':
-    case 'stop':
-      if (GemWarrior.settings.enableSound) {
-        if (GemWarrior.config.synth_bgm.playing) {
-          GemWarrior._stopBGM()
-
-          GemWarrior.config.outText = 'Background music has stopped.'
-        } else {
-          GemWarrior.config.outText = 'Background is not playing, so this has no effect.'
-        }
-      } else {
-        GemWarrior.config.outText = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
-      }
-
-      break
-
-    case 'help':
-    case 'h':
-    case '?':
-      GemWarrior.config.outText = GemWarrior._displayHelp()
-
-      break
-
-    case 'history':
-    case 'hist':
-      GemWarrior.config.outText = GemWarrior.__getHistoryDisplay()
-
-      break
-
-    case 'about':
-    case 'a':
-      GemWarrior.config.outText = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
-
-      <em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
-
-      break
-
-    default:
-      GemWarrior.config.outText = 'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
-
-      break
-  }
-
-  return GemWarrior.config.outText
-}
-
-GemWarrior._move = function(direction) {
-  if (GemWarrior.world.player.status !== 'sleeping') {
-    if (GemWarrior.world.can_move(direction)) {
-      const new_coords = GemWarrior.world.player.go(direction)
-
-      GemWarrior.world.cur_location = GemWarrior.world.locations[new_coords]
-      GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[new_coords].name
-
-      return GemWarrior.world.describe(new_coords)
-    } else {
-      GemWarrior._playSFX('bonk')
-
-      return 'Cannot move that way.'
-    }
-  } else {
-    return 'You cannot move while sleeping.'
-  }
-}
-
 // update DOM stats and save to localStorage
-GemWarrior._updateStatus = function() {
-  // console.log('_updateStatus()')
+GemWarrior._updateInterface = function() {
+  // console.log('_updateInterface()', GemWarrior.world.player.rox())
 
   GemWarrior.dom.statsNM.text(GemWarrior.world.player.name)
   GemWarrior.dom.statsLV.text(GemWarrior.world.player.level)
   GemWarrior.dom.statsXP.text(GemWarrior.world.player.xp)
   GemWarrior.dom.statsHP.text(GemWarrior.world.player.hp)
-  GemWarrior.dom.statsROX.text(GemWarrior.world.player.rox)
-  GemWarrior.dom.statsLOC.innerText = GemWarrior.world.locations[GemWarrior.world.player.cur_coords].name
-
-  GemWarrior._saveWorld()
+  GemWarrior.dom.statsROX.text(GemWarrior.world.player.inventory.rox().toString())
+  GemWarrior.dom.statsLOC.innerText = GemWarrior.world.location.name
 }
 
 // resize fixed elements when viewport changes
@@ -1011,18 +735,6 @@ GemWarrior._displayWelcome = function() {
 </pre>`)
 }
 
-GemWarrior._saveWorld = function() {
-  // console.log('saving world state and global settings to localStorage...')
-
-  try {
-    localStorage.setItem(GW_WORLD_KEY, JSON.stringify(GemWarrior.world))
-
-    // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_KEY)))
-  } catch(error) {
-    console.error('localStorage world state save failed', error)
-  }
-}
-
 GemWarrior._getNebyooApps = async function() {
   const response = await fetch(NEBYOOAPPS_SOURCE_URL)
   const json = await response.json()
@@ -1053,7 +765,7 @@ GemWarrior.__handleEnter = function() {
     GemWarrior._repl(`
       <br />
       <span class="command-previous">&gt; ${input}</span><br />
-      ${GemWarrior._evaluator(input)}
+      ${GemWarrior.evaluator.parse(input)}
     `)
 
     // reset keyCommand

@@ -35,6 +35,8 @@ class Modal {
         modal._destroyModal()
       }.bind(this, modal), this.modalDelay)
     }
+
+    console.log('[LOADED] /app/modal')
   }
 
   question() {
