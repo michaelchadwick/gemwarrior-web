@@ -20,28 +20,28 @@ As you travel you will discover sights and sounds of the land, all of which are 
 
 ## Main Commands
 
-`> (c)haracter`             - character check for weapon/armor/status
-`> (i)nventory`             - check your inventory
-`> (si)t`                   - change status to sitting
-`> (st)and`                 - change status to standing
-`> (sl)eep`                 - change status to sleeping
+`> (c)haracter`               - character check for weapon/armor/status
+`> (i)nventory`               - check your inventory
+`> (si)t`                     - change status to sitting
+`> (st)and`                   - change status to standing
+`> (sl)eep`                   - change status to sleeping
 <!--`> rest`                  - take a load off and replenish hp-->
 
-`> (l)ook      [object]`    - look at current location and its items and monsters
-`> (t)ake      [object]`    - take an item from the current location
-`> (dr)op      [object]`    - drop an item to the current location
-`> (u)se       [object]`    - use an item from your inventory or current location
+`> (l)ook      [object]`      - look at current location and its items and monsters
+`> (t)ake      [object]`      - take an item from the current location
+`> (dr)op      [object]`      - drop an item to the current location
+`> (u)se       [object]`      - use an item from your inventory or current location
 
-`> (g)o        [direction]` - go in a direction, if possible (north|east|south|west work as shortcuts)
-<!--`> equip     [object]`    - designate an item in your inventory your weapon-->
-<!--`> unequip   [object]`    - stop using an item in your inventory as your weapon-->
+`> (g)o        [direction]`   - go in a direction, if possible (north|east|south|west work as shortcuts)
+<!--`> (eq)uip [object]`    - designate an item in your inventory your weapon-->
+<!--`> (uneq)uip   [object]`    - stop using an item in your inventory as your weapon-->
 <!--`> (d)rop      [object]`    - drop an item from your inventory-->
-<!--`> attack    [monster]`   - attack a monster-->
+<!--`> (at)ack    [monster]`   - attack a monster-->
 
-`> (h)elp`                  - display available commands
-`> (hist)ory`               - display command history
-`> (a)bout`                 - display information about the creator of GemWarrior
-`> (ch)ange    [attribute]` - change some things about yourself or the game
+`> (h)elp`                    - display available commands
+`> (hist)ory`                 - display command history
+`> (a)bout`                   - display information about the creator of GemWarrior
+`> (ch)ange    [attribute]`   - change some things about yourself or the game
 
 ## Subsystems
 
