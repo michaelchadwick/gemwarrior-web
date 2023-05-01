@@ -221,11 +221,12 @@ class Inventory {
             if (GemWarrior.world.player.inventory.rox() == GW_IHOT_MAX_ROX) {
               setTimeout(() => GemWarrior._playSFX('secret'), 500)
 
-              GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).set_description(`You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.<br /><br />There is a small indentation in the wall you can barely make out in the turbidity. You swear it wasn't there before.`)
               GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).add_item('indentation')
-            }
 
-            result = `Added <span class="noun">${item_name}</span> to your increasing collection of bits of tid.`
+              result = `After adding the most recent <span class="noun">${item_name}</span> to your collection, you hear a faint sound towards the northeast, almost as if stone moved upon stone.`
+            } else {
+              result = `Added <span class="noun">${item_name}</span> to your increasing collection of bits of tid.`
+            }
 
             GemWarrior.world.save()
 
@@ -245,6 +246,8 @@ class Inventory {
   }
 
   drop_item(item_name) {
+    let result
+
     if (this.has_item(item_name)) {
       // remove item with same name from this.inv
       this.remove_item(item_name)
@@ -256,16 +259,21 @@ class Inventory {
       GemWarrior._playSFX('drop')
 
       if (GemWarrior.world.player.inventory.rox() < GW_IHOT_MAX_ROX) {
-        GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).set_description(`You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.`)
+        setTimeout(() => GemWarrior._playSFX('secret'), 500)
+
         GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).remove_item('indentation')
+
+        result = `After dropping the most recent <span class="noun">${item_name}</span> to your collection, you hear a faint sound towards the northeast, almost as if stone moved upon stone.`
+      } else {
+        result = `You drop the <span class="noun">${item_name}</span> on the ground, never to be seen again...unless you pick it up again at some point.`
       }
 
       GemWarrior.world.save()
-
-      return `You drop the <span class="noun">${item_name}</span> on the ground, never to be seen again...unless you pick it up again at some point.`
     } else {
-      return ERROR_ITEM_REMOVE_INVALID
+      result = ERROR_ITEM_REMOVE_INVALID
     }
+
+    return result
   }
 
   remove_item(item_name) {

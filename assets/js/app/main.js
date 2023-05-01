@@ -463,6 +463,12 @@ GemWarrior._loadWorld = async function() {
     console.log('[LOADED] /app/world(saved)')
 
     GemWarrior._updateInterface()
+
+    if (GemWarrior.settings.firstTime) {
+      await modalOpen('start')
+    } else {
+      GemWarrior._displayWelcomeBack()
+    }
   } else {
     console.log('No saved world data found. Loading default world data...')
 
@@ -504,12 +510,12 @@ GemWarrior._loadWorld = async function() {
     } else {
       console.error('could not load default world data url')
     }
-  }
 
-  if (GemWarrior.settings.firstTime) {
-    await modalOpen('start')
-  } else {
-    GemWarrior._displayWelcome()
+    if (GemWarrior.settings.firstTime) {
+      await modalOpen('start')
+    } else {
+      GemWarrior._displayWelcome()
+    }
   }
 }
 
@@ -711,7 +717,7 @@ GemWarrior._scrollOutput = function() {
   }
 }
 
-// display command list
+// write command list to main output
 GemWarrior._displayHelp = function() {
   var cmdList = ''
 
@@ -722,7 +728,7 @@ GemWarrior._displayHelp = function() {
   return `HELP: The following commands are valid: ${cmdList}`
 }
 
-// write welcome message to main output
+// write initial welcome message to main output
 GemWarrior._displayWelcome = function() {
   GemWarrior.dom.output.append(`<pre>
 *************************************
@@ -731,6 +737,17 @@ GemWarrior._displayWelcome = function() {
 * - Top-right gear icon for options *
 * - Currently only one room...or?   *
 * <strong>Good luck, <span class="noun">${GemWarrior.world.player.name}</span>...</strong>           *
+*************************************
+</pre>`)
+}
+
+// write welcome back message for saved game to main output
+GemWarrior._displayWelcomeBack = function() {
+  GemWarrior.dom.output.append(`<pre>
+*************************************
+* Welcome back to Gem Warrior, <span class="noun">${GemWarrior.world.player.name}</span>!           *
+* - Top-right gear icon for options *
+* - Currently only one room...or?   *
 *************************************
 </pre>`)
 }
