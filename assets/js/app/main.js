@@ -743,6 +743,11 @@ GemWarrior._displayHelp = function() {
 
 // write initial welcome message to main output
 GemWarrior._displayWelcome = function() {
+  const name = GemWarrior.world.player.name
+  const len = name.length
+  const sp = GemWarrior._sp(28 - len)
+  const will_save = GemWarrior.options.world_save
+
   let output = `
 *********************************************
 * Welcome to <span class="noun">${PROGRAM_NAME}</span>!                   *
@@ -751,13 +756,13 @@ GemWarrior._displayWelcome = function() {
 *   your randomly-named character           *
 * - Top-right gear icon for options         *`
 
-  if (!GemWarrior.options.world_save) {
+  if (!will_save) {
     output += `
 * - World save is off, so <strong>DON'T REFRESH</strong>!    *`
   }
 
   output += `
-* Good luck, <span class="noun">${GemWarrior.world.player.name}</span>...                   *
+* Good luck, <span class="noun">${name}</span>...${sp}*
 *********************************************`
 
   GemWarrior.dom.output.append('<pre>' + output + '</pre>')
@@ -765,15 +770,20 @@ GemWarrior._displayWelcome = function() {
 
 // write welcome back message for saved game to main output
 GemWarrior._displayWelcomeBack = function() {
+  const name = GemWarrior.world.player.name
+  const len = name.length
+  const sp = GemWarrior._sp(12 - len).length > 0 ? GemWarrior._sp(12 - len) : ''
+  const will_save = GemWarrior.options.world_save
+
   let output = `
 *********************************************
-* Welcome back to <span class="noun">${PROGRAM_NAME}</span>, <span class="noun">${GemWarrior.world.player.name}</span>!   *
+* Welcome back to <span class="noun">${PROGRAM_NAME}</span>, <span class="noun">${name}</span>!${sp}*
 * - Try <span class="keyword">help</span> if stuck                       *
 * - Type <span class="keyword">change name [new-name]</span> to rename   *
 *   your randomly-named character           *
 * - Top-right gear icon for options         *`
 
-  if (!GemWarrior.options.world_save) {
+  if (!will_save) {
     output += `
 * - World save is off, so <strong>DON'T REFRESH</strong>!    *`
   }
@@ -888,6 +898,17 @@ GemWarrior.__traverseHistory = function(key) {
 // get a filtered list of the player's command history
 GemWarrior.__getHistoryDisplay = function() {
   return `<strong>Command history</strong>: ${GemWarrior.config.history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
+}
+
+// print number of spaces
+GemWarrior._sp = function(num) {
+  const spaces = []
+
+  for (let i = 0; i < num; i++) {
+    spaces.push('&nbsp;')
+  }
+
+  return spaces.join('')
 }
 
 /*************************************************************************

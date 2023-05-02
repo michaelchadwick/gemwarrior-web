@@ -20,6 +20,7 @@ const GW_IHOT_SW = { x: 0, y: 0, z:0 }
 const GW_IHOT_EXIT_POINT = { x: 2, y: 2, z:0 }
 const GW_IHOT_MAX_ROX = 10
 const GW_SNAPBACK_DELAY = 500
+const GW_NAME_LENGTH_MAX = 10
 
 const GW_COMMANDS = {
   'self': [

@@ -10,9 +10,9 @@ class Evaluator {
     let cmds = command.split(' ')
 
     let verb = cmds[0].toLowerCase()
-    let arg1 = cmds[1] ? cmds[1].toLowerCase() : null
-    let arg2 = cmds[2] ? cmds[2].toLowerCase() : null
-    let arg3 = cmds[3] ? cmds[3].toLowerCase() : null
+    let arg1 = cmds[1] ? cmds[1] : null
+    let arg2 = cmds[2] ? cmds[2] : null
+    let arg3 = cmds[3] ? cmds[3] : null
 
     // if (arg1) {
     //   if (arg2) {
@@ -29,8 +29,6 @@ class Evaluator {
     //   // arg2 = arg2.filter((i) => !['a', 'the', 'my'].includes(i))
     //   // arg2 = arg2.join(' ').toLowerCase()
     // }
-
-    // console.log(`parse(${verb}, ${arg1}, ${arg2}, ${arg3})`)
 
     switch (verb) {
       // self
@@ -90,7 +88,7 @@ class Evaluator {
       case 'go':
       case 'g':
         if (arg1) {
-          GemWarrior.evaluator.parse(arg1)
+          GemWarrior.evaluator.parse(arg1.toLowerCase())
         } else {
           GemWarrior.config.outText = 'You cannot just <span class="keyword">go</span> without a direction.'
         }
@@ -129,7 +127,7 @@ class Evaluator {
             GemWarrior.config.outText = GemWarrior.world.location.describe()
           }
         } else {
-          GemWarrior.config.outText = GemWarrior.world.describe_entity(GemWarrior.world.location, arg1)
+          GemWarrior.config.outText = GemWarrior.world.describe_entity(GemWarrior.world.location, arg1.toLowerCase())
         }
 
         break
@@ -141,7 +139,7 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.outText = ERROR_TAKE_PARAM_MISSING
         } else {
-          GemWarrior.config.outText = GemWarrior.world.player.inventory.add_item(arg1, GemWarrior.world.location)
+          GemWarrior.config.outText = GemWarrior.world.player.inventory.add_item(arg1.toLowerCase(), GemWarrior.world.location)
         }
 
         break
@@ -151,7 +149,7 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.outText = ERROR_DROP_PARAM_MISSING
         } else {
-          GemWarrior.config.outText = GemWarrior.world.player.inventory.drop_item(arg1)
+          GemWarrior.config.outText = GemWarrior.world.player.inventory.drop_item(arg1.toLowerCase())
         }
 
         break
@@ -167,10 +165,10 @@ class Evaluator {
           const player_location = GemWarrior.world.location
 
           // using one item with another?
-          if (arg2 == 'with') {
+          if (arg2.toLowerCase() == 'with') {
             if (arg3) {
-              const item1_name = arg1
-              const item2_name = arg3
+              const item1_name = arg1.toLowerCase()
+              const item2_name = arg3.toLowerCase()
 
               if (player_inventory.has_item(item1_name)) {
                 const item1 = Object.values(player_inventory.items).filter(i => i.name == item1_name)[0]
@@ -221,7 +219,7 @@ class Evaluator {
           }
           // using one item
           else {
-            const item_name = arg1
+            const item_name = arg1.toLowerCase()
 
             if (player_inventory.has_item(item_name)) {
               const item = Object.values(player_inventory.items).filter(i => i.name == item_name)[0]
@@ -323,10 +321,12 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.outText = ERROR_CHANGE_PARAM_MISSING
         } else {
-          switch(arg1) {
+          switch(arg1.toLowerCase()) {
             case 'name':
               if (!arg2) {
                 GemWarrior.config.outText = 'If you want to <span class="keyword">change</span> your <span class="noun">name</span>, you must indicate <em>what</em> you would like to change it to.'
+              } else if (arg2.length > GW_NAME_LENGTH_MAX) {
+                GemWarrior.config.outText = `That name is too long. Try again with something fewer than ${GW_NAME_LENGTH_MAX} characters.`
               } else {
                 GemWarrior.world.player.name = arg2.trim()
 
@@ -339,7 +339,7 @@ class Evaluator {
               if (!arg2) {
                 GemWarrior.config.outText = 'If you want to <span class="keyword">change</span> <span class="argument">debug_mode</span>, you must indicate <em>what</em> you would like to change it to.'
               } else {
-                if (arg2 == 'true') {
+                if (arg2.toLowerCase() == 'true') {
                   GemWarrior.options.debug_mode = true
 
                   GemWarrior.config.outText = `${PROGRAM_NAME}'s <span class="keyword">debug_mode</span> is now <span class="keyword true">true</span>`
