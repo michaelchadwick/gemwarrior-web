@@ -476,8 +476,6 @@ GemWarrior._loadWorld = async function() {
       GemWarrior._displayWelcomeBack()
     }
   } else {
-    console.log('No saved world data found. Loading default world data...')
-
     const jsonLocations = await fetch(GW_WORLD_IHOT_JSON_URL)
 
     if (jsonLocations) {
@@ -492,19 +490,19 @@ GemWarrior._loadWorld = async function() {
         const ng_name_set = await ng.get_name_set()
 
         if (ng_name_set) {
-          const rand_name = ng.generate_name()
+          const ng_name = await ng.generate_name()
 
-          if (rand_name) {
-            GemWarrior.world.player.name = rand_name
+          if (ng_name) {
+            GemWarrior.world.player.name = ng_name
           } else {
             GemWarrior.world.player.name = GemWarrior.world.player._generate_name()
 
-            console.warn('NameGenerator generate_name() failed; defaulting to terrible random name generator')
+            console.warn('NameGenerator.generate_name() failed; defaulting to terrible random name generator')
           }
         } else {
           GemWarrior.world.player.name = GemWarrior.world.player._generate_name()
 
-          console.warn('NameGenerator name_set load failed; defaulting to terrible random name generator')
+          console.warn('NameGenerator.name_set load failed; defaulting to terrible random name generator')
         }
 
         console.log('[LOADED] /app/world(default)')

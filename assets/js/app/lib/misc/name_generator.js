@@ -16,47 +16,46 @@ class NameGenerator {
     const names_promise = await fetch(`/assets/data/names/${this.type}.json`)
     const names_data = await names_promise.json()
 
-    this.name_set = names_data
+    if (names_data) {
+      this.name_set = names_data
 
-    return names_data
-  }
-
-  // generate single
-  generate_name() {
-    let chain = null
-
-    // console.log('generate_name this.type', this.type)
-
-    if (chain = this.markov_chain(this.type)) {
-      return this.markov_name(chain)
+      return names_data
     } else {
       return false
     }
   }
 
+  // generate single
+  async generate_name() {
+    let chain = await this.markov_chain(this.type)
+
+    if (chain) {
+      return this.markov_name(chain)
+    } else {
+      return false
+    }
+  }
   // generate multiple
-  generate_names(n_of = 1) {
+  async generate_names(n_of = 1) {
     let list = []
 
-    let i
-
-    for (i = 0; i < n_of; i++) {
-      list.push(this.generate_name(this.type))
+    for (let i = 0; i < n_of; i++) {
+      list.push(await this.generate_name(this.type))
     }
 
     return list
   }
 
   // get markov chain by type
-  markov_chain(type) {
-    let chain
+  async markov_chain(type) {
+    let chain = this.chain_cache[type]
 
-    if (chain = this.chain_cache[type]) {
+    if (chain) {
       return chain
     } else {
-      let list
+      let list = this.name_set
 
-      if ((list = this.name_set[type]) && list.length) {
+      if (list && list.length) {
         let chain
 
         if (chain = this.construct_chain(list)) {
@@ -71,18 +70,16 @@ class NameGenerator {
   }
 
   // construct markov chain from list of names
+
   construct_chain(list) {
     let chain = {}
-    let i
 
-    for (i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       let names = list[i].split(/\s+/)
 
       chain = this.incr_chain(chain, 'parts', names.length)
 
-      let j
-
-      for (j = 0; j < names.length; j++) {
+      for (let j = 0; j < names.length; j++) {
         let name = names[j]
 
         chain = this.incr_chain(chain, 'name_len', name.length)
@@ -127,7 +124,7 @@ class NameGenerator {
 
       Object.keys(chain[key]).forEach(token => {
         let count = chain[key][token]
-        let weighted = Math.floor(Math.pow(count,1.3))
+        let weighted = Math.floor(Math.pow(count, 1.3))
 
         chain[key][token] = weighted
         table_len[key] += weighted
@@ -141,20 +138,18 @@ class NameGenerator {
 
   // construct name from markov chain
 
-  markov_name (chain) {
-    let parts = this.select_link(chain,'parts')
+  markov_name(chain) {
+    let parts = this.select_link(chain, 'parts')
     let names = []
 
-    let i
-
-    for (i = 0; i < parts; i++) {
-      let name_len = this.select_link(chain,'name_len')
-      let c = this.select_link(chain,'initial')
+    for (let i = 0; i < parts; i++) {
+      let name_len = this.select_link(chain, 'name_len')
+      let c = this.select_link(chain, 'initial')
       let name = c
       let last_c = c
 
       while (name.length < name_len) {
-        c = this.select_link(chain,last_c)
+        c = this.select_link(chain, last_c)
 
         if (! c) break
 
@@ -167,7 +162,8 @@ class NameGenerator {
 
     return names.join(' ')
   }
-  select_link (chain, key) {
+
+  select_link(chain, key) {
     let len = chain['table_len'][key]
 
     if (!len) return false
@@ -176,15 +172,14 @@ class NameGenerator {
     let tokens = Object.keys(chain[key])
     let acc = 0
 
-    let i
-
-    for (i = 0; i < tokens.length; i++) {
+    for (let i = 0; i < tokens.length; i++) {
       let token = tokens[i]
 
       acc += chain[key][token]
 
       if (acc > idx) return token
     }
+
     return false
   }
 
