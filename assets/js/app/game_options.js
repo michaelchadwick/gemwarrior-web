@@ -1,5 +1,5 @@
 class GameOptions {
   constructor() {
-    this.debug_mode = false
+    this.debug_mode = true
   }
 }

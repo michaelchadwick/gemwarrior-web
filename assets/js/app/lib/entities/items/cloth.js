@@ -11,20 +11,31 @@ class Cloth extends Item {
   }
 
   use_with(item_name) {
+    let result
+
+    const player_inventory = GemWarrior.world.player.inventory
+
     switch (item_name) {
       case 'stick':
-        if (GemWarrior.world.player.inventory.has_item(item_name)) {
-          GemWarrior.world.player.inventory.update_item_description('stick', `Fragment of a tree, now wrapped in a <span class="noun">${this.name}</span> near the end.`)
+        if (player_inventory.has_item(item_name)) {
+          player_inventory.update_item_condition('stick', 'is_clothed', true)
+          player_inventory.update_item_description('stick', `Fragment of a tree, wrapped in a <span class="noun">${this.name}</span> near the end.`)
 
-          GemWarrior.world.player.inventory.remove_item(this.name)
+          player_inventory.remove_item(this.name)
 
-          return `You wrap the end of the <span class="noun">${item_name}</span> with the <span class="noun">${this.name}</span>.`
+          result = `You wrap the end of the <span class="noun">${item_name}</span> with the <span class="noun">${this.name}</span>.`
         } else {
-          return `Your possessions do not include <span class="noun">${item_name}</span>, so you can't use the <span class="noun">${this.name}</span> with it.`
+          result = `Your possessions do not include <span class="noun">${item_name}</span>, so you can't use the <span class="noun">${this.name}</span> with it.`
         }
 
+        break
+
       default:
-        return `You are not able to use the <span class="noun">${this.name}</span> with ${item_name}.`
+        result = `You are not able to use the <span class="noun">${this.name}</span> with ${item_name}.`
+
+        break
     }
+
+    return result
   }
 }

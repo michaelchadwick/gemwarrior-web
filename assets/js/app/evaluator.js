@@ -123,7 +123,11 @@ class Evaluator {
       case 'ls':
       case 'l':
         if (!arg1) {
-          GemWarrior.config.outText = GemWarrior.world.location.describe()
+          if (GemWarrior.options.debug_mode) {
+            GemWarrior.config.outText = GemWarrior.world.location.describe_detailed()
+          } else {
+            GemWarrior.config.outText = GemWarrior.world.location.describe()
+          }
         } else {
           GemWarrior.config.outText = GemWarrior.world.describe_entity(GemWarrior.world.location, arg1)
         }
@@ -154,12 +158,13 @@ class Evaluator {
 
       case 'use':
       case 'u':
+        let result
+
         if (!arg1) {
-          GemWarrior.config.outText = ERROR_USE_PARAM_MISSING
+          result = ERROR_USE_PARAM_MISSING
         } else {
           const player_inventory = GemWarrior.world.player.inventory
           const player_location = GemWarrior.world.location
-          let result
 
           // using one item with another?
           if (arg2 == 'with') {
@@ -175,10 +180,14 @@ class Evaluator {
                     const item2 = Object.values(player_inventory.items).filter(i => i.name == item2_name)[0]
 
                     if (item2.useable) {
+                      GemWarrior._playSFX('use-with')
+
                       result = item1.use_with(item2_name)
                     } else {
                       result = ERROR_USE_WITH_PARAM_UNUSEABLE
                     }
+                  } else {
+                    result = ERROR_USE_WITH_PARAM_MISSING
                   }
                 } else {
                   result = ERROR_USE_PARAM_UNUSEABLE
@@ -187,16 +196,24 @@ class Evaluator {
                 const item1 = Object.values(player_location.items).filter(i => i.name == item1_name)[0]
 
                 if (item1.useable) {
-                  const item2 = Object.values(player_location.items).filter(i => i.name == item2_name)[0]
+                  if (player_inventory.has_item(item2_name)) {
+                    const item2 = Object.values(player_location.items).filter(i => i.name == item2_name)[0]
 
-                  if (item2.useable) {
-                    result = item1.use_with(item2_name)
+                    if (item2.useable) {
+                      GemWarrior._playSFX('use-with')
+
+                      result = item1.use_with(item2_name)
+                    } else {
+                      result = ERROR_USE_WITH_PARAM_UNUSEABLE
+                    }
                   } else {
-                    result = ERROR_USE_WITH_PARAM_UNUSEABLE
+                    result = ERROR_USE_WITH_PARAM_MISSING
                   }
                 } else {
                   result = ERROR_USE_PARAM_UNUSEABLE
                 }
+              } else {
+                result = ERROR_USE_PARAM_INVALID
               }
             } else {
               result = ERROR_USE_WITH_PARAM_MISSING
@@ -210,6 +227,8 @@ class Evaluator {
               const item = Object.values(player_inventory.items).filter(i => i.name == item_name)[0]
 
               if (item.useable) {
+                GemWarrior._playSFX('use')
+
                 if (item.number_of_uses) {
                   if (item.number_of_uses > 0) {
                     item.use()
@@ -233,6 +252,8 @@ class Evaluator {
               const item = Object.values(player_location.items).filter(i => i.name == item_name)[0]
 
               if (item.useable) {
+                GemWarrior._playSFX('use')
+
                 if (item.number_of_uses) {
                   if (item.number_of_uses > 0) {
                     item.use()

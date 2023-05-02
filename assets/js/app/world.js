@@ -65,6 +65,7 @@ class World {
       case 'resin': return new Resin()
       case 'rock': return new Rock()
       case 'stick': return new Stick()
+      case 'torch': return new Torch()
       default:
         return false
     }

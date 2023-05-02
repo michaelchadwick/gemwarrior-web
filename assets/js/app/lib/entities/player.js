@@ -21,8 +21,18 @@ class Player extends Creature {
       this.level = 1
       this.xp = 0
       this.hp = 10
+      // normal
+      // this.inventory = new Inventory([
+      //   new Rock()
+      // ])
+      // debug
       this.inventory = new Inventory([
-        new Rock()
+        new Bucket(),
+        new Cloth(),
+        new Resin(),
+        new Rock(),
+        new Rock(),
+        new Stick()
       ])
       this.inventory_checks = 0
       this.coords = {

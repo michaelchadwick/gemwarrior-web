@@ -24,19 +24,22 @@ class Entity {
   }
 
   describe_detailed() {
-    return `<pre>
+    let result = '<pre>'
+    result += `
 ${this.name_display()} [<code>${this.name}</code>]
 '${this.description}'
-TAKEABLE?   ${this.takeable ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-USEABLE?    ${this.useable ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-TALKABLE?   ${this.talkable ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-CONSUMABLE? ${this.consumable ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-EQUIPPABLE? ${this.equippable ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-EQUIPPED?   ${this.equipped ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-USED?       ${this.used ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-USED AGAIN? ${this.used_again ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}
-USES LEFT?  ${this.number_of_uses}
-    </pre>`
+    `
+
+    for (const prop in this) {
+      if (prop !== 'name' && prop !== 'description') {
+        result += `
+${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}`
+      }
+    }
+
+    result += `</pre>`
+
+    return result
   }
 
   name_display() {

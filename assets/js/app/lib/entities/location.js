@@ -16,18 +16,43 @@ class Location extends Entity {
     this.bosses_abounding     = options.bosses_abounding
     this.checked_for_monsters = options.checked_for_monsters
     this.visited              = options.visited
+    this.useable              = false
+    this.takeable             = false
 
     // console.log('[LOADED] /app/lib/entities/location')
   }
 
   describe() {
-    let description = this.description
+    let result = this.description
 
     if (!this.is_empty()) {
-      description += '<br />&gt;&gt; Items(s): ' + this.list_items()
+      result += this.list_items()
     }
 
-    return description
+    return result
+  }
+
+  describe_detailed() {
+    const skipped_props = ['name', 'description', 'items', 'paths', 'coords']
+
+    let result = this.description
+
+    result += `<br />&gt;&gt; Coords: [${Object.values(this.coords).join(', ')}]`
+    result += this.list_items()
+    result += this.list_paths()
+
+    result += `<pre>`
+
+    for (const prop in this) {
+      if (!skipped_props.includes(prop)) {
+        result += `
+${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}`
+      }
+    }
+
+    result += `</pre>`
+
+    return result
   }
 
   set_description(text) {
@@ -87,24 +112,24 @@ class Location extends Entity {
 
         const output = q > 1 ? `<span class="keyword">${i}</span> x${q}` : `<span class="keyword">${i}</span>`
 
-        return output
+        return `<br />&gt;&gt; Item(s): ${output}`
       }
       // multiple items? return an array of strings
       else {
-        const item_arr = []
+        const output = []
 
         Object.entries(item_hash).forEach(entry => {
           const i = entry[0]
           const q = entry[1]
 
           if (q > 1) {
-            item_arr.push(`<span class="keyword">${i}</span> x${q}`)
+            output.push(`<span class="keyword">${i}</span> x${q}`)
           } else {
-            item_arr.push(`<span class="keyword">${i}</span>`)
+            output.push(`<span class="keyword">${i}</span>`)
           }
         })
 
-        return item_arr.sort().join(', ')
+        return `<br />&gt;&gt; Items(s): ${output.sort().join(', ')}`
       }
     }
   }
@@ -112,11 +137,11 @@ class Location extends Entity {
   list_paths() {
     const valid_paths = []
 
-    this.paths.forEach((key, val) => {
-      if (val) valid_paths.push(key)
+    Object.entries(this.paths).forEach(entry => {
+      if (!!entry[1]) valid_paths.push(entry[0])
     })
 
-    return valid_paths
+    return `<br />&gt;&gt; Path(s): ${valid_paths.join(', ')}`
   }
 
   // TODO

@@ -11,19 +11,30 @@ class Resin extends Item {
   }
 
   use_with(item_name) {
+    let result
+
+    const player_inventory = GemWarrior.world.player.inventory
+
     switch (item_name) {
       case 'bucket':
-        if (GemWarrior.world.player.inventory.has_item(item_name)) {
-          GemWarrior.world.player.inventory.update_item_description('bucket', `A small metal container, filled with tree bark <span class="noun">${this.name}</span>.`)
+        if (player_inventory.has_item(item_name)) {
+          player_inventory.update_item_description('bucket', `A small metal container, filled with tree bark <span class="noun">${this.name}</span>.`)
 
-          GemWarrior.world.player.inventory.remove_item(this.name)
+          player_inventory.remove_item(this.name)
 
-          return `You fill the <span class="noun">${item_name}</span> with <span class="noun">${this.name}</span> and discard the bottle.`
+          result = `You fill the <span class="noun">${item_name}</span> with <span class="noun">${this.name}</span> and discard the bottle.`
         } else {
-          return `Your possessions do not include <span class="noun">${item_name}</span>, so you can't use the <span class="noun">${this.name}</span> with it.`
+          result = `Your possessions do not include <span class="noun">${item_name}</span>, so you can't use the <span class="noun">${this.name}</span> with it.`
         }
+
+        break
+
       default:
-        return `You are not able to use the <span class="noun">${this.name}</span> with ${item_name}.`
+        result = `You are not able to use the <span class="noun">${this.name}</span> with ${item_name}.`
+
+        break
     }
+
+    return result
   }
 }

@@ -277,8 +277,12 @@ class Inventory {
   }
 
   remove_item(item_name) {
+    console.log(`remove_item(${item_name})`)
+
     if (this.has_item(item_name)) {
-      const index = Object.values(this.items).map(item => item.name.toLowerCase()).indexOf(item_name.toLowerCase())
+      const index = Object.values(this.items)
+        .map(i => i.name.toLowerCase())
+        .indexOf(item_name.toLowerCase())
 
       this.items.splice(index, 1)
 
@@ -294,11 +298,35 @@ class Inventory {
     }
   }
 
+  item_has_condition(item_name, condition) {
+    console.log(`item_has_condition(${item_name}, ${condition})`)
+
+    const item = Object.values(this.items).filter(i => i.name.toLowerCase() == item_name.toLowerCase())[0]
+
+    if (item) {
+      return item[condition] == true ? true : false
+    } else {
+      return false
+    }
+  }
+
+  update_item_condition(item_name, condition, value) {
+    const item = Object.values(this.items).filter(i => i.name.toLowerCase() == item_name.toLowerCase())[0]
+
+    if (item) {
+      item[condition] = value
+
+      return true
+    } else {
+      return false
+    }
+  }
+
   update_item_description(item_name, text) {
     if (this.has_item(item_name)) {
-      const index = Object.values(this.items).map(item => item.name.toLowerCase()).indexOf(item_name.toLowerCase())
+      const item = Object.values(this.items).filter(i => i.name.toLowerCase() == item_name.toLowerCase())[0]
 
-      this.items[index].description = text
+      item.description = text
 
       return true
     } else {
