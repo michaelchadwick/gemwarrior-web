@@ -25,6 +25,38 @@ class Location extends Entity {
   describe() {
     let result = this.description
 
+    // IHOT Southwest room
+    if (
+      Utils.are_equal(this.coords, GW_IHOT_SW) &&
+      GemWarrior.world.player.inventory.has_item('torch')
+    ) {
+      result += `<br /><br />You see a faint <span class="noun">etching</span> on the wall nearby.`
+
+      if (!this.has_item('etching')) {
+        this.add_item('etching')
+      }
+    } else {
+      if (this.has_item('etching')) {
+        this.remove_item('etching')
+      }
+    }
+
+    // IHOT Exit point
+    if (
+      Utils.are_equal(this.coords, GW_IHOT_EXIT_POINT) &&
+      GemWarrior.world.player.inventory.has_item('rock', 10)
+    ) {
+      result += `<br /><br />You also see a part of the wall that's <em>slightly raised</em> from the rest.`
+
+      if (!this.has_item('indentation')) {
+        this.add_item('indentation')
+      }
+    } else {
+      if (this.has_item('indentation')) {
+        this.remove_item('indentation')
+      }
+    }
+
     if (!this.is_empty()) {
       result += this.list_items()
     }
@@ -35,12 +67,14 @@ class Location extends Entity {
   describe_detailed() {
     const skipped_props = ['name', 'description', 'items', 'paths', 'coords']
 
-    let result = this.description
+    let result = this.describe()
 
-    result += `<br />&gt;&gt; Coords: [${Object.values(this.coords).join(', ')}]`
-    result += this.list_items()
+
+
+    result += this.list_coords()
     result += this.list_paths()
 
+    result += '<br /><br />'
     result += `<pre>`
 
     for (const prop in this) {
@@ -65,9 +99,7 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
     return !this.items.length
   }
   has_item(item_name) {
-    const needle = item_name.replaceAll(' ', '_').toLowerCase()
-
-    return this.items.some(loc_item => loc_item.name.toLowerCase() == needle)
+    return this.items.some(loc_item => loc_item.name.toLowerCase() == item_name.toLowerCase())
   }
   add_item(item_name) {
     console.log('location add_item', item_name)
@@ -133,7 +165,9 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
       }
     }
   }
-
+  list_coords() {
+    return `<br />&gt;&gt; Coords: <span class="keyword">[${Object.values(this.coords).join(', ')}]</span>`
+  }
   list_paths() {
     const valid_paths = []
 
@@ -141,20 +175,20 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
       if (!!entry[1]) valid_paths.push(entry[0])
     })
 
-    return `<br />&gt;&gt; Path(s): ${valid_paths.join(', ')}`
+    return `<br />&gt;&gt; Path(s): <span class="keyword">${valid_paths.join(', ')}</span>`
   }
 
   // TODO
-  checked_for_monsters() {
-    return this.checked_for_monsters
-  }
-  should_spawn_monster() {}
-  remove_monster(name) {}
-  list_monsters() {}
-  list_bosses() {}
-  has_monsters() {}
-  has_monster(monster_name) {}
-  has_boss(boss_name) {}
-  list_actionable_words() {}
-  populate_monsters() {}
+  // checked_for_monsters() {
+  //   return this.checked_for_monsters
+  // }
+  // should_spawn_monster() {}
+  // remove_monster(name) {}
+  // list_monsters() {}
+  // list_bosses() {}
+  // has_monsters() {}
+  // has_monster(monster_name) {}
+  // has_boss(boss_name) {}
+  // list_actionable_words() {}
+  // populate_monsters() {}
 }

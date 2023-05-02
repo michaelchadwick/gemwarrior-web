@@ -26,13 +26,18 @@ class Player extends Creature {
       //   new Rock()
       // ])
       // debug
+      // this.inventory = new Inventory([
+      //   new Bucket(),
+      //   new Cloth(),
+      //   new Resin(),
+      //   new Rock(),
+      //   new Rock(),
+      //   new Stick()
+      // ])
       this.inventory = new Inventory([
-        new Bucket(),
-        new Cloth(),
-        new Resin(),
-        new Rock(),
-        new Rock(),
-        new Stick()
+        new Rock(),new Rock(),new Rock(),new Rock(),new Rock(),
+        new Rock(),new Rock(),new Rock(),new Rock(),new Rock(),
+        new Torch()
       ])
       this.inventory_checks = 0
       this.coords = {

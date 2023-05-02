@@ -285,9 +285,9 @@ class Evaluator {
               result = ERROR_USE_PARAM_INVALID
             }
           }
-
-          GemWarrior.config.outText = result
         }
+
+        GemWarrior.config.outText = result
 
         break
 
@@ -300,6 +300,12 @@ class Evaluator {
 
         break
 
+      case 'commands':
+      case 'com':
+        GemWarrior.config.outText = GemWarrior._displayCommands()
+
+        break
+
       case 'history':
       case 'hist':
         GemWarrior.config.outText = GemWarrior.__getHistoryDisplay()
@@ -307,7 +313,7 @@ class Evaluator {
         break
 
       case 'about':
-      case 'a':
+      case 'ab':
         GemWarrior.config.outText = GW_ABOUT_TEXT
 
         break
@@ -336,11 +342,11 @@ class Evaluator {
                 if (arg2 == 'true') {
                   GemWarrior.options.debug_mode = true
 
-                  GemWarrior.config.outText = `Gem Warrior's <span class="keyword">debug_mode</span> is now <span class="keyword true">true</span>`
+                  GemWarrior.config.outText = `${PROGRAM_NAME}'s <span class="keyword">debug_mode</span> is now <span class="keyword true">true</span>`
                 } else {
                   GemWarrior.options.debug_mode = false
 
-                  GemWarrior.config.outText = `Gem Warrior's <span class="keyword">debug_mode</span> is now <span class="keyword false">false</span>`
+                  GemWarrior.config.outText = `${PROGRAM_NAME}'s <span class="keyword">debug_mode</span> is now <span class="keyword false">false</span>`
                 }
               }
 
@@ -358,7 +364,6 @@ class Evaluator {
 
       case 'playbgm':
       case 'play':
-      case 'pl':
         if (GemWarrior.settings.enableSound) {
           if (!GemWarrior.config.synth_bgm.playing) {
             if (GemWarrior.world.player.status == 'sleeping') {

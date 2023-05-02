@@ -61,6 +61,7 @@ class World {
     switch (item_name) {
       case 'bucket': return new Bucket()
       case 'cloth': return new Cloth()
+      case 'etching': return new Etching()
       case 'indentation': return new Indentation()
       case 'resin': return new Resin()
       case 'rock': return new Rock()
@@ -92,12 +93,14 @@ class World {
   save = function() {
     // console.log('saving world state and global settings to localStorage...')
 
-    try {
-      // localStorage.setItem(GW_WORLD_KEY, JSON.stringify(this))
+    if (GemWarrior.options.world_save) {
+      try {
+        localStorage.setItem(GW_WORLD_KEY, JSON.stringify(this))
 
-      // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_KEY)))
-    } catch(error) {
-      console.error('localStorage world state save failed', error)
+        // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_KEY)))
+      } catch(error) {
+        console.error('localStorage world state save failed', error)
+      }
     }
   }
 

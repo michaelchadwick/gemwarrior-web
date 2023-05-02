@@ -32,7 +32,7 @@ async function modalOpen(type) {
       break
 
     case 'start':
-      const playConfirm = new Modal('confirm', 'Welcome to Gem Warrior',
+      const playConfirm = new Modal('confirm', `Welcome to ${PROGRAM_NAME}`,
         `
           Welcome to a world of mystery and single-room-ness (because I haven't programmed more than that yet). See if you can escape the Inescapable Hole of Turbidity (spoiler: you cannot...yet)! However, there are plenty of the usual text adventure command fare to experiment with for now.
         `,
@@ -142,6 +142,17 @@ async function modalOpen(type) {
       )
 
       GemWarrior._loadSettings()
+
+      break
+
+    case 'win':
+      this.myModal = new Modal('perm-win', 'Congratulations!',
+        `
+          You have figured out how to exit the <span class="noun">Inescapable Hole of Turbidity</span>! Well done on completing this pre-pre-alpha version of <span class="noun">${PROGRAM_NAME}</span>. There will be more content in the pre-alpha version, but <a target="_blank" href="https://michaelchadwick.info">let me know</a> if you have any comments so far.
+        `,
+        null,
+        null
+      )
 
       break
   }
@@ -717,39 +728,63 @@ GemWarrior._scrollOutput = function() {
   }
 }
 
-// write command list to main output
-GemWarrior._displayHelp = function() {
-  var cmdList = ''
+// return available commands in a nice display
+GemWarrior._displayCommands = function() {
+  let cmdList = ''
 
   Object.keys(GW_COMMANDS).forEach((key) => {
-    cmdList += `<br />&nbsp;${key}:<br />&nbsp;&nbsp;<span class="keyword">${GW_COMMANDS[key].join(', ')}</span><br />`
+    cmdList += `&nbsp;<strong>${key}</strong>:<br />&nbsp;&nbsp;<span class="keyword">${GW_COMMANDS[key].join(', ')}</span><br />`
   })
 
-  return `HELP: The following commands are valid: ${cmdList}`
+  return cmdList
+}
+
+// write command list to main output
+GemWarrior._displayHelp = function() {
+  let output = `<span class="noun">${PROGRAM_NAME}</span> is an old-school (if you're not playing this in some alternate, circa 1970-something, timeline) text adventure game. Type words into the command line below, hit enter/return, and things happen! See if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>!`
+
+  output += `<br /><br />The following commands are valid:<br />${GemWarrior._displayCommands()}`
+
+  return output
 }
 
 // write initial welcome message to main output
 GemWarrior._displayWelcome = function() {
-  GemWarrior.dom.output.append(`<pre>
-*************************************
-* Welcome to Gem Warrior!           *
-* - Try <span class="keyword">help</span> if stuck               *
-* - Top-right gear icon for options *
-* - Currently only one room...or?   *
-* <strong>Good luck, <span class="noun">${GemWarrior.world.player.name}</span>...</strong>           *
-*************************************
-</pre>`)
+  let output = `
+*********************************************
+* Welcome to <span class="noun">${PROGRAM_NAME}</span>!                   *
+* - Try <span class="keyword">help</span> if stuck                       *
+* - Top-right gear icon for options         *`
+
+  if (!GemWarrior.options.world_save) {
+    output += `
+* - World save is off, so <strong>DON'T REFRESH</strong>!    *`
+  }
+
+  output += `
+* <strong>Good luck, <span class="noun">${GemWarrior.world.player.name}</span>...</strong>                   *
+*********************************************`
+
+  GemWarrior.dom.output.append('<pre>' + output + '</pre>')
 }
 
 // write welcome back message for saved game to main output
 GemWarrior._displayWelcomeBack = function() {
-  GemWarrior.dom.output.append(`<pre>
-*************************************
-* Welcome back to Gem Warrior, <span class="noun">${GemWarrior.world.player.name}</span>!           *
-* - Top-right gear icon for options *
-* - Currently only one room...or?   *
-*************************************
-</pre>`)
+  let output = `
+*********************************************
+* Welcome back to ${PROGRAM_NAME}, <span class="noun">${GemWarrior.world.player.name}</span>!   *
+* - Try <span class="keyword">help</span> if stuck                       *
+* - Top-right gear icon for options         *`
+
+  if (!GemWarrior.options.world_save) {
+    output += `
+* - World save is off, so <strong>DON'T REFRESH</strong>!    *`
+  }
+
+  output += `
+*********************************************`
+
+  GemWarrior.dom.output.append('<pre>' + output + '</pre>')
 }
 
 GemWarrior._getNebyooApps = async function() {

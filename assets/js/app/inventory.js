@@ -131,10 +131,12 @@ class Inventory {
     return this.items.filter(item => item.name.toLowerCase() == 'rock').length
   }
 
-  has_item(item_name) {
-    const needle = item_name.toLowerCase()
-
-    return Object.values(this.items).some(item => item.name.toLowerCase() == needle)
+  has_item(item_name, amount = null) {
+    if (amount) {
+      return Object.values(this.items).filter(item => item.name.toLowerCase() == item_name.toLowerCase()).length >= amount
+    } else {
+      return Object.values(this.items).some(item => item.name.toLowerCase() == item_name.toLowerCase())
+    }
   }
 
   equip_item(item_name) {
@@ -200,10 +202,6 @@ class Inventory {
       let result = ERROR_ITEM_ADD_INVALID
 
       Object.values(cur_loc.items).every(item => {
-        // console.log('cur_loc items item.name', item.name)
-        // console.log('item_name', item_name)
-
-        // did we find the item
         if (item.name == item_name) {
           // is it takeable?
           if (item.takeable) {
@@ -258,7 +256,11 @@ class Inventory {
 
       GemWarrior._playSFX('drop')
 
-      if (GemWarrior.world.player.inventory.rox() < GW_IHOT_MAX_ROX) {
+      if (
+        item_name == 'rock' &&
+        GemWarrior.world.player.inventory.rox() < GW_IHOT_MAX_ROX &&
+        GemWarrior.world.location.has_item('indentation')
+      ) {
         setTimeout(() => GemWarrior._playSFX('secret'), 500)
 
         GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).remove_item('indentation')

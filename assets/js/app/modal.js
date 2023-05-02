@@ -97,7 +97,11 @@ class Modal {
       title.appendChild(titleText);
 
       // Close
-      if (modalType == 'perm' || modalType == 'perm-debug') {
+      if (modalType == 'perm' || modalType == 'perm-debug' || modalType == 'perm-win') {
+        if (modalType == 'perm-win') {
+          this.modal.classList.add('perm-win')
+        }
+
         this.closeButton = document.createElement('button');
         this.closeButton.type = 'button';
         this.closeButton.innerHTML = '&times;';

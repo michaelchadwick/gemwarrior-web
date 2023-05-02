@@ -16,6 +16,7 @@ const GW_WORLD_IHOT_JSON_URL = '/assets/data/world/ihot.json'
 const GW_WORLD_JOOL_JSON_URL = '/assets/data/world/jool.json'
 const GW_WORLD_IHOT_JOOL_JSON_URL = '/assets/data/world/ihot_jool.json'
 
+const GW_IHOT_SW = { x: 0, y: 0, z:0 }
 const GW_IHOT_EXIT_POINT = { x: 2, y: 2, z:0 }
 const GW_IHOT_MAX_ROX = 10
 const GW_SNAPBACK_DELAY = 500
@@ -38,17 +39,18 @@ const GW_COMMANDS = {
   'action': [
     '(l)ook',
     '(p)ickup/(t)ake',
-    '(dr)op',
+    '(d)op',
     '(u)se'
   ],
   'meta': [
     '(h)elp',
+    '(com)mands',
     '(hist)ory',
-    '(a)bout',
+    '(ab)bout',
     '(ch)ange'
   ],
   'fx': [
-    '(pl)ay bgm',
+    '(play)bgm',
     '(stop)bgm'
   ]
 }
@@ -88,16 +90,14 @@ const CHAR_LOWER_VOWEL_POOL = ['a', 'e', 'i', 'o', 'u', 'y']
 
 const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'
 
-const GW_ABOUT_TEXT = `<strong>Gem Warrior (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>Gem Warrior</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
-
-<em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`
-
 const PROGRAM_NAME                          = 'Gem Warrior'
-const QUIT_MESSAGE                          = 'Thanks for playing the game. Until next time...'
-const RESUME_MESSAGE                        = 'Back to adventuring!'
 
 const LEVEL_UP_TEXT                         = '** LEVEL UP! **'
 const REST_FULL_TEXT                        = '** HMMMM **'
 const REST_NOT_FULL_TEXT                    = '** ZZZZZ **'
 
 const VOWELS                                = 'aeiou'
+
+const GW_ABOUT_TEXT = `<strong>${PROGRAM_NAME} (Web)</strong> was programmed by <a class='glow-transition' href='https://michaelchadwick.info' target='_blank'>Michael Chadwick</a>, an all right kind of person entity. This webapp is based on <a class='glow-transition' href='https://github.com/michaelchadwick/gemwarrior' target='_blank'>${PROGRAM_NAME}</a>, a <a class='glow-transition' href='https://rubygems.org' target='_blank'>Ruby gem</a> (because I was <em>really</em> into Ruby at some point and thought to myself "I should make a game. I guess I'll use the language I'm really into right now. I'm sure it's totally portable.")<br /><br />
+
+<em><strong>Narrator</strong>: It actually wasn't very portable at all.</em>`

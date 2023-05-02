@@ -1,5 +1,6 @@
 class GameOptions {
   constructor() {
-    this.debug_mode = true
+    this.debug_mode = false
+    this.world_save = false
   }
 }
