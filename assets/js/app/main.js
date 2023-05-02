@@ -749,6 +749,8 @@ GemWarrior._displayWelcome = function() {
 *********************************************
 * Welcome to <span class="noun">${PROGRAM_NAME}</span>!                   *
 * - Try <span class="keyword">help</span> if stuck                       *
+* - Type <span class="keyword">change name [new-name]</span> to rename   *
+*   your randomly-named character           *
 * - Top-right gear icon for options         *`
 
   if (!GemWarrior.options.world_save) {
@@ -757,7 +759,7 @@ GemWarrior._displayWelcome = function() {
   }
 
   output += `
-* <strong>Good luck, <span class="noun">${GemWarrior.world.player.name}</span>...</strong>                   *
+* Good luck, <span class="noun">${GemWarrior.world.player.name}</span>...                   *
 *********************************************`
 
   GemWarrior.dom.output.append('<pre>' + output + '</pre>')
@@ -767,8 +769,10 @@ GemWarrior._displayWelcome = function() {
 GemWarrior._displayWelcomeBack = function() {
   let output = `
 *********************************************
-* Welcome back to ${PROGRAM_NAME}, <span class="noun">${GemWarrior.world.player.name}</span>!   *
+* Welcome back to <span class="noun">${PROGRAM_NAME}</span>, <span class="noun">${GemWarrior.world.player.name}</span>!   *
 * - Try <span class="keyword">help</span> if stuck                       *
+* - Type <span class="keyword">change name [new-name]</span> to rename   *
+*   your randomly-named character           *
 * - Top-right gear icon for options         *`
 
   if (!GemWarrior.options.world_save) {
