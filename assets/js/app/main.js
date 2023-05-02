@@ -32,9 +32,9 @@ async function modalOpen(type) {
       break
 
     case 'start':
-      const playConfirm = new Modal('confirm-start', `Welcome to ${PROGRAM_NAME}`,
+      const playConfirm = new Modal('confirm-start', `Welcome to ${PROGRAM_NAME}!`,
         `
-          Welcome to a world of mystery and single-scene-ness (because I haven't programmed more than that yet). See if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>! However, there are plenty of the usual text adventure command fare to experiment with for now.
+          Welcome to an old-school text adventure world of mystery and single-scene-ness (because I haven't programmed more than that yet). Use all the typical text adventure command fare and see if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>!<br /><br />Feedback accepted and welcomed via any point of contact found <a href="https://michaelchadwick.info" target="_blank">here</a>.
         `,
         'Play w/ sound',
         'Play quietly'
