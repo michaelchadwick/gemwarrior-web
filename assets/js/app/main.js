@@ -32,9 +32,9 @@ async function modalOpen(type) {
       break
 
     case 'start':
-      const playConfirm = new Modal('confirm', `Welcome to ${PROGRAM_NAME}`,
+      const playConfirm = new Modal('confirm-start', `Welcome to ${PROGRAM_NAME}`,
         `
-          Welcome to a world of mystery and single-room-ness (because I haven't programmed more than that yet). See if you can escape the Inescapable Hole of Turbidity (spoiler: you cannot...yet)! However, there are plenty of the usual text adventure command fare to experiment with for now.
+          Welcome to a world of mystery and single-scene-ness (because I haven't programmed more than that yet). See if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>! However, there are plenty of the usual text adventure command fare to experiment with for now.
         `,
         'Play w/ sound',
         'Play quietly'
@@ -43,6 +43,10 @@ async function modalOpen(type) {
       try {
         // wait for modal confirmation
         const answer = await playConfirm.question()
+
+        if (!localStorage.getItem(GW_SETTINGS_KEY)) {
+          localStorage.setItem(GW_SETTINGS_KEY, JSON.stringify(GW_DEFAULTS.settings))
+        }
 
         GemWarrior._saveSetting('firstTime', false)
 
@@ -53,8 +57,6 @@ async function modalOpen(type) {
 
           setTimeout(() => GemWarrior._playSFX('start'), 200)
         }
-
-        GemWarrior._displayWelcome()
       } catch (err) {
         console.error('something went very wrong', err)
       }
@@ -168,7 +170,7 @@ GemWarrior.initApp = async function() {
     document.title = '(LH) ' + document.title
   }
 
-  GemWarrior._loadSettings()
+  await GemWarrior._loadSettings()
 
   GemWarrior._resizeFixed()
 
@@ -216,7 +218,7 @@ GemWarrior._initDebug = function() {
   }
 }
 
-GemWarrior._loadSettings = function() {
+GemWarrior._loadSettings = async function() {
   // console.log('[LOADING] settings')
 
   const lsSettings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
@@ -311,14 +313,7 @@ GemWarrior._loadSettings = function() {
       }
     }
   } else {
-    // save default game settings
-    try {
-      localStorage.setItem(GW_SETTINGS_KEY, JSON.stringify(GemWarrior.settings))
-
-      // console.log('localStorage settings saved!', JSON.parse(localStorage.getItem(GW_SETTINGS_KEY)))
-    } catch(error) {
-      console.error('localStorage global settings save failed', error)
-    }
+    await modalOpen('start')
   }
 
   console.log('[LOADED] /app/main(settings)')
@@ -440,9 +435,9 @@ GemWarrior._changeSetting = function(setting, event = null) {
   }
 }
 GemWarrior._saveSetting = function(setting, value) {
-  // console.log('saving setting to LS...', setting, value)
+  console.log('saving setting to LS...', setting, value)
 
-  var settings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
+  const settings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
 
   if (settings) {
     // set internal code model

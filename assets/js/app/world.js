@@ -56,7 +56,7 @@ class World {
   }
 
   create_custom_item(item_name) {
-    console.log(`create_custom_item(${item_name})`)
+    // console.log(`create_custom_item(${item_name})`)
 
     switch (item_name) {
       case 'bucket': return new Bucket()
