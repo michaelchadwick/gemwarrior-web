@@ -165,7 +165,7 @@ class Evaluator {
           const player_location = GemWarrior.world.location
 
           // using one item with another?
-          if (arg2.toLowerCase() == 'with') {
+          if (arg2 && arg2.toLowerCase() == 'with') {
             if (arg3) {
               const item1_name = arg1.toLowerCase()
               const item2_name = arg3.toLowerCase()
@@ -284,6 +284,8 @@ class Evaluator {
             }
           }
         }
+
+        GemWarrior.world.save()
 
         GemWarrior.config.outText = result
 
@@ -423,7 +425,7 @@ class Evaluator {
       } else {
         GemWarrior._playSFX('bonk')
 
-        return 'Cannot move that way.'
+        return ERROR_GO_PARAM_INVALID
       }
     } else {
       return 'You cannot move while sleeping.'

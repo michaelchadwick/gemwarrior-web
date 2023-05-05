@@ -3,10 +3,10 @@
 /* eslint-disable no-unused-vars */
 
 class World {
-  constructor(initObj) {
-    this.player = new Player(initObj.player || null)
+  constructor(options) {
+    this.player = new Player(options.player || null)
 
-    this.locations = this._create_locations(initObj.locations)
+    this.locations = this._create_locations(options.locations)
 
     this.location = this.get_location()
   }
@@ -17,15 +17,16 @@ class World {
 
     // check location items->monster->boss, inventory->items
     if (loc.has_item(entity)) {
-      Object.values(loc.items).forEach(i => {
-        if (i.name.toLowerCase() == entity) {
-          if (GemWarrior.options.debug_mode) {
-            result = i.describe_detailed()
-          } else {
-            result = i.describe()
-          }
-        }
-      })
+      const item = Object.values(loc.items).filter(i => i.name.toLowerCase() == entity)[0]
+
+      // console.log('item', item)
+
+      if (GemWarrior.options.debug_mode) {
+        result = item.describe_detailed()
+      } else {
+        result = item.describe()
+      }
+
     // } else if (loc.has_monster(entity)) {
     //   Object.values(loc.monsters_abounding).forEach(m => {
     //     if (m.name.toLowerCase() == entity) {
@@ -53,23 +54,6 @@ class World {
     }
 
     return result
-  }
-
-  create_custom_item(item_name) {
-    // console.log(`create_custom_item(${item_name})`)
-
-    switch (item_name) {
-      case 'bucket': return new Bucket()
-      case 'cloth': return new Cloth()
-      case 'etching': return new Etching()
-      case 'indentation': return new Indentation()
-      case 'resin': return new Resin()
-      case 'rock': return new Rock()
-      case 'stick': return new Stick()
-      case 'torch': return new Torch()
-      default:
-        return false
-    }
   }
 
   can_move_in_direction(direction) {
@@ -101,11 +85,14 @@ class World {
       } catch(error) {
         console.error('localStorage world state save failed', error)
       }
+    } else {
+      console.warn('World is not being saved, so DON\'T REFRESH!')
     }
   }
 
   /* private */
 
+  // take json string locations and create internal custom class object instances
   _create_locations(loc_data) {
     let locs = []
 
@@ -120,7 +107,7 @@ class World {
           paths: loc.paths,
           danger_level: loc.danger_level,
           monster_level_range: loc.monster_level_range || null,
-          items: loc.items.map(item => this.create_custom_item(item)) || [],
+          items: loc.items.map(item => Utils.create_custom_item(item)),
           monsters_abounding: loc.monsters_abounding || [],
           bosses_abounding: loc.bosses_abounding || [],
           checked_for_monsters: loc.checked_for_monsters || false,

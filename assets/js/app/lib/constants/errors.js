@@ -12,7 +12,7 @@ const ERROR_TALK_PARAM_UNTALKABLE           = 'That cannnot be conversed with.'
 const ERROR_TALK_TO_PARAM_MISSING           = 'You cannot just "talk to". You gotta choose someone to talk to.'
 
 const ERROR_GO_PARAM_MISSING                = 'Just wander aimlessly? A direction would be nice.'
-const ERROR_GO_PARAM_INVALID                = 'Something tells you that is not a way to go.'
+const ERROR_GO_PARAM_INVALID                = 'Cannot go that way.'
 
 const ERROR_DIRECTION_PARAM_INVALID         = 'You cannot go to that place.'
 const ERROR_ATTACK_PARAM_MISSING            = 'You cannot just "attack". You gotta choose something to attack.'

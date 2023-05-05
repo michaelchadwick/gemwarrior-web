@@ -1,9 +1,9 @@
 class Rock extends Item {
-  constructor() {
+  constructor(options = null) {
     super()
 
     this.name         = 'rock'
-    this.description  = 'A small, yet quite sharp, sedimentary pebble, suitable for tossing in amusement, and perhaps commerce.'
+    this.description  = options.description || 'A small, yet quite sharp, sedimentary pebble, suitable for tossing in amusement, and perhaps commerce.'
   }
 
   use() {

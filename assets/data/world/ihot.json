@@ -1,155 +1,213 @@
-[
-  {
-    "name": "Inescapable Hole of Turbidity (Center)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
+{
+  "locations": [
+    {
+      "name": "Inescapable Hole of Turbidity (Center)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 1,
+        "y": 1,
+        "z": 0
+      },
+      "paths": {
+        "north": true,
+        "east": true,
+        "south": true,
+        "west": true
+      },
+      "items": ["cloth", "rock"],
+      "visited": true
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (North)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 1,
+        "y": 2,
+        "z": 0
+      },
+      "paths": {
+        "north": false,
+        "east": true,
+        "south": true,
+        "west": true
+      },
+      "items": ["rock"]
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (North/East)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 2,
+        "y": 2,
+        "z": 0
+      },
+      "paths": {
+        "north": false,
+        "east": false,
+        "south": true,
+        "west": true
+      },
+      "items": ["rock"]
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (East)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 2,
+        "y": 1,
+        "z": 0
+      },
+      "paths": {
+        "north": true,
+        "east": false,
+        "south": true,
+        "west": true
+      },
+      "items": ["rock"]
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (South/East)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 2,
+        "y": 0,
+        "z": 0
+      },
+      "paths": {
+        "north": true,
+        "east": false,
+        "south": false,
+        "west": true
+      },
+      "items": ["rock"]
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (South)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 1,
+        "y": 0,
+        "z": 0
+      },
+      "paths": {
+        "north": true,
+        "east": true,
+        "south": false,
+        "west": true
+      },
+      "items": ["rock"]
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (South/West)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "paths": {
+        "north": true,
+        "east": true,
+        "south": false,
+        "west": false
+      },
+      "items": ["bucket", "rock", "resin"]
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (West)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "paths": {
+        "north": true,
+        "east": true,
+        "south": true,
+        "west": false
+      },
+      "items": ["rock"]
+    },
+    {
+      "name": "Inescapable Hole of Turbidity (North/West)",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "danger_level": "none",
+      "coords": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "paths": {
+        "north": false,
+        "east": true,
+        "south": true,
+        "west": false
+      },
+      "items": ["rock", "stick"]
+    }
+  ],
+  "player": {
+    "name": "",
+    "description": "The playable character in the world of Gem Warrior.",
+    "useable": true,
+    "useable_battle": false,
+    "talkable": true,
+    "consumable": false,
+    "takeable": false,
+    "equippable": false,
+    "equipped": false,
+    "used": false,
+    "used_again": false,
+    "number_of_uses": null,
+    "face": "face-y",
+    "hands": "handsy",
+    "mood": "moody",
+    "level": 1,
+    "xp": 0,
+    "hp_cur": 10,
+    "hp_max": 10,
+    "atk_lo": 1,
+    "atk_hi": 1,
+    "defense": 1,
+    "dexterity": 1,
+    "inventory": {
+      "items": [
+        {
+          "name": "rock",
+          "description": "A small, yet quite sharp, sedimentary pebble, suitable for tossing in amusement, and perhaps commerce.",
+          "useable": true,
+          "useable_battle": false,
+          "talkable": false,
+          "consumable": false,
+          "takeable": true,
+          "equippable": false,
+          "equipped": false,
+          "used": false,
+          "used_again": false,
+          "number_of_uses": null,
+          "is_armor": false,
+          "is_weapon": false
+        }
+      ],
+      "weapon": null,
+      "armor": null
+    },
+    "inventory_checks": 0,
     "coords": {
       "x": 1,
       "y": 1,
       "z": 0
     },
-    "paths": {
-      "north": true,
-      "east": true,
-      "south": true,
-      "west": true
-    },
-    "items": ["cloth", "rock"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (North)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 1,
-      "y": 2,
-      "z": 0
-    },
-    "paths": {
-      "north": false,
-      "east": true,
-      "south": true,
-      "west": true
-    },
-    "items": ["rock"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (North/East)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 2,
-      "y": 2,
-      "z": 0
-    },
-    "paths": {
-      "north": false,
-      "east": false,
-      "south": true,
-      "west": true
-    },
-    "items": ["rock"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (East)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 2,
-      "y": 1,
-      "z": 0
-    },
-    "paths": {
-      "north": true,
-      "east": false,
-      "south": true,
-      "west": true
-    },
-    "items": ["rock"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (South/East)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 2,
-      "y": 0,
-      "z": 0
-    },
-    "paths": {
-      "north": true,
-      "east": false,
-      "south": false,
-      "west": true
-    },
-    "items": ["rock"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (South)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 1,
-      "y": 0,
-      "z": 0
-    },
-    "paths": {
-      "north": true,
-      "east": true,
-      "south": false,
-      "west": true
-    },
-    "items": ["rock"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (South/West)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "paths": {
-      "north": true,
-      "east": true,
-      "south": false,
-      "west": false
-    },
-    "items": ["bucket", "rock", "resin"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (West)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 0,
-      "y": 1,
-      "z": 0
-    },
-    "paths": {
-      "north": true,
-      "east": true,
-      "south": true,
-      "west": false
-    },
-    "items": ["rock"]
-  },
-  {
-    "name": "Inescapable Hole of Turbidity (North/West)",
-    "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
-    "danger_level": "none",
-    "coords": {
-      "x": 0,
-      "y": 2,
-      "z": 0
-    },
-    "paths": {
-      "north": false,
-      "east": true,
-      "south": true,
-      "west": false
-    },
-    "items": ["rock", "stick"]
+    "status": "standing",
+    "items_taken": 0
   }
-]
+}

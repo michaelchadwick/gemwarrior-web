@@ -11,7 +11,7 @@ class Location extends Entity {
     this.paths                = options.paths
     this.danger_level         = options.danger_level
     this.monster_level_range  = options.monster_level_range
-    this.items                = options.items
+    this.items                = this._create_items(options.items)
     this.monsters_abounding   = options.monsters_abounding
     this.bosses_abounding     = options.bosses_abounding
     this.checked_for_monsters = options.checked_for_monsters
@@ -61,6 +61,8 @@ class Location extends Entity {
       result += this.list_items()
     }
 
+    this.visited = true
+
     return result
   }
 
@@ -99,15 +101,18 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
     return !this.items.length
   }
   has_item(item_name) {
+    // console.log('has_item() item_name', item_name)
+    // console.log('has_item() this.items', this.items)
+
     return this.items.some(loc_item => loc_item.name.toLowerCase() == item_name.toLowerCase())
   }
   add_item(item_name) {
     console.log('location add_item', item_name)
 
-    return this.items.push(GemWarrior.world.create_custom_item(item_name))
+    return this.items.push(Utils.create_custom_item(item_name))
   }
   remove_item(item_name) {
-    console.log('location remove_item', item_name)
+    // console.log('location remove_item', item_name)
 
     if (this.has_item(item_name)) {
       const index = Object.values(this.items).map(item => item.name.toLowerCase()).indexOf(item_name.toLowerCase())
@@ -191,4 +196,23 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
   // has_boss(boss_name) {}
   // list_actionable_words() {}
   // populate_monsters() {}
+
+  /* private */
+
+  // create array of objects (or json strings->objects) to fill current location's items
+  _create_items(item_list) {
+    const item_objects = []
+
+    if (item_list.length) {
+      Object.values(item_list).forEach(item => {
+        if (typeof item == 'object') {
+          item_objects.push(item)
+        } else {
+          item_objects.push(Utils.create_custom_item(item))
+        }
+      })
+    }
+
+    return item_objects
+  }
 }

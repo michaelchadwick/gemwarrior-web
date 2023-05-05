@@ -3,8 +3,6 @@ class Utils {
     const obj1Keys = Object.keys(obj1).sort()
     const obj2Keys = Object.keys(obj2).sort()
 
-    console.log('are_equal', Object.values(obj1), Object.values(obj2))
-
     if (obj1Keys.length !== obj2Keys.length) {
       return false
     } else {
@@ -16,6 +14,29 @@ class Utils {
       })
 
       return areEqual
+    }
+  }
+
+  static create_custom_item(data) {
+    const item_name = (typeof data == 'object') ? data.name : data
+
+    // if (typeof data == 'object') {
+    //   console.log(`create_custom_item(${JSON.stringify(data)})`)
+    // } else {
+    //   console.log(`create_custom_item(${data})`)
+    // }
+
+    switch (item_name) {
+      case 'bucket': return new Bucket(data)
+      case 'cloth': return new Cloth(data)
+      case 'etching': return new Etching(data)
+      case 'indentation': return new Indentation(data)
+      case 'resin': return new Resin(data)
+      case 'rock': return new Rock(data)
+      case 'stick': return new Stick(data)
+      case 'torch': return new Torch(data)
+      default:
+        return false
     }
   }
 }

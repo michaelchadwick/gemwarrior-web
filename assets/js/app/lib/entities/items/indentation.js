@@ -1,9 +1,9 @@
 class Indentation extends Item {
-  constructor() {
+  constructor(options = null) {
     super()
 
     this.name         = 'indentation'
-    this.description  = 'Raised stone, not flush with the rest of the wall.'
+    this.description  = options.description || 'Raised stone, not flush with the rest of the wall.'
     this.takeable     = false
   }
 

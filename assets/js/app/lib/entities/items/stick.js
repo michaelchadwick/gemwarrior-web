@@ -1,11 +1,11 @@
 class Stick extends Item {
-  constructor() {
+  constructor(options = null) {
     super()
 
     this.name         = 'stick'
-    this.description  = 'Fragment of a tree.'
-    this.is_clothed   = false
-    this.is_resined   = false
+    this.description  = options.description || 'Fragment of a tree.'
+    this.is_clothed   = options.is_clothed || false
+    this.is_resined   = options.is_resined || false
   }
 
   use() {

@@ -172,20 +172,24 @@ GemWarrior.initApp = async function() {
 
   await GemWarrior._loadSettings()
 
-  GemWarrior._resizeFixed()
-
   GemWarrior._initAvatarWorker()
 
-  GemWarrior._attachEventHandlers()
+  await GemWarrior._loadWorld()
 
-  GemWarrior._loadWorld()
+  GemWarrior._updateDashboard()
 
   GemWarrior._getNebyooApps()
 
-  // initial command
-  window.scrollTo(0,1)
+  GemWarrior._attachEventHandlers()
 
   console.log('[LOADED] /app/main')
+
+  // need to run this once at the end of initApp
+  // because window.onload doesn't trigger correctly
+  GemWarrior._resizeFixedElements()
+
+  // initial command
+  window.scrollTo(0,1)
 }
 
 /*************************************************************************
@@ -455,12 +459,12 @@ GemWarrior._saveSetting = function(setting, value) {
 
 // load entire GemWarrior world into existence
 GemWarrior._loadWorld = async function() {
-  console.log('[INITIALIZING] /app/world')
+  // console.log('[INITIALIZING] /app/world')
 
   const lsWorld = localStorage.getItem(GW_WORLD_KEY)
 
   if (lsWorld) {
-    console.log('Saved world data found. Loading...')
+    // console.log('Saved world data found. Loading...')
 
     const lsWorldObj = JSON.parse(lsWorld)
 
@@ -468,7 +472,7 @@ GemWarrior._loadWorld = async function() {
 
     console.log('[LOADED] /app/world(saved)')
 
-    GemWarrior._updateInterface()
+    // GemWarrior._updateDashboard()
 
     if (GemWarrior.settings.firstTime) {
       await modalOpen('start')
@@ -476,14 +480,15 @@ GemWarrior._loadWorld = async function() {
       GemWarrior._displayWelcomeBack()
     }
   } else {
-    const jsonLocations = await fetch(GW_WORLD_IHOT_JSON_URL)
+    // console.log('No saved world data found. Loading default world...')
 
-    if (jsonLocations) {
-      const worldObj = {}
-      worldObj.locations = await jsonLocations.json()
+    const defaultWorld = await fetch(GW_WORLD_IHOT_JSON_URL)
 
-      if (worldObj) {
-        GemWarrior.world = new World(worldObj)
+    if (defaultWorld) {
+      const defaultWorldObj = await defaultWorld.json()
+
+      if (defaultWorldObj) {
+        GemWarrior.world = new World(defaultWorldObj)
 
         // create name for player inside world
         const ng = new NameGenerator('fantasy')
@@ -507,7 +512,9 @@ GemWarrior._loadWorld = async function() {
 
         console.log('[LOADED] /app/world(default)')
 
-        GemWarrior._updateInterface()
+        GemWarrior.world.save()
+
+        // GemWarrior._updateDashboard()
       } else {
         console.error('could not load default world data')
       }
@@ -660,12 +667,12 @@ GemWarrior._attachEventHandlers = function() {
   window.addEventListener('touchend', GemWarrior.__handleClickTouch)
 
   // on viewport change, resize output
-  window.onresize = GemWarrior._resizeFixed
+  window.onresize = GemWarrior._resizeFixedElements
 }
 
 // update user stats and send command result to display function
 GemWarrior._repl = function(result) {
-  GemWarrior._updateInterface()
+  GemWarrior._updateDashboard()
   GemWarrior._out(result)
 }
 
@@ -685,8 +692,8 @@ GemWarrior._out = function(text, noLineBreak) {
 }
 
 // update DOM stats and save to localStorage
-GemWarrior._updateInterface = function() {
-  // console.log('_updateInterface()', GemWarrior.world.player.rox())
+GemWarrior._updateDashboard = function() {
+  // console.log('_updateDashboard()')
 
   GemWarrior.dom.statsNM.text(GemWarrior.world.player.name)
   GemWarrior.dom.statsLV.text(GemWarrior.world.player.level)
@@ -697,7 +704,7 @@ GemWarrior._updateInterface = function() {
 }
 
 // resize fixed elements when viewport changes
-GemWarrior._resizeFixed = function() {
+GemWarrior._resizeFixedElements = function() {
   // console.log('resized fixed elements')
 
   $('header').width(window.innerWidth - 32)

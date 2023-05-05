@@ -1,9 +1,9 @@
 class Cloth extends Item {
-  constructor() {
+  constructor(options = null) {
     super()
 
     this.name         = 'cloth'
-    this.description  = "Leftovers from someone's shirt, most likely."
+    this.description  = options.description || "Leftovers from someone's shirt, most likely."
   }
 
   use() {

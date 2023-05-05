@@ -1,9 +1,9 @@
 class Etching extends Item {
-  constructor() {
+  constructor(options = null) {
     super()
 
     this.name         = 'etching'
-    this.description  = 'Crude scrawling made into the wall reads: "I just wish someone would pick up around here".'
+    this.description  = options.description || 'Crude scrawling made into the wall reads: "I just wish someone would pick up around here".'
     this.takeable     = false
   }
 

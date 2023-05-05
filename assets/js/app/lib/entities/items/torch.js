@@ -1,9 +1,9 @@
 class Torch extends Item {
-  constructor() {
+  constructor(options = null) {
     super()
 
     this.name         = 'torch'
-    this.description  = 'An illuminating piece of wood with fire at the end.'
+    this.description  = options.description || 'An illuminating piece of wood with fire at the end.'
   }
 
   use() {

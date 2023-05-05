@@ -1,6 +1,6 @@
 class Inventory {
   constructor(items = [], weapon = null, armor = null) {
-    this.items  = items
+    this.items  = this._create_items(items)
     this.weapon = weapon
     this.armor  = armor
 
@@ -90,7 +90,7 @@ class Inventory {
       // build hash out of location's items
       const item_hash = {}
 
-      this.items.map(item => item.name).forEach(name => {
+      Object.values(this.items).forEach(name => {
         if (Object.keys(item_hash).includes(name)) {
           item_hash[name] += 1
         } else {
@@ -195,7 +195,7 @@ class Inventory {
     if (!cur_loc) {
       // create Item-extended class instance
       // add it to this inventory
-      this.items.push(GemWarrior.world.create_custom_item(item_name))
+      this.items.push(Utils.create_custom_item(item_name))
 
       return `Added <span class="noun">${item_name}</span> to your increasing collection of bits of tid.`
     } else {
@@ -207,7 +207,7 @@ class Inventory {
           if (item.takeable) {
             // create Item-extended class instance
             // add it to this.inv
-            this.items.push(GemWarrior.world.create_custom_item(item_name))
+            this.items.push(Utils.create_custom_item(item_name))
             // remove item with same name from loc
             cur_loc.remove_item(item_name)
 
@@ -216,7 +216,7 @@ class Inventory {
 
             GemWarrior._playSFX('take')
 
-            if (GemWarrior.world.player.inventory.rox() == GW_IHOT_MAX_ROX) {
+            if (this.rox() == GW_IHOT_MAX_ROX) {
               setTimeout(() => GemWarrior._playSFX('secret'), 500)
 
               GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).add_item('indentation')
@@ -258,7 +258,7 @@ class Inventory {
 
       if (
         item_name == 'rock' &&
-        GemWarrior.world.player.inventory.rox() < GW_IHOT_MAX_ROX &&
+        this.rox() < GW_IHOT_MAX_ROX &&
         GemWarrior.world.location.has_item('indentation')
       ) {
         setTimeout(() => GemWarrior._playSFX('secret'), 500)
@@ -352,5 +352,18 @@ class Inventory {
 
   _article_chooser(word) {
     return VOWELS.includes(word[0]) || this._an_words().includes(word) ? 'an' : 'a'
+  }
+
+  // create array of custom objects to fill current inventory's items
+  _create_items(item_list) {
+    const item_objects = []
+
+    if (item_list.length) {
+      Object.values(item_list).forEach(item => {
+        item_objects.push(Utils.create_custom_item(item))
+      })
+    }
+
+    return item_objects
   }
 }

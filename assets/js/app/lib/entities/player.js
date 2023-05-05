@@ -10,8 +10,9 @@ class Player extends Creature {
       this.name = options.name
       this.level = options.level
       this.xp = options.xp
-      this.hp = options.hp
-      this.inventory = options.inventory
+      this.hp = options.hp_cur
+      this.hp_max = options.hp_max
+      this.inventory = this._create_inventory(options.inventory.items)
       this.inventory_checks = options.inventory_checks
       this.coords = options.coords
       this.status = options.status
@@ -20,12 +21,13 @@ class Player extends Creature {
       this.name = ''
       this.level = 1
       this.xp = 0
-      this.hp = 10
+      this.hp_cur = 10
+      this.hp_max = 10
       // normal
-      // this.inventory = new Inventory([
-      //   new Rock()
-      // ])
-      // debug
+      this.inventory = new Inventory([
+        new Rock()
+      ])
+      // IHOT all stuff needed for torch
       // this.inventory = new Inventory([
       //   new Bucket(),
       //   new Cloth(),
@@ -34,11 +36,12 @@ class Player extends Creature {
       //   new Rock(),
       //   new Stick()
       // ])
-      this.inventory = new Inventory([
-        new Rock(),new Rock(),new Rock(),new Rock(),new Rock(),
-        new Rock(),new Rock(),new Rock(),new Rock(),new Rock(),
-        new Torch()
-      ])
+      // IHOT win state
+      // this.inventory = new Inventory([
+      //   new Rock(),new Rock(),new Rock(),new Rock(),new Rock(),
+      //   new Rock(),new Rock(),new Rock(),new Rock(),new Rock(),
+      //   new Torch()
+      // ])
       this.inventory_checks = 0
       this.coords = {
         x: 1, y: 1, z: 0
@@ -46,6 +49,8 @@ class Player extends Creature {
       this.status = 'standing'
       this.items_taken = 0
     }
+
+    this.description = `The playable character in the world of ${PROGRAM_NAME}.`
 
     console.log('[LOADED] /app/lib/entities/player')
   }
@@ -59,8 +64,13 @@ class Player extends Creature {
         <li>
           You are reasonably healthy, but due to your current location and station, that feeling of heartiness ever diminishes.
         </li>
+        <li>You have taken ${this.items_taken} item(s).</li>
       </ul>
     `
+  }
+
+  use() {
+    return 'You may not, uh, <em>use</em> yourself.'
   }
 
   go(direction) {
@@ -101,10 +111,10 @@ class Player extends Creature {
   list_inventory() {
     let roxCount = ''
 
-    if (this.rox() === 1) {
+    if (this.inventory.rox() === 1) {
       roxCount = ' <strong>1</strong> rock'
     } else {
-      roxCount = ` <strong>${this.rox()}</strong> rox`
+      roxCount = ` <strong>${this.inventory.rox()}</strong> rox`
     }
 
     const playerInv = GemWarrior.world.player.inventory
@@ -159,5 +169,22 @@ class Player extends Creature {
     this.name = name.join('')
 
     return this.name
+  }
+
+  // create array of objects (or json strings->objects) to fill current player's inventory items
+  _create_inventory(item_list) {
+    const item_objects = []
+
+    if (item_list.length) {
+      Object.values(item_list).forEach(item => {
+        if (typeof item == 'object') {
+          item_objects.push(item)
+        } else {
+          item_objects.push(Utils.create_custom_item(item))
+        }
+      })
+    }
+
+    return new Inventory(item_objects)
   }
 }

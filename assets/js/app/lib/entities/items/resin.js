@@ -1,9 +1,9 @@
 class Resin extends Item {
-  constructor() {
+  constructor(options = null) {
     super()
 
     this.name         = 'resin'
-    this.description  = "A small flask of what appears to be tree bark resin."
+    this.description  = options.description || 'A small flask of what appears to be tree bark resin.'
   }
 
   use() {
