@@ -70,6 +70,7 @@ const GW_DEFAULTS = {
   'settings': {
     'enableSound': false,
     'firstTime': true,
+    'hasChangedName': false,
     'showAvatar': true,
     'soundBGMLevel': 0.1,
     'soundSFXLevel': 0.2,

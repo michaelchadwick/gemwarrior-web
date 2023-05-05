@@ -333,6 +333,10 @@ class Evaluator {
                 GemWarrior.world.player.name = arg2.trim()
 
                 GemWarrior.config.outText = `You are now known as <span class="noun">${arg2}</span>.`
+
+                GemWarrior._saveSetting('hasChangedName', true)
+
+                GemWarrior.world.save()
               }
 
               break

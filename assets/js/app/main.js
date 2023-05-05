@@ -258,6 +258,10 @@ GemWarrior._loadSettings = async function() {
       GemWarrior.settings.firstTime = lsSettings.firstTime
     }
 
+    if (lsSettings.hasChangedName !== undefined) {
+      GemWarrior.settings.hasChangedName = lsSettings.hasChangedName
+    }
+
     if (lsSettings.showAvatar !== undefined) {
       GemWarrior.settings.showAvatar = lsSettings.showAvatar
 
@@ -754,13 +758,20 @@ GemWarrior._displayWelcome = function() {
   const len = name.length
   const sp = GemWarrior._sp(28 - len)
   const will_save = GemWarrior.options.world_save
+  const has_renamed = GemWarrior.settings.hasChangedName
 
   let output = `
 *********************************************
 * Welcome to <span class="noun">${PROGRAM_NAME}</span>!                   *
-* - Try <span class="keyword">help</span> if stuck                       *
-* - Type <span class="keyword">change name [new-name]</span> to rename   *
-*   your randomly-named character           *
+* - Try <span class="keyword">help</span> if stuck                       *`
+
+  if (!has_renamed) {
+    output += `
+* - Type <span class="keyword">change name [new-name]</span>             *
+*   to rename your character                *`
+  }
+
+  output += `
 * - Top-right gear icon for options         *`
 
   if (!will_save) {
@@ -781,13 +792,20 @@ GemWarrior._displayWelcomeBack = function() {
   const len = name.length
   const sp = GemWarrior._sp(12 - len).length > 0 ? GemWarrior._sp(12 - len) : ''
   const will_save = GemWarrior.options.world_save
+  const has_renamed = GemWarrior.settings.hasChangedName
 
   let output = `
 *********************************************
 * Welcome back to <span class="noun">${PROGRAM_NAME}</span>, <span class="noun">${name}</span>!${sp}*
-* - Try <span class="keyword">help</span> if stuck                       *
-* - Type <span class="keyword">change name [new-name]</span> to rename   *
-*   your randomly-named character           *
+* - Try <span class="keyword">help</span> if stuck                       *`
+
+  if (!has_renamed) {
+    output += `
+* - Type <span class="keyword">change name [new-name]</span>             *
+*   to rename your character                *`
+  }
+
+  output += `
 * - Top-right gear icon for options         *`
 
   if (!will_save) {
