@@ -40,7 +40,7 @@ class Evaluator {
       case 'character':
       case 'char':
       case 'c':
-        GemWarrior.config.outText = GemWarrior.world.player.describe()
+        GemWarrior.config.textOutput = GemWarrior.world.player.describe()
 
         break
 
@@ -48,17 +48,17 @@ class Evaluator {
       case 'inven':
       case 'inv':
       case 'i':
-        GemWarrior.config.outText = GemWarrior.world.player.inventory.describe_items()
+        GemWarrior.config.textOutput = GemWarrior.world.player.inventory.describe_items()
 
         break
 
       case 'sit':
       case 'si':
         if (GemWarrior.world.player.status === 'sitting') {
-          GemWarrior.config.outText = `You are already ${GemWarrior.world.player.status}.`
+          GemWarrior.config.textOutput = `You are already ${GemWarrior.world.player.status}.`
         } else {
           GemWarrior._avatarSit({ sound: true })
-          GemWarrior.config.outText = 'You sit down.'
+          GemWarrior.config.textOutput = 'You sit down.'
         }
 
         break
@@ -66,10 +66,10 @@ class Evaluator {
       case 'stand':
       case 'st':
         if (GemWarrior.world.player.status === 'standing') {
-          GemWarrior.config.outText = `You are already ${GemWarrior.world.player.status}.`
+          GemWarrior.config.textOutput = `You are already ${GemWarrior.world.player.status}.`
         } else {
           GemWarrior._avatarStand({ sound: true })
-          GemWarrior.config.outText = 'You stand up.'
+          GemWarrior.config.textOutput = 'You stand up.'
         }
 
         break
@@ -77,12 +77,12 @@ class Evaluator {
       case 'sleep':
       case 'sl':
         if (GemWarrior.world.player.status == 'sleeping') {
-          GemWarrior.config.outText = 'You are already resting.'
+          GemWarrior.config.textOutput = 'You are already resting.'
         } else {
           GemWarrior.world.player.status = 'sleeping'
           GemWarrior._avatarSleep(true)
 
-          GemWarrior.config.outText = 'You lie down to rest.'
+          GemWarrior.config.textOutput = 'You lie down to rest.'
         }
 
         break
@@ -94,29 +94,29 @@ class Evaluator {
         if (arg1) {
           GemWarrior.evaluator.parse(arg1.toLowerCase())
         } else {
-          GemWarrior.config.outText = 'You cannot just <span class="keyword">go</span> without a direction.'
+          GemWarrior.config.textOutput = 'You cannot just <span class="keyword">go</span> without a direction.'
         }
 
         break
 
       case 'north':
       case 'n':
-        GemWarrior.config.outText = this._try_to_move_player('north')
+        GemWarrior.config.textOutput = this._try_to_move_player('north')
         break
 
       case 'west':
       case 'w':
-        GemWarrior.config.outText = this._try_to_move_player('west')
+        GemWarrior.config.textOutput = this._try_to_move_player('west')
         break
 
       case 'south':
       case 's':
-        GemWarrior.config.outText = this._try_to_move_player('south')
+        GemWarrior.config.textOutput = this._try_to_move_player('south')
         break
 
       case 'east':
       case 'e':
-        GemWarrior.config.outText = this._try_to_move_player('east')
+        GemWarrior.config.textOutput = this._try_to_move_player('east')
         break
 
       // action
@@ -125,13 +125,13 @@ class Evaluator {
       case 'ls':
       case 'l':
         if (!arg1) {
-          if (GemWarrior.options.debug_mode) {
-            GemWarrior.config.outText = GemWarrior.world.location.describe_detailed()
+          if (GemWarrior.config.debugMode) {
+            GemWarrior.config.textOutput = GemWarrior.world.location.describe_detailed()
           } else {
-            GemWarrior.config.outText = GemWarrior.world.location.describe()
+            GemWarrior.config.textOutput = GemWarrior.world.location.describe()
           }
         } else {
-          GemWarrior.config.outText = GemWarrior.world.describe_entity(GemWarrior.world.location, arg1.toLowerCase())
+          GemWarrior.config.textOutput = GemWarrior.world.describe_entity(GemWarrior.world.location, arg1.toLowerCase())
         }
 
         break
@@ -141,9 +141,9 @@ class Evaluator {
       case 'take':
       case 't':
         if (!arg1) {
-          GemWarrior.config.outText = ERROR_TAKE_PARAM_MISSING
+          GemWarrior.config.textOutput = ERROR_TAKE_PARAM_MISSING
         } else {
-          GemWarrior.config.outText = GemWarrior.world.player.inventory.add_item(arg1.toLowerCase(), GemWarrior.world.location)
+          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.add_item(arg1.toLowerCase(), GemWarrior.world.location)
         }
 
         break
@@ -151,9 +151,9 @@ class Evaluator {
       case 'drop':
       case 'dr':
         if (!arg1) {
-          GemWarrior.config.outText = ERROR_DROP_PARAM_MISSING
+          GemWarrior.config.textOutput = ERROR_DROP_PARAM_MISSING
         } else {
-          GemWarrior.config.outText = GemWarrior.world.player.inventory.drop_item(arg1.toLowerCase())
+          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.drop_item(arg1.toLowerCase())
         }
 
         break
@@ -291,7 +291,7 @@ class Evaluator {
 
         GemWarrior.world.save()
 
-        GemWarrior.config.outText = result
+        GemWarrior.config.textOutput = result
 
         break
 
@@ -300,43 +300,43 @@ class Evaluator {
       case 'help':
       case 'h':
       case '?':
-        GemWarrior.config.outText = GemWarrior._displayHelp()
+        GemWarrior.config.textOutput = GemWarrior._displayHelp()
 
         break
 
       case 'commands':
       case 'com':
-        GemWarrior.config.outText = GemWarrior._displayCommands()
+        GemWarrior.config.textOutput = GemWarrior._displayCommands()
 
         break
 
       case 'history':
       case 'hist':
-        GemWarrior.config.outText = GemWarrior.__getHistoryDisplay()
+        GemWarrior.config.textOutput = GemWarrior.__getHistoryDisplay()
 
         break
 
       case 'about':
       case 'ab':
-        GemWarrior.config.outText = GW_ABOUT_TEXT
+        GemWarrior.config.textOutput = GW_ABOUT_TEXT
 
         break
 
       case 'change':
       case 'ch':
         if (!arg1) {
-          GemWarrior.config.outText = ERROR_CHANGE_PARAM_MISSING
+          GemWarrior.config.textOutput = ERROR_CHANGE_PARAM_MISSING
         } else {
           switch(arg1.toLowerCase()) {
             case 'name':
               if (!arg2) {
-                GemWarrior.config.outText = 'If you want to <span class="keyword">change</span> your <span class="noun">name</span>, you must indicate <em>what</em> you would like to change it to.'
+                GemWarrior.config.textOutput = 'If you want to <span class="keyword">change</span> your <span class="noun">name</span>, you must indicate <em>what</em> you would like to change it to.'
               } else if (arg2.length > GW_NAME_LENGTH_MAX) {
-                GemWarrior.config.outText = `That name is too long. Try again with something fewer than ${GW_NAME_LENGTH_MAX} characters.`
+                GemWarrior.config.textOutput = `That name is too long. Try again with something fewer than ${GW_NAME_LENGTH_MAX} characters.`
               } else {
                 GemWarrior.world.player.name = arg2.trim()
 
-                GemWarrior.config.outText = `You are now known as <span class="noun">${arg2}</span>.`
+                GemWarrior.config.textOutput = `You are now known as <span class="noun">${arg2}</span>.`
 
                 GemWarrior._saveSetting('hasChangedName', true)
 
@@ -345,25 +345,25 @@ class Evaluator {
 
               break
 
-            case 'debug_mode':
+            case 'debugMode':
               if (!arg2) {
-                GemWarrior.config.outText = 'If you want to <span class="keyword">change</span> <span class="argument">debug_mode</span>, you must indicate <em>what</em> you would like to change it to.'
+                GemWarrior.config.textOutput = 'If you want to <span class="keyword">change</span> <span class="argument">debugMode</span>, you must indicate <em>what</em> you would like to change it to.'
               } else {
                 if (arg2.toLowerCase() == 'true') {
-                  GemWarrior.options.debug_mode = true
+                  GemWarrior.config.debugMode = true
 
-                  GemWarrior.config.outText = `${PROGRAM_NAME}'s <span class="keyword">debug_mode</span> is now <span class="keyword true">true</span>`
+                  GemWarrior.config.textOutput = `${PROGRAM_NAME}'s <span class="keyword">debugMode</span> is now <span class="keyword true">true</span>`
                 } else {
-                  GemWarrior.options.debug_mode = false
+                  GemWarrior.config.debugMode = false
 
-                  GemWarrior.config.outText = `${PROGRAM_NAME}'s <span class="keyword">debug_mode</span> is now <span class="keyword false">false</span>`
+                  GemWarrior.config.textOutput = `${PROGRAM_NAME}'s <span class="keyword">debugMode</span> is now <span class="keyword false">false</span>`
                 }
               }
 
               break
 
             default:
-              GemWarrior.config.outText = `You cannot <span class="keyword">change</span> <span class="argument">${arg1}</span>...<em>yet</em>.`
+              GemWarrior.config.textOutput = `You cannot <span class="keyword">change</span> <span class="argument">${arg1}</span>...<em>yet</em>.`
               break
           }
         }
@@ -375,19 +375,19 @@ class Evaluator {
       case 'playbgm':
       case 'play':
         if (GemWarrior.settings.enableSound) {
-          if (!GemWarrior.config.synth_bgm.playing) {
+          if (!GemWarrior.config.synthBGM.playing) {
             if (GemWarrior.world.player.status == 'sleeping') {
               GemWarrior._playBGM('sleep')
             } else {
               GemWarrior._playBGM('main')
             }
 
-            GemWarrior.config.outText = 'Playing background music.'
+            GemWarrior.config.textOutput = 'Playing background music.'
           } else {
-            GemWarrior.config.outText = 'Background music is already playing.'
+            GemWarrior.config.textOutput = 'Background music is already playing.'
           }
         } else {
-          GemWarrior.config.outText = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
+          GemWarrior.config.textOutput = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
         }
 
         break
@@ -395,26 +395,26 @@ class Evaluator {
       case 'stopbgm':
       case 'stop':
         if (GemWarrior.settings.enableSound) {
-          if (GemWarrior.config.synth_bgm.playing) {
+          if (GemWarrior.config.synthBGM.playing) {
             GemWarrior._stopBGM()
 
-            GemWarrior.config.outText = 'Background music has stopped.'
+            GemWarrior.config.textOutput = 'Background music has stopped.'
           } else {
-            GemWarrior.config.outText = 'Background is not playing, so this has no effect.'
+            GemWarrior.config.textOutput = 'Background is not playing, so this has no effect.'
           }
         } else {
-          GemWarrior.config.outText = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
+          GemWarrior.config.textOutput = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
         }
 
         break
 
       default:
-        GemWarrior.config.outText = 'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
+        GemWarrior.config.textOutput = 'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
 
         break
     }
 
-    return GemWarrior.config.outText
+    return GemWarrior.config.textOutput
   }
 
   /* private */

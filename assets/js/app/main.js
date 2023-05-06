@@ -14,9 +14,6 @@ GemWarrior.config.env = GW_ENV_PROD_URL.includes(document.location.hostname) ? '
 // create new instance of Evaluator class to parse commands
 GemWarrior.evaluator = new Evaluator()
 
-// create new instance of GameOptions class for global internal options
-GemWarrior.options = new GameOptions()
-
 /*************************************************************************
  * public methods *
  *************************************************************************/
@@ -234,7 +231,7 @@ GemWarrior._loadSettings = async function() {
 
       if (GemWarrior.settings.enableSound) {
         // create synths
-        if (!GemWarrior.config.synth_bgm || !GemWarrior.config.synth_sfx) {
+        if (!GemWarrior.config.synthBGM || !GemWarrior.config.synthSFX) {
           GemWarrior._initSynths()
         }
 
@@ -279,10 +276,10 @@ GemWarrior._loadSettings = async function() {
     }
 
     if (lsSettings.soundBGMLevel !== undefined) {
-      if (GemWarrior.config.synth_bgm) {
+      if (GemWarrior.config.synthBGM) {
         GemWarrior.settings.soundBGMLevel = lsSettings.soundBGMLevel
 
-        GemWarrior.config.synth_bgm.setMasterVol(GemWarrior.settings.soundBGMLevel)
+        GemWarrior.config.synthBGM.setMasterVol(GemWarrior.settings.soundBGMLevel)
 
         setting = document.getElementById('range-setting-bgm-level')
 
@@ -290,14 +287,14 @@ GemWarrior._loadSettings = async function() {
           setting.value = GemWarrior.settings.soundBGMLevel * 100
         }
       } else {
-        // console.error('no synth_bgm found, so cannot set level')
+        // console.error('no synthBGM found, so cannot set level')
       }
     }
     if (lsSettings.soundSFXLevel !== undefined) {
-      if (GemWarrior.config.synth_sfx) {
+      if (GemWarrior.config.synthSFX) {
         GemWarrior.settings.soundSFXLevel = lsSettings.soundSFXLevel
 
-        GemWarrior.config.synth_sfx.setMasterVol(GemWarrior.settings.soundSFXLevel)
+        GemWarrior.config.synthSFX.setMasterVol(GemWarrior.settings.soundSFXLevel)
 
         setting = document.getElementById('range-setting-sfx-level')
 
@@ -305,7 +302,7 @@ GemWarrior._loadSettings = async function() {
           setting.value = GemWarrior.settings.soundSFXLevel * 100
         }
       } else {
-        // console.error('no synth_sfx found, so cannot set level')
+        // console.error('no synthSFX found, so cannot set level')
       }
     }
 
@@ -355,8 +352,8 @@ GemWarrior._changeSetting = function(setting, event = null) {
           GemWarrior._stopBGM()
 
           // destroy synth instance
-          GemWarrior.config.synth_bgm = null
-          GemWarrior.config.synth_sfx = null
+          GemWarrior.config.synthBGM = null
+          GemWarrior.config.synthSFX = null
 
           for (elem of document.getElementsByClassName('requires-sound')) {
             elem.classList.remove('enabled')
@@ -402,10 +399,10 @@ GemWarrior._changeSetting = function(setting, event = null) {
       // set config
       const newBGMLevel = parseInt(event.target.value) / 100
 
-      if (GemWarrior.config.synth_bgm) {
-        GemWarrior.config.synth_bgm.setMasterVol(newBGMLevel)
+      if (GemWarrior.config.synthBGM) {
+        GemWarrior.config.synthBGM.setMasterVol(newBGMLevel)
       } else {
-        console.error('no synth_bgm found, so cannot set level')
+        console.error('no synthBGM found, so cannot set level')
       }
 
       // save to code/LS
@@ -417,10 +414,10 @@ GemWarrior._changeSetting = function(setting, event = null) {
       // set config
       const newSFXLevel = parseInt(event.target.value) / 100
 
-      if (GemWarrior.config.synth_sfx) {
-        GemWarrior.config.synth_sfx.setMasterVol(newSFXLevel)
+      if (GemWarrior.config.synthSFX) {
+        GemWarrior.config.synthSFX.setMasterVol(newSFXLevel)
       } else {
-        console.error('no synth_sfx found, so cannot set level')
+        console.error('no synthSFX found, so cannot set level')
       }
 
       // save to code/LS
@@ -757,7 +754,7 @@ GemWarrior._displayWelcome = function() {
   const name = GemWarrior.world.player.name
   const len = name.length
   const sp = GemWarrior._sp(28 - len)
-  const will_save = GemWarrior.options.world_save
+  const will_save = GemWarrior.config.worldSave
   const has_renamed = GemWarrior.settings.hasChangedName
 
   let output = `
@@ -791,7 +788,7 @@ GemWarrior._displayWelcomeBack = function() {
   const name = GemWarrior.world.player.name
   const len = name.length
   const sp = GemWarrior._sp(12 - len).length > 0 ? GemWarrior._sp(12 - len) : ''
-  const will_save = GemWarrior.options.world_save
+  const will_save = GemWarrior.config.worldSave
   const has_renamed = GemWarrior.settings.hasChangedName
 
   let output = `

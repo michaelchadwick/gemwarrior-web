@@ -125,17 +125,17 @@ class Player extends Creature {
     })
 
     if (!GemWarrior.world.player.inventory.is_empty()) {
-      GemWarrior.config.outText = `You have the clothes on your back, ${invOutput.join(', ')}, and <span class="noun">${roxCount}</span>`
+      GemWarrior.config.textOutput = `You have the clothes on your back, ${invOutput.join(', ')}, and <span class="noun">${roxCount}</span>`
 
       if (GemWarrior.world.player.inventory_checks >= 1) {
-        GemWarrior.config.outText += '.'
+        GemWarrior.config.textOutput += '.'
       } else {
-        GemWarrior.config.outText += '. You also can\'t shake the lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
+        GemWarrior.config.textOutput += '. You also can\'t shake the lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
 
         GemWarrior.world.player.inventory_checks++
       }
     } else {
-      GemWarrior.config.outText = `You have nothing on your person except the clothes on your back and ${roxCount}`
+      GemWarrior.config.textOutput = `You have nothing on your person except the clothes on your back and ${roxCount}`
     }
   }
 

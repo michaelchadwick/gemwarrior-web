@@ -5,9 +5,9 @@
 GemWarrior._initSynths = function() {
   // console.log('[INITIALIZING] synths')
 
-  if (!GemWarrior.config.synth_bgm) {
-    // initialize synth_bgm instance
-    GemWarrior.config.synth_bgm = new WebAudioTinySynth({
+  if (!GemWarrior.config.synthBGM) {
+    // initialize synthBGM instance
+    GemWarrior.config.synthBGM = new WebAudioTinySynth({
       debug: 1,
       loop: 1,
       masterVol: GemWarrior.settings.soundBGMLevel,
@@ -18,19 +18,19 @@ GemWarrior._initSynths = function() {
     })
   }
 
-  GemWarrior.config.synth_bgm.setLoop(1)
-  GemWarrior.config.synth_bgm.setMasterVol(GemWarrior.settings.soundBGMLevel)
-  GemWarrior.config.synth_bgm.setProgram(0, 2)
+  GemWarrior.config.synthBGM.setLoop(1)
+  GemWarrior.config.synthBGM.setMasterVol(GemWarrior.settings.soundBGMLevel)
+  GemWarrior.config.synthBGM.setProgram(0, 2)
 
-  if (GemWarrior.config.synth_bgm) {
-    // console.log('* synth_bgm initialized!')
+  if (GemWarrior.config.synthBGM) {
+    // console.log('* synthBGM initialized!')
   } else {
-    console.error('* synth_bgm could not be initialized')
+    console.error('* synthBGM could not be initialized')
   }
 
-  if (!GemWarrior.config.synth_sfx) {
-    // initialize synth_bgm instance
-    GemWarrior.config.synth_sfx = new WebAudioTinySynth({
+  if (!GemWarrior.config.synthSFX) {
+    // initialize synthBGM instance
+    GemWarrior.config.synthSFX = new WebAudioTinySynth({
       debug: 0,
       loop: 0,
       quality: 1, // 0: chiptune, 1: FM
@@ -40,10 +40,10 @@ GemWarrior._initSynths = function() {
     })
   }
 
-  if (GemWarrior.config.synth_sfx) {
-    // console.log('* synth_sfx initialized!')
+  if (GemWarrior.config.synthSFX) {
+    // console.log('* synthSFX initialized!')
   } else {
-    console.error('* synth_sfx could not be initialized')
+    console.error('* synthSFX could not be initialized')
   }
 
   console.log('[LOADED] /app/lib/misc/audio(synths)')
@@ -52,46 +52,46 @@ GemWarrior._playBGM = function(action) {
   if (GemWarrior.settings.enableSound) {
     const filename = `/assets/audio/gw-bgm-${action}.mid`
 
-    GemWarrior.config.synth_bgm.loadMIDIUrl(filename)
+    GemWarrior.config.synthBGM.loadMIDIUrl(filename)
 
     setTimeout(() => {
       // console.log('_playBGM()', filename)
 
       // setInterval(() => {
-      //   console.log('synth_bgm.playStatus()',
-      //     GemWarrior.config.synth_bgm.getPlayStatus()
+      //   console.log('synthBGM.playStatus()',
+      //     GemWarrior.config.synthBGM.getPlayStatus()
       //   )
       // }, 1000)
 
-      GemWarrior.config.synth_bgm.playMIDI()
+      GemWarrior.config.synthBGM.playMIDI()
     }, 20)
   }
 }
 GemWarrior._stopBGM = function() {
-  GemWarrior.config.synth_bgm.stopMIDI()
+  GemWarrior.config.synthBGM.stopMIDI()
 }
 
 GemWarrior._playSFX = function(action) {
   if (GemWarrior.settings.enableSound) {
     const filename = `/assets/audio/gw-sfx-${action}.mid`
 
-    GemWarrior.config.synth_sfx.loadMIDIUrl(filename)
-    GemWarrior.config.synth_sfx.setLoop(0)
-    GemWarrior.config.synth_sfx.setMasterVol(GemWarrior.settings.soundSFXLevel)
-    GemWarrior.config.synth_sfx.setProgram(0, 3)
+    GemWarrior.config.synthSFX.loadMIDIUrl(filename)
+    GemWarrior.config.synthSFX.setLoop(0)
+    GemWarrior.config.synthSFX.setMasterVol(GemWarrior.settings.soundSFXLevel)
+    GemWarrior.config.synthSFX.setProgram(0, 3)
 
     setTimeout(() => {
       // console.log('_playSFX()', filename)
 
       // setInterval(() => {
-      //   console.log('playStatus', GemWarrior.config.synth_bgm.getPlayStatus(), GemWarrior.config.synth_bgm)
+      //   console.log('playStatus', GemWarrior.config.synthBGM.getPlayStatus(), GemWarrior.config.synthBGM)
       // }, 1000)
 
-      GemWarrior.config.synth_sfx.playMIDI()
+      GemWarrior.config.synthSFX.playMIDI()
     }, 20)
   }
 }
 
 GemWarrior._isBGMPlaying = function() {
-  return GemWarrior.config.synth_bgm.playing
+  return GemWarrior.config.synthBGM.playing
 }

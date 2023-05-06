@@ -22,7 +22,7 @@ class World {
 
       // console.log('item', item)
 
-      if (GemWarrior.options.debug_mode) {
+      if (GemWarrior.config.debugMode) {
         result = item.describe_detailed()
       } else {
         result = item.describe()
@@ -31,7 +31,7 @@ class World {
     // } else if (loc.has_monster(entity)) {
     //   Object.values(loc.monsters_abounding).forEach(m => {
     //     if (m.name.toLowerCase() == entity) {
-    //       if (GemWarrior.options.debug_mode) {
+    //       if (GemWarrior.config.debugMode) {
     //         result = m.describe_detailed()
     //       } else {
     //         result = m.describe()
@@ -41,7 +41,7 @@ class World {
     // } else if (loc.has_boss(entity)) {
     //   Object.values(loc.bosses_abounding).forEach(b => {
     //     if (b.name.toLowerCase() == entity) {
-    //       if (GemWarrior.options.debug_mode) {
+    //       if (GemWarrior.config.debugMode) {
     //         result = b.describe_detailed()
     //       } else {
     //         result = b.describe()
@@ -78,7 +78,7 @@ class World {
   save = function() {
     // console.log('saving world state and global settings to localStorage...')
 
-    if (GemWarrior.options.world_save) {
+    if (GemWarrior.config.worldSave) {
       try {
         localStorage.setItem(GW_WORLD_KEY, JSON.stringify(this))
 

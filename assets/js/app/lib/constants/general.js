@@ -60,12 +60,14 @@ const GW_DEFAULTS = {
   'config': {
     'avatarWorker': null,
     'blinker': null,
+    'debugMode': false,
     'history': [],
     'historyMarker': 0,
     'keyCommand': '',
-    'outText': '',
-    'synth_bgm': null,
-    'synth_sfx': null
+    'synthBGM': null,
+    'synthSFX': null,
+    'textOutput': '',
+    'worldSave': true
   },
   'settings': {
     'enableSound': false,

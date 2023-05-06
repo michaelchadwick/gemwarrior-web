@@ -22,7 +22,7 @@ class Inventory {
     if (this.has_item(item)) {
       Object.values(this.items).forEach(i => {
         if (i.name == item) {
-          if (GemWarrior.options.debug_mode) {
+          if (GemWarrior.config.debugMode) {
             result = i.describe_detailed()
           } else {
             result = i.describe()
