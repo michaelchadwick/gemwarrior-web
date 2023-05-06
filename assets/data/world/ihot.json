@@ -2,7 +2,7 @@
   "locations": [
     {
       "name": "Inescapable Hole of Turbidity (Center)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. However, there are paths all around you.",
       "danger_level": "none",
       "coords": {
         "x": 1,
@@ -20,7 +20,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (North)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. You can, however, go everywhere but north.",
       "danger_level": "none",
       "coords": {
         "x": 1,
@@ -37,7 +37,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (North/East)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. You see walls to the north and east, but passage south and west.",
       "danger_level": "none",
       "coords": {
         "x": 2,
@@ -54,7 +54,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (East)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. While a wall blocks your path eastward, other directions are unblocked.",
       "danger_level": "none",
       "coords": {
         "x": 2,
@@ -71,7 +71,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (South/East)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. A corner of wall meets your gaze to the southeast, but other directions are clear.",
       "danger_level": "none",
       "coords": {
         "x": 2,
@@ -88,7 +88,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (South)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. Passage south is blocked by a wall, while other directions look passable.",
       "danger_level": "none",
       "coords": {
         "x": 1,
@@ -105,7 +105,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (South/West)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. Regardless of your current inability to go south or west, north and east look good.",
       "danger_level": "none",
       "coords": {
         "x": 0,
@@ -122,7 +122,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (West)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. If anyone tells you to 'go west', they are a fool. North, east, and south are still options.",
       "danger_level": "none",
       "coords": {
         "x": 0,
@@ -139,7 +139,7 @@
     },
     {
       "name": "Inescapable Hole of Turbidity (North/West)",
-      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable.",
+      "description": "You look around the Inescapable Hole of Turbidity. Due to its turbidity, you see little. Also, unfortunately, it is inescapable. Only a solid stone wall find you toward the northwest, so try going elsewhere.",
       "danger_level": "none",
       "coords": {
         "x": 0,
