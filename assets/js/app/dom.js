@@ -1,4 +1,4 @@
-/* dom */
+/* /assets/js/app/dom.js */
 /* grab references to dom elements */
 /* global $, GemWarrior */
 

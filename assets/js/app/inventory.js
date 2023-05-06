@@ -1,3 +1,7 @@
+/* /assets/js/app/inventory.js */
+/* a collection of items */
+/* global GemWarrior */
+
 class Inventory {
   constructor(items = [], weapon = null, armor = null) {
     this.items  = this._create_items(items)

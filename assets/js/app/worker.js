@@ -1,4 +1,4 @@
-/* worker */
+/* /assets/js/app/worker.js */
 /* js background worker for avatar display */
 
 const GW_CACHE_TEXT_KEY = 'gemwarrior-cache-text'

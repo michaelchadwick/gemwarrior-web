@@ -1,3 +1,7 @@
+/* /assets/js/app/evaluator.js */
+/* take input and give output */
+/* global GemWarrior */
+
 class Evaluator {
   construction() {
     console.log('[LOADED] /app/evaluator')

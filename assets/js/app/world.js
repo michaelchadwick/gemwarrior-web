@@ -1,5 +1,6 @@
 // /assets/js/app/world.js
-/* global GemWarrior, Item, Location, Player */
+/* main object that holds Location(s) and Player
+/* global GemWarrior, Location, Player */
 /* eslint-disable no-unused-vars */
 
 class World {
