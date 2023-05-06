@@ -120,4 +120,12 @@ class World {
     return locs
   }
 
+  _make_locations_unvisited() {
+    Object.values(GemWarrior.world.locations).forEach(loc => {
+      loc.visited = false
+    })
+
+    console.log('[debug] All locations now unvisited')
+  }
+
 }
