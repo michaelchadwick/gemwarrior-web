@@ -208,6 +208,12 @@
       "z": 0
     },
     "status": "standing",
-    "items_taken": 0
+    "special_abilities": [],
+    "monsters_killed": 0,
+    "bosses_killed": 0,
+    "items_taken": 0,
+    "moves_made": 0,
+    "rests_taken": 0,
+    "deaths": 0
   }
 }

@@ -16,7 +16,13 @@ class Player extends Creature {
       this.inventory_checks = options.inventory_checks
       this.coords = options.coords
       this.status = options.status
+      this.special_abilities = options.special_abilities
+      this.monsters_killed = options.monsters_killed
+      this.bosses_killed = options.bosses_killed
       this.items_taken = options.items_taken
+      this.moves_made = options.moves_made
+      this.rests_taken = options.rests_taken
+      this.deaths = options.deaths
     } else {
       this.name = ''
       this.level = 1
@@ -47,7 +53,13 @@ class Player extends Creature {
         x: 1, y: 1, z: 0
       },
       this.status = 'standing'
+      this.special_abilities = []
+      this.monsters_killed = 0
+      this.bosses_killed = 0
       this.items_taken = 0
+      this.moves_made = 0
+      this.rests_taken = 0
+      this.deaths = 0
     }
 
     this.description = `The playable character in the world of ${PROGRAM_NAME}.`
@@ -56,17 +68,37 @@ class Player extends Creature {
   }
 
   describe() {
-    return `
+    let output = ''
+
+    output += `
       <p>You, the mighty warrior <span class="noun">${GemWarrior.world.player.name}</span>, assess yourself:</p>
       <ul>
-        <li>You are wearing a shirt, pants, socks, and shoes. Your fashion sense is satisfactory, without being notable.</li>
-        <li>You are <strong>${GemWarrior.world.player.status}</strong>.</li>
+        <li>You are wearing typical period garb. Your fashion sense is satisfactory, but not notable.</li>
         <li>
           You are reasonably healthy, but due to your current location and station, that feeling of heartiness ever diminishes.
         </li>
-        <li>You have taken ${this.items_taken} item(s).</li>
+        <li>You are <strong>${GemWarrior.world.player.status}</strong>.</li>
+        <li>You have <span class="noun">${this.weapon || 'nothing'}</span> equipped as a weapon.</li>
+        <li>You have <span class="noun">${this.armor || 'nothing'}</span> equipped as armor.</li>
+        <li>You have the following special abilities: ${this.special_abilities.length ? this.special_abilities.join(', ') : 'none...yet'}.</li>
+    `
+
+    if (GemWarrior.config.debugMode) {
+      output += `
+        <li>You have killed <span class="keyword">${this.monsters_killed}</span> monster(s).</li>
+        <li>You have killed <span class="keyword">${this.bosses_killed}</span> boss(es).</li>
+        <li>You have taken <span class="keyword">${this.items_taken}</span> item(s).</li>
+        <li>You have made <span class="keyword">${this.moves_made}</span> move(s).</li>
+        <li>You have taken <span class="keyword">${this.rests_taken}</span> rest(s).</li>
+        <li>You have died <span class="keyword">${this.deaths}</span> time(s).</li>
+      `
+    }
+
+    output += `
       </ul>
     `
+
+    return output
   }
 
   use() {
