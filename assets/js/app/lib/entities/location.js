@@ -57,13 +57,33 @@ class Location extends Entity {
       }
     }
 
-    if (!this.is_empty()) {
-      result += this.list_items()
+    // TODO: sort of works, but not really
+    if (!GemWarrior.config.useTypewriter) {
+      if (!this.is_empty()) {
+        result += this.list_items()
+      }
+
+      return result
+    } else {
+      // if visited, just display text and items immediately
+      if (this.visited) {
+        if (!this.is_empty()) {
+          result += this.list_items()
+        }
+      }
+      // if not visited yet, do a cool typewriter effect
+      else {
+        this.visited = true
+
+        GemWarrior._type(result)
+
+        if (!this.is_empty()) {
+          return this.list_items()
+        } else {
+          return false
+        }
+      }
     }
-
-    this.visited = true
-
-    return result
   }
 
   describe_detailed() {

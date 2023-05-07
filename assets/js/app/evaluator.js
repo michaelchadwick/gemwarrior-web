@@ -7,7 +7,7 @@ class Evaluator {
     console.log('[LOADED] /app/evaluator')
   }
 
-  parse(command) {
+  process(command) {
     GemWarrior.config.history.push(command)
     GemWarrior.config.historyMarker = GemWarrior.config.history.length
 
@@ -92,7 +92,7 @@ class Evaluator {
       case 'go':
       case 'g':
         if (arg1) {
-          GemWarrior.evaluator.parse(arg1.toLowerCase())
+          GemWarrior.evaluator.process(arg1.toLowerCase())
         } else {
           GemWarrior.config.textOutput = 'You cannot just <span class="keyword">go</span> without a direction.'
         }
@@ -429,7 +429,7 @@ class Evaluator {
 
         GemWarrior.world.save()
 
-        return GemWarrior.world.location.describe()
+        return `You go <span class="keyword">${direction}</span>.<br /><br />${GemWarrior.world.location.describe()}`
       } else {
         GemWarrior._playSFX('bonk')
 

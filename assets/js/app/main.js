@@ -21,11 +21,12 @@ GemWarrior.evaluator = new Evaluator()
 async function modalOpen(type) {
   switch(type) {
     case 'help':
-      GemWarrior._repl(`
+      GemWarrior._out(`
         <br />
         <span class="command-previous">&gt; help</span><br />
-        ${GemWarrior.evaluator.parse('help')}
       `)
+      GemWarrior._repl(GemWarrior.evaluator.process('help'))
+
       break
 
     case 'start':
@@ -581,11 +582,12 @@ GemWarrior._attachEventHandlers = function() {
 
     if (input.length) {
       // show last entered command and display evaluated output
-      GemWarrior._repl(`
+      GemWarrior._out(`
         <br />
         <span class="command-previous">&gt; ${input}</span><br />
-        ${GemWarrior.evaluator.parse(input)}
       `)
+
+      GemWarrior._repl(GemWarrior.evaluator.process(input))
 
       // clear command bar
       GemWarrior.dom.interactive.cmdInput.val('')
@@ -679,16 +681,41 @@ GemWarrior._repl = function(result) {
 
 // print result of user command
 GemWarrior._out = function(text, noLineBreak) {
-  let $content_to_display = text
+  let content_to_display = text
 
   if (!noLineBreak) {
-    $content_to_display = '<p>' + $content_to_display + '</p>'
+    content_to_display = '<p>' + content_to_display + '</p>'
   }
 
   // add new text to output
-  GemWarrior.dom.output.append($content_to_display)
+  GemWarrior.dom.output.append(content_to_display)
 
   // check if scroll is needed
+  GemWarrior._scrollOutput()
+}
+
+GemWarrior._type = function(str) {
+  let i = 0
+
+  typeWriter()
+
+  function typeWriter() {
+    if (i < str.length) {
+      const char = str.charAt(i)
+      console.log('type char', char)
+      const min = 9
+      const max = min + 3
+      // min delay (s) to max delay (s) (exclusive)
+      const delay = Math.floor(Math.random() * max) + min
+
+      GemWarrior.dom.output.append(char)
+      i++
+      setTimeout(typeWriter, delay)
+    } else {
+      return true
+    }
+  }
+
   GemWarrior._scrollOutput()
 }
 
@@ -780,7 +807,7 @@ GemWarrior._displayWelcome = function() {
 * Good luck, <span class="noun">${name}</span>...${sp}*
 *********************************************`
 
-  GemWarrior.dom.output.append('<pre>' + output + '</pre>')
+  GemWarrior._out('<pre>' + output + '</pre>')
 }
 
 // write welcome back message for saved game to main output
@@ -813,7 +840,7 @@ GemWarrior._displayWelcomeBack = function() {
   output += `
 *********************************************`
 
-  GemWarrior.dom.output.append('<pre>' + output + '</pre>')
+  GemWarrior._out('<pre>' + output + '</pre>')
 }
 
 GemWarrior._getNebyooApps = async function() {
@@ -843,11 +870,11 @@ GemWarrior.__handleEnter = function() {
     // fix on-screen keyboard "spaces"
     input = input.toString().replaceAll('_', ' ')
 
-    GemWarrior._repl(`
+    GemWarrior._out(`
       <br />
       <span class="command-previous">&gt; ${input}</span><br />
-      ${GemWarrior.evaluator.parse(input)}
     `)
+    GemWarrior._repl(GemWarrior.evaluator.process(input))
 
     // reset keyCommand
     GemWarrior.config.keyCommand = ''

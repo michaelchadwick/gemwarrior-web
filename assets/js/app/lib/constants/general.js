@@ -67,6 +67,7 @@ const GW_DEFAULTS = {
     'synthBGM': null,
     'synthSFX': null,
     'textOutput': '',
+    'useTypewriter': false,
     'worldSave': true
   },
   'settings': {
