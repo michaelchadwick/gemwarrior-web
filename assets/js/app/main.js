@@ -172,6 +172,10 @@ GemWarrior.initApp = async function() {
 
   GemWarrior._initAvatarWorker()
 
+  // need to run this once in initApp because
+  // window.onload doesn't trigger correctly
+  GemWarrior._resizeFixedElements()
+
   await GemWarrior._loadWorld()
 
   GemWarrior._updateDashboard()
@@ -181,10 +185,6 @@ GemWarrior.initApp = async function() {
   GemWarrior._attachEventHandlers()
 
   console.log('[LOADED] /app/main')
-
-  // need to run this once at the end of initApp
-  // because window.onload doesn't trigger correctly
-  GemWarrior._resizeFixedElements()
 
   // initial command
   window.scrollTo(0,1)
