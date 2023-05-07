@@ -168,13 +168,13 @@ GemWarrior.initApp = async function() {
     document.title = '(LH) ' + document.title
   }
 
-  await GemWarrior._loadSettings()
-
-  GemWarrior._initAvatarWorker()
-
   // need to run this once in initApp because
   // window.onload doesn't trigger correctly
   GemWarrior._resizeFixedElements()
+
+  await GemWarrior._loadSettings()
+
+  GemWarrior._initAvatarWorker()
 
   await GemWarrior._loadWorld()
 
@@ -838,18 +838,18 @@ GemWarrior._displayWelcomeBack = function() {
   const has_renamed = GemWarrior.settings.hasChangedName
 
   let output = `
-*********************************************
-* Welcome back to <span class="noun">${PROGRAM_NAME}</span>, <span class="noun">${name}</span>!${sp}*
-* - Try <span class="keyword">help</span> if stuck                       *`
+******************************
+* Welcome back, <span class="noun">${name}</span>!${sp}*
+* - Try <span class="keyword">help</span> if stuck        *`
 
   if (!has_renamed) {
     output += `
-* - Type <span class="keyword">change name [new-name]</span>             *
-*   to rename your character                *`
+* - Type <span class="keyword">change name [name]</span>  *
+*   to rename character      *`
   }
 
   output += `
-* - Top-right gear icon for options         *`
+* - Gear icon for options    *`
 
   if (!will_save) {
     output += `
@@ -857,7 +857,7 @@ GemWarrior._displayWelcomeBack = function() {
   }
 
   output += `
-*********************************************`
+******************************`
 
   GemWarrior._out('<pre>' + output + '</pre>')
 }
