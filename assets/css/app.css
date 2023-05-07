@@ -263,7 +263,6 @@ header {
     pointer-events: none;
     text-align: center;
     text-transform: uppercase;
-    transform: translateY(6px);
   }
   header .menu-right {
     display: flex;
@@ -282,7 +281,6 @@ header {
   header .title {
     font-size: 0.7rem;
     line-height: 170%;
-    transform: translateY(3px);
   }
 }
 @media (min-width: 768px) {
