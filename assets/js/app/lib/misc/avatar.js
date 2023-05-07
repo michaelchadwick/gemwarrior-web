@@ -22,7 +22,7 @@ GemWarrior._initAvatarWorker = function() {
           if (cmd) {
             switch (cmd) {
               case 'data':
-                GemWarrior.dom.avatar.html(val)
+                GemWarrior.dom.avatar.innerHTML = val
                 break
 
               case 'status':

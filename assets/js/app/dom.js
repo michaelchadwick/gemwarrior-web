@@ -1,30 +1,32 @@
 /* /assets/js/app/dom.js */
 /* grab references to dom elements */
-/* global $, GemWarrior */
+/* global GemWarrior */
 
 // DOM > main divs/elements
 GemWarrior.dom = {
-  'navOverlay': $('#nav-overlay'),
-  'navContent': ('$nav-content'),
-  'output': $('#output'),
-  'interface': $('#interface'),
-  'interactive': {
-    'btnNav': $('#button-nav'),
-    'btnNavClose': $('#button-nav-close'),
-    'btnHelp': $('#button-help'),
-    'btnSettings': $('#button-settings'),
-    'cmdInput': $('#command-input'),
-    'keyboard': $('#keyboard'),
-    'keyboardInput': $('#keyboard-input')
-  },
-  'stats': $('#interface #stats'),
-  'statsNM': $('#interface #stats #name'),
-  'statsLV': $('#interface #stats #level'),
-  'statsXP': $('#interface #stats #xp'),
-  'statsROX': $('#interface #stats #rox'),
-  'statsHP': $('#interface #stats #hp'),
-  'statsLOC': document.querySelector('#interface #location #loc'),
-  'avatar': $('#interface #avatar')
+  'navOverlay': document.getElementById('nav-overlay'),
+  'navContent': document.getElementById('nav-content'),
+  'header': document.querySelector('header'),
+  'logContainer': document.getElementById('log-container'),
+  'output': document.getElementById('output'),
+  'btnNav': document.getElementById('button-nav'),
+  'btnNavClose': document.getElementById('button-nav-close'),
+  'btnHelp': document.getElementById('button-help'),
+  'btnSettings': document.getElementById('button-settings'),
+  'interface': document.getElementById('interface'),
+  'cmdInput': document.getElementById('command-input'),
+  'cliForm': document.querySelector('#cli form'),
+  'keyboard': document.getElementById('keyboard'),
+  'keyboardButtons': document.querySelectorAll('#keyboard button'),
+  'keyboardInput': document.getElementById('keyboard-input'),
+  'stats': document.getElementById('stats'),
+  'statsNM': document.getElementById('name'),
+  'statsLV': document.getElementById('level'),
+  'statsXP': document.getElementById('xp'),
+  'statsROX': document.getElementById('rox'),
+  'statsHP': document.getElementById('hp'),
+  'statsLOC': document.getElementById('loc'),
+  'avatar': document.getElementById('avatar')
 }
 
 console.log('[LOADED] /app/dom')

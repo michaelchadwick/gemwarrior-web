@@ -394,6 +394,7 @@ section#log-container {
     z-index: 1;
   }
   #interface #keyboard {
+    display: block;
     margin: 0;
     padding-top: 8px;
     user-select: none;

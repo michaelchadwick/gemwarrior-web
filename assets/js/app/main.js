@@ -1,6 +1,6 @@
 ﻿/* /assets/js/app/main.js */
 /* app entry point and main functions */
-/* global $, GemWarrior */
+/* global GemWarrior */
 
 // settings: saved in LOCAL STORAGE
 GemWarrior.settings = {...GW_DEFAULTS.settings}
@@ -213,7 +213,7 @@ GemWarrior._initDebug = function() {
       debugScript.src = './assets/js/app/lib/misc/logger.js'
       document.body.appendChild(debugScript)
 
-      document.getElementById('log-container').style.display = 'block'
+      GemWarrior.dom.logContainer.style.display = 'block'
 
       console.log('[LOADED] /app/main(debug)')
     }
@@ -310,7 +310,7 @@ GemWarrior._loadSettings = async function() {
     if (lsSettings.textSize !== undefined) {
       GemWarrior.settings.textSize = lsSettings.textSize
 
-      $('#output').css('font-size', GemWarrior.settings.textSize + 'px')
+      GemWarrior.dom.output.style.fontSize = GemWarrior.settings.textSize + 'px'
 
       setting = document.getElementById('text-size-pixels')
 
@@ -431,7 +431,7 @@ GemWarrior._changeSetting = function(setting, event = null) {
 
       if (st != '') {
         // sync to DOM
-        $('#output').css('font-size', st + 'px')
+        GemWarrior.dom.output.style.fontSize = st + 'px'
 
         // save to code/LS
         GemWarrior._saveSetting('textSize', st)
@@ -534,51 +534,53 @@ GemWarrior._loadWorld = async function() {
 
 GemWarrior._attachEventHandlers = function() {
   // {} header icons to open modals
-  GemWarrior.dom.interactive.btnNav.click(() => {
-    GemWarrior.dom.navOverlay.toggleClass('show')
+  GemWarrior.dom.btnNav.addEventListener('click', () => {
+    GemWarrior.dom.navOverlay.classList.toggle('show')
   })
-  GemWarrior.dom.interactive.btnNavClose.click(() => {
-    GemWarrior.dom.navOverlay.toggleClass('show')
+  GemWarrior.dom.btnNavClose.addEventListener('click', () => {
+    GemWarrior.dom.navOverlay.classList.toggle('show')
   })
-  GemWarrior.dom.interactive.btnHelp.click(() => modalOpen('help'))
-  GemWarrior.dom.interactive.btnSettings.click(() => modalOpen('settings'))
+  GemWarrior.dom.btnHelp.addEventListener('click', () => modalOpen('help'))
+  GemWarrior.dom.btnSettings.addEventListener('click', () => modalOpen('settings'))
 
   // catch the mobile keyboard buttons
-  $('#keyboard button').click(function (event) {
-    let key = event.target.dataset.key
+  GemWarrior.dom.keyboardButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
+      let key = event.target.dataset.key
 
-    if (key == undefined) {
-      key = event.target.parentElement.dataset.key
-    }
+      if (key == undefined) {
+        key = event.target.parentElement.dataset.key
+      }
 
-    switch (key) {
-      case '↵':
-        GemWarrior.__handleEnter()
-        break
-      case '<':
-        GemWarrior.__handleBackspace()
-        break
-      default:
-        // update keyCommand
-        GemWarrior.config.keyCommand += key
+      switch (key) {
+        case '↵':
+          GemWarrior.__handleEnter()
+          break
+        case '<':
+          GemWarrior.__handleBackspace()
+          break
+        default:
+          // update keyCommand
+          GemWarrior.config.keyCommand += key
 
-        // make sure DOM display is visible
-        GemWarrior.dom.interactive.keyboardInput.addClass('show')
+          // make sure DOM display is visible
+          GemWarrior.dom.keyboardInput.classList.add('show')
 
-        break
-    }
+          break
+      }
 
-    // sync to DOM display
-    if (GemWarrior.dom.interactive.keyboard.is(':visible')) {
-      GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
-    }
+      // sync to DOM display
+      if (getComputedStyle(GemWarrior.dom.keyboard).display == 'block') {
+        GemWarrior.dom.keyboardInput.innerText = GemWarrior.config.keyCommand
+      }
+    })
   })
 
   // catch the command bar form
-  $('#cli form').submit(function (e) {
-    e.preventDefault()
+  GemWarrior.dom.cliForm.addEventListener('submit', (event) => {
+    event.preventDefault()
 
-    const input = GemWarrior.dom.interactive.cmdInput.val()
+    const input = GemWarrior.dom.cmdInput.value
 
     if (input.length) {
       // show last entered command and display evaluated output
@@ -590,37 +592,31 @@ GemWarrior._attachEventHandlers = function() {
       GemWarrior._repl(GemWarrior.evaluator.process(input))
 
       // clear command bar
-      GemWarrior.dom.interactive.cmdInput.val('')
+      GemWarrior.dom.cmdInput.value = ''
     }
   })
 
-  // jquery command to force the textbox to take focus
-  GemWarrior.dom.interactive.cmdInput.focus()
+  // force the textbox to take focus
+  GemWarrior.dom.cmdInput.focus()
 
-  // if we leave command bar form, return after a second
-  $('*').on('mouseup', (event) => {
+  // if we leave command bar form, return after a moment
+  document.addEventListener('mouseup', () => {
     const isTextSelected = window.getSelection().toString() != ''
 
     if (!isTextSelected) {
       setTimeout(function() {
-        GemWarrior.dom.interactive.cmdInput.focus()
+        GemWarrior.dom.cmdInput.focus()
       }, GW_SNAPBACK_DELAY)
     }
   })
 
-  // $('#output').scroll(function() {
-  //   const output = document.getElementById('output')
-  //   console.log('#output scrollTop, scrollHeight, clientHeight', output.scrollTop, output.scrollHeight, output.clientHeight)
-  // })
-
   // cycle through previous commands
-  $(document).on('keydown', function(event) {
+  document.addEventListener('keydown', (event) => {
     const code = event.code
+    const excludedKeys = ['Alt', 'Control', 'Meta', 'Shift']
 
-    var excludedKeys = ['Alt', 'Control', 'Meta', 'Shift']
-
-    if (!excludedKeys.some(key => event.originalEvent.getModifierState(key))) {
-      if (GemWarrior.dom.interactive.keyboard.is(':visible')) {
+    if (!excludedKeys.some(key => event.getModifierState(key))) {
+      if (getComputedStyle(GemWarrior.dom.keyboard).display == 'block') {
         if (code == 'Enter') {
           event.preventDefault()
 
@@ -631,21 +627,21 @@ GemWarrior._attachEventHandlers = function() {
           GemWarrior.config.keyCommand += '_'
 
           // sync to DOM display
-          GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+          GemWarrior.dom.keyboardInput.innerText = GemWarrior.config.keyCommand
 
-          GemWarrior.dom.interactive.keyboardInput.addClass('show')
+          GemWarrior.dom.keyboardInput.classList.add('show')
         } else if (code.startsWith('Key')) {
           const key = code.charAt(code.length - 1)
 
-          $('#keyboard button').each(function() {
-            if ($(this).data('key') == key.toLowerCase()) {
+          GemWarrior.dom.keyboardButtons.forEach(button => {
+            if (button.dataset.key == key.toLowerCase()) {
               // update keyCommand
               GemWarrior.config.keyCommand += key
 
               // sync to DOM display
-              GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+              GemWarrior.dom.keyboardInput.innerText = GemWarrior.config.keyCommand
 
-              GemWarrior.dom.interactive.keyboardInput.addClass('show')
+              GemWarrior.dom.keyboardInput.classList.add('show')
             }
           })
         }
@@ -657,7 +653,7 @@ GemWarrior._attachEventHandlers = function() {
     }
   })
 
-  $(document).on('touchmove', function(event) {
+  document.addEventListener('touchmove', (event) => {
     event = event.originalEvent || event
 
     if (event.scale !== 1) {
@@ -707,7 +703,7 @@ GemWarrior._out = function(text, noLineBreak) {
   }
 
   // add new text to output
-  GemWarrior.dom.output.append(content_to_display)
+  GemWarrior.dom.output.innerHTML += content_to_display
 
   // check if scroll is needed
   GemWarrior._scrollOutput()
@@ -742,11 +738,11 @@ GemWarrior._type = function(str) {
 GemWarrior._updateDashboard = function() {
   // console.log('_updateDashboard()')
 
-  GemWarrior.dom.statsNM.text(GemWarrior.world.player.name)
-  GemWarrior.dom.statsLV.text(GemWarrior.world.player.level)
-  GemWarrior.dom.statsXP.text(GemWarrior.world.player.xp)
-  GemWarrior.dom.statsHP.text(GemWarrior.world.player.hp)
-  GemWarrior.dom.statsROX.text(GemWarrior.world.player.inventory.rox().toString())
+  GemWarrior.dom.statsNM.innerText = GemWarrior.world.player.name
+  GemWarrior.dom.statsLV.innerText = GemWarrior.world.player.level
+  GemWarrior.dom.statsXP.innerText = GemWarrior.world.player.xp
+  GemWarrior.dom.statsHP.innerText = GemWarrior.world.player.hp
+  GemWarrior.dom.statsROX.innerText = GemWarrior.world.player.inventory.rox().toString()
   GemWarrior.dom.statsLOC.innerText = GemWarrior.world.location.name
 }
 
@@ -754,24 +750,18 @@ GemWarrior._updateDashboard = function() {
 GemWarrior._resizeFixedElements = function() {
   // console.log('resized fixed elements')
 
-  $('header').width(window.innerWidth - 32)
-  $('#interface #keyboard').width(window.innerWidth - 16)
+  GemWarrior.dom.header.style.width = `${window.innerWidth - 32}px`
+  GemWarrior.dom.keyboard.style.width = `${window.innerWidth - 16}px`
 
   GemWarrior._scrollOutput()
 }
 
 // dynamically scroll output depending on overflow
 GemWarrior._scrollOutput = function() {
-  const output = document.getElementById('output')
-
-  // console.log('no scrolling yet')
-  // console.log('output.scrollHeight, output.clientHeight', output.scrollHeight, output.clientHeight)
+  const output = GemWarrior.dom.output
 
   if (output.scrollHeight > output.clientHeight) {
-    $('#output').animate({ scrollTop: output.scrollHeight }, 100, function() {
-      // console.log('scrolled output', document.getElementById('output').scrollTop)
-      // console.log('output.scrollHeight, output.clientHeight', output.scrollHeight, output.clientHeight)
-    })
+    output.scrollTop = output.scrollHeight
   }
 }
 
@@ -899,10 +889,10 @@ GemWarrior.__handleEnter = function() {
     GemWarrior.config.keyCommand = ''
 
     // sync to DOM display
-    GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+    GemWarrior.dom.keyboardInput.innerText = GemWarrior.config.keyCommand
 
     // if keyCommand is empty, hide DOM display
-    GemWarrior.dom.interactive.keyboardInput.removeClass('show')
+    GemWarrior.dom.keyboardInput.classList.remove('show')
   }
 }
 
@@ -912,13 +902,13 @@ GemWarrior.__handleBackspace = function() {
     GemWarrior.config.keyCommand = GemWarrior.config.keyCommand.slice(0, GemWarrior.config.keyCommand.length - 1)
 
     // sync to DOM display
-    GemWarrior.dom.interactive.keyboardInput.text(GemWarrior.config.keyCommand)
+    GemWarrior.dom.keyboardInput.innerText = GemWarrior.config.keyCommand
 
     // console.log(GemWarrior.config.keyCommand.length)
 
     // if keyCommand is empty, hide DOM display
     if (GemWarrior.config.keyCommand.length <= 0) {
-      GemWarrior.dom.interactive.keyboardInput.removeClass('show')
+      GemWarrior.dom.keyboardInput.classList.remove('show')
     }
   }
 }
@@ -966,15 +956,16 @@ GemWarrior.__traverseHistory = function(key) {
       if (GemWarrior.config.historyMarker < GemWarrior.config.history.length) {
         GemWarrior.config.historyMarker++
       } else { // back to current untyped-as-of-yet command
-        GemWarrior.dom.interactive.cmdInput.val()
+        GemWarrior.dom.cmdInput.value = ''
         GemWarrior.config.historyMarker = GemWarrior.config.history.length
       }
     }
 
     // set command bar to historical value
-    GemWarrior.dom.interactive.cmdInput.focus().val('')
+    GemWarrior.dom.cmdInput.focus()
+    GemWarrior.dom.cmdInput.value = ''
 
-    setTimeout(() => GemWarrior.dom.interactive.cmdInput.val(GemWarrior.config.history[GemWarrior.config.historyMarker]), 20)
+    setTimeout(() => GemWarrior.dom.cmdInput.value = GemWarrior.config.history[GemWarrior.config.historyMarker], 20)
   }
 }
 
