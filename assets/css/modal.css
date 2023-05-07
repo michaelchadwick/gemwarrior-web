@@ -40,11 +40,17 @@
   display: flex;
   flex-flow: column;
   flex-wrap: nowrap;
-  margin: 0 1em;
+  margin: 0;
   max-height: 90%;
-  max-width: 500px;
-  width: 90%;
+  width: 100%;
 }
+  @media (min-width: 768px) {
+    .modal-window {
+      margin: 0 1em;
+      max-width: 500px;
+      width: 90%;
+    }
+  }
   .modal-window .modal-window.debug {
     border-color: #715ec7;
   }
