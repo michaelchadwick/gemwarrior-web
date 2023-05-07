@@ -671,6 +671,25 @@ GemWarrior._attachEventHandlers = function() {
 
   // on viewport change, resize output
   window.onresize = GemWarrior._resizeFixedElements
+
+  let touchstartX = 0;
+  let touchstartY = 0;
+  let touchendX = 0;
+  let touchendY = 0;
+
+  const gestureZone = document.getElementById('output');
+
+  gestureZone.addEventListener('touchstart', function(event) {
+    touchstartX = event.changedTouches[0].screenX;
+    touchstartY = event.changedTouches[0].screenY;
+  }, false);
+
+  gestureZone.addEventListener('touchend', function(event) {
+    touchendX = event.changedTouches[0].screenX;
+    touchendY = event.changedTouches[0].screenY;
+    console.log(GemWarrior.__handleGesture(touchstartX, touchstartY, touchendX, touchendY))
+    // alert(GemWarrior.__handleGesture(touchstartX, touchstartY, touchendX, touchendY))
+  }, false);
 }
 
 // update user stats and send command result to display function
@@ -919,6 +938,21 @@ GemWarrior.__handleClickTouch = function(event) {
   if (event.target == GemWarrior.dom.navOverlay) {
     GemWarrior.dom.navOverlay.classList.toggle('show')
   }
+}
+
+GemWarrior.__handleGesture = function(touchstartX, touchstartY, touchendX, touchendY) {
+  const delx = touchendX - touchstartX
+  const dely = touchendY - touchstartY
+
+  if (Math.abs(delx) > Math.abs(dely)) {
+    if (delx > 0) return "right"
+    else return "left"
+  }
+  else if(Math.abs(delx) < Math.abs(dely)){
+    if(dely > 0) return "down"
+    else return "up"
+  }
+  else return "tap"
 }
 
 // replace the command bar's command with historic data if available
