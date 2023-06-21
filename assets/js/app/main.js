@@ -158,8 +158,8 @@ async function modalOpen(type) {
           submitOutput.classList.add("incorrect")
           submitOutput.innerHTML = 'Email and feedback fields required'
         } else {
-          requiredOutput.classList.remove("incorrect")
-          requiredOutput.innerHTML = ''
+          submitOutput.classList.remove("incorrect")
+          submitOutput.innerHTML = ''
 
           if (userText.value === c) {
             captchaOutput.classList.add("correct")
