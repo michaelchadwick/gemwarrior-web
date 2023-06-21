@@ -36,6 +36,18 @@ GemWarrior.sendFeedback = async function(e) {
   })
   const json = await response.json()
 
+  const submitOutput = document.querySelector('#feedback #feedback-submit-output')
+
+  if (json.error) {
+    submitOutput.classList.remove("correct")
+    submitOutput.classList.add("incorrect")
+    submitOutput.innerHTML = 'Feedback could not be submitted. Try again later.'
+  } else {
+    submitOutput.classList.remove("incorrect")
+    submitOutput.classList.add("correct")
+    submitOutput.innerHTML = 'Thanks for the feedback.'
+  }
+
   console.log('json response', json)
 }
 
@@ -70,7 +82,7 @@ async function modalOpen(type) {
               <span id="captcha-output"></span>
             </div>
 
-            <span id="required-output"></span>
+            <span id="feedback-submit-output"></span>
 
             <button id="feedback-button-submit"">Send Feedback</button>
           </form>
@@ -94,7 +106,7 @@ async function modalOpen(type) {
       let submitButton = document.querySelector('#feedback #feedback-button-submit')
       let captchaOutput = document.querySelector('#feedback #captcha-output')
       let refreshButton = document.querySelector('#feedback #feedback-button-refresh')
-      let requiredOutput = document.querySelector('#feedback #required-output')
+      let submitOutput = document.querySelector('#feedback #feedback-submit-output')
 
       // alphaNums contains the characters with which you want to create the CAPTCHA
       let alphaNums = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -143,19 +155,19 @@ async function modalOpen(type) {
         event.preventDefault()
 
         if (emailField.value == '' || feedbackField.value == '') {
-          requiredOutput.classList.add("incorrectCaptcha")
-          requiredOutput.innerHTML = 'Email and feedback fields required'
+          submitOutput.classList.add("incorrect")
+          submitOutput.innerHTML = 'Email and feedback fields required'
         } else {
-          requiredOutput.classList.remove("incorrectCaptcha")
+          requiredOutput.classList.remove("incorrect")
           requiredOutput.innerHTML = ''
 
           if (userText.value === c) {
-            captchaOutput.classList.add("correctCaptcha")
+            captchaOutput.classList.add("correct")
             captchaOutput.innerHTML = "Correct!"
 
             GemWarrior.sendFeedback(event)
           } else {
-            captchaOutput.classList.add("incorrectCaptcha")
+            captchaOutput.classList.add("incorrect")
             captchaOutput.innerHTML = "Incorrect, please try again"
           }
         }

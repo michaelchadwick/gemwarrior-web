@@ -345,10 +345,10 @@ section#log-container {
       font-weight: bold;
       max-height: 26px;
     }
-    #feedback .incorrectCaptcha {
+    #feedback .incorrect {
       color: #ee9090;
     }
-    #feedback .correctCaptcha {
+    #feedback .correct {
       color: #90ee90;
     }
 
