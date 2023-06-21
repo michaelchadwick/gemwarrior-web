@@ -43,17 +43,17 @@ $body = $decoded['feedback'];
 $mailSend = mail($to, $subj, $body, $headers);
 
 /* Do something with received data and include it in response */
-$response = array(
-  'data' => $decoded
-);
+// $response = array(
+//   'data' => $decoded
+// );
 
 /* Perhaps database manipulation here? */
 // query, etc.
 
 die(json_encode([
   'value' => 1,
-  'error' => $mailSend ? $mailSend : 'Mail could not be sent',
-  'data' => $response
+  'error' => !$mailSend ? $mailSend : 'Mail could not be sent',
+  'data' => $decoded
 ]));
 
 ?>
