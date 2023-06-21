@@ -43,9 +43,7 @@ GemWarrior.sendFeedback = async function(e) {
     submitOutput.classList.add("incorrect")
     submitOutput.innerHTML = 'Feedback could not be submitted. Try again later.'
   } else {
-    submitOutput.classList.remove("incorrect")
-    submitOutput.classList.add("correct")
-    submitOutput.innerHTML = 'Thanks for the feedback.'
+    document.querySelector('#feedback').innerHTML = 'Thanks for the feedback!'
   }
 
   console.log('json response', json)
@@ -124,11 +122,11 @@ async function modalOpen(type) {
         // Key Code Value of "Enter" Button is 13
         if (e.keyCode === 13) {
           if (userText.value === c) {
-            captchaOutput.classList.add("correctCaptcha")
-            captchaOutput.innerHTML = "Correct!"
+            captchaOutput.classList.add('correct')
+            captchaOutput.innerHTML = 'Correct!'
           } else {
-            captchaOutput.classList.add("incorrectCaptcha")
-            captchaOutput.innerHTML = "Incorrect, please try again"
+            captchaOutput.classList.add('incorrect')
+            captchaOutput.innerHTML = 'Incorrect, please try again'
           }
         }
       });
@@ -153,20 +151,17 @@ async function modalOpen(type) {
         event.preventDefault()
 
         if (emailField.value == '' || feedbackField.value == '') {
-          submitOutput.classList.add("incorrect")
+          submitOutput.classList.add('incorrect')
           submitOutput.innerHTML = 'Email and feedback fields required'
         } else {
-          submitOutput.classList.remove("incorrect")
+          submitOutput.classList.remove('incorrect')
           submitOutput.innerHTML = ''
 
           if (userText.value === c) {
-            captchaOutput.classList.add("correct")
-            captchaOutput.innerHTML = "Correct!"
-
             GemWarrior.sendFeedback(event)
           } else {
-            captchaOutput.classList.add("incorrect")
-            captchaOutput.innerHTML = "Incorrect, please try again"
+            captchaOutput.classList.add('incorrect')
+            captchaOutput.innerHTML = 'Incorrect, please try again'
           }
         }
       })
