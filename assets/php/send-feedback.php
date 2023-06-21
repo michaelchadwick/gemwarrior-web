@@ -50,10 +50,17 @@ $mailSend = mail($to, $subj, $body, $headers);
 /* Perhaps database manipulation here? */
 // query, etc.
 
-die(json_encode([
-  'value' => 1,
-  'error' => !$mailSend ? $mailSend : 'Mail could not be sent',
-  'data' => $decoded
-]));
-
+if ($mailSend) {
+  die(json_encode([
+    'value' => 1,
+    'error' => false,
+    'data' => $decoded
+  ]));
+} else {
+  die(json_encode([
+    'value' => 0,
+    'error' => 'Mail could not be sent.',
+    'data' => null
+  ]));
+}
 ?>
