@@ -114,8 +114,6 @@ async function modalOpen(type) {
       const cw = captchaCanvas.width
       const ch = captchaCanvas.height
 
-      console.log('cw, ch', cw, ch)
-
       for (let i = 1; i <= 7; i++) {
         captchaTextArr.push(alphaNums[Math.floor(Math.random() * alphaNums.length)]);
       }
