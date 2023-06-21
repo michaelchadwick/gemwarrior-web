@@ -12,6 +12,7 @@ GemWarrior.dom = {
   'btnNav': document.getElementById('button-nav'),
   'btnNavClose': document.getElementById('button-nav-close'),
   'btnHelp': document.getElementById('button-help'),
+  'btnFeedback': document.getElementById('button-feedback'),
   'btnSettings': document.getElementById('button-settings'),
   'interface': document.getElementById('interface'),
   'cmdInput': document.getElementById('command-input'),

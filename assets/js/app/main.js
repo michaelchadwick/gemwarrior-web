@@ -18,6 +18,27 @@ GemWarrior.evaluator = new Evaluator()
  * public methods *
  *************************************************************************/
 
+GemWarrior.sendFeedback = async function(e) {
+  e.preventDefault()
+
+  const email = e.target.parentElement[0].value
+  const feedback = e.target.parentElement[1].value
+
+  console.log('sendFeedback', email, feedback)
+
+  const response = await fetch('../assets/php/send-feedback.php', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept":       "application/json"
+    },
+    body: JSON.stringify({ "email": email, "feedback": feedback })
+  })
+  const json = await response.json()
+
+  console.log('json response', json)
+}
+
 async function modalOpen(type) {
   switch(type) {
     case 'help':
@@ -29,10 +50,127 @@ async function modalOpen(type) {
 
       break
 
+    case 'feedback':
+      const CANVAS_WIDTH = 300
+      const CANVAS_HEIGHT = 50
+
+      this.myModal = new Modal('perm', 'Feedback',
+        `
+          <form id="feedback">
+            <p>Thanks for taking the time to send me some feedback on Gem Warrior!</p>
+
+            <input id="feedback-email" type="email" placeholder="Email address" required />
+
+            <textarea id="feedback-body" placeholder="Thoughts, questions, bugs? Put them here" required></textarea>
+
+            <div id="captcha-container">
+              <canvas id="captcha" width="${CANVAS_WIDTH}" height="${CANVAS_HEIGHT}">captcha text</canvas>
+              <input id="captcha-usertext" type="text" name="text">
+              <button id="feedback-button-refresh" type="button">Refresh</button>
+              <span id="captcha-output"></span>
+            </div>
+
+            <span id="required-output"></span>
+
+            <button id="feedback-button-submit"">Send Feedback</button>
+          </form>
+        `,
+        null,
+        null
+      )
+
+      let captchaCanvas = document.querySelector('#captcha')
+      let captchaTextArr = []
+
+      var ctx = captchaCanvas.getContext("2d")
+      ctx.font = "bold 30px monospace"
+      ctx.fillStyle = "#f2ed6e"
+      ctx.width = CANVAS_WIDTH
+      ctx.height = CANVAS_HEIGHT
+
+      let emailField = document.querySelector('#feedback #feedback-email')
+      let feedbackField = document.querySelector('#feedback #feedback-body')
+      let userText = document.querySelector('#feedback #captcha-usertext')
+      let submitButton = document.querySelector('#feedback #feedback-button-submit')
+      let captchaOutput = document.querySelector('#feedback #captcha-output')
+      let refreshButton = document.querySelector('#feedback #feedback-button-refresh')
+      let requiredOutput = document.querySelector('#feedback #required-output')
+
+      // alphaNums contains the characters with which you want to create the CAPTCHA
+      let alphaNums = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+      const cw = captchaCanvas.width
+      const ch = captchaCanvas.height
+
+      console.log('cw, ch', cw, ch)
+
+      for (let i = 1; i <= 7; i++) {
+        captchaTextArr.push(alphaNums[Math.floor(Math.random() * alphaNums.length)]);
+      }
+      var c = captchaTextArr.join('');
+      ctx.fillText(c, cw / 4, ch / 1.5)
+
+      userText.addEventListener('keyup', function(e) {
+        // Key Code Value of "Enter" Button is 13
+        if (e.keyCode === 13) {
+          if (userText.value === c) {
+            captchaOutput.classList.add("correctCaptcha")
+            captchaOutput.innerHTML = "Correct!"
+          } else {
+            captchaOutput.classList.add("incorrectCaptcha")
+            captchaOutput.innerHTML = "Incorrect, please try again"
+          }
+        }
+      });
+
+      refreshButton.addEventListener('click', function(event) {
+        event.preventDefault()
+
+        userText.value = ""
+
+        captchaTextArr = []
+        for (let j = 1; j <= 7; j++) {
+          captchaTextArr.push(alphaNums[Math.floor(Math.random() * alphaNums.length)])
+        }
+
+        ctx.clearRect(0, 0, cw, ch)
+        c = captchaTextArr.join('')
+        ctx.fillText(c, cw / 4, ch / 1.5)
+        captchaOutput.innerHTML = ""
+      });
+
+      submitButton.addEventListener('click', function(event) {
+        event.preventDefault()
+
+        if (emailField.value == '' || feedbackField.value == '') {
+          requiredOutput.classList.add("incorrectCaptcha")
+          requiredOutput.innerHTML = 'Email and feedback fields required'
+        } else {
+          requiredOutput.classList.remove("incorrectCaptcha")
+          requiredOutput.innerHTML = ''
+
+          if (userText.value === c) {
+            captchaOutput.classList.add("correctCaptcha")
+            captchaOutput.innerHTML = "Correct!"
+
+            GemWarrior.sendFeedback(event)
+          } else {
+            captchaOutput.classList.add("incorrectCaptcha")
+            captchaOutput.innerHTML = "Incorrect, please try again"
+          }
+        }
+      })
+
+      break
+
     case 'start':
       const playConfirm = new Modal('confirm-start', `Welcome to ${PROGRAM_NAME}!`,
         `
-          Welcome to an old-school text adventure world of mystery and single-scene-ness (because I haven't programmed more than that yet). Use all the typical text adventure command fare and see if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>!<br /><br />Feedback accepted and welcomed via any point of contact found <a href="https://michaelchadwick.info" target="_blank">here</a>.
+          <p>Welcome to an old-school text adventure world of mystery and single-scene-ness (because I haven't programmed more than that yet). Use all the typical text adventure command fare and see if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>!</p>
+
+          <br />
+
+          <p>Feedback accepted and welcomed! Click the dialog icon (<i class="fa-solid fa-comments"></i>) in the top-right of the header and send me a few words.</p>
         `,
         'Play w/ sound',
         'Play quietly'
@@ -541,6 +679,7 @@ GemWarrior._attachEventHandlers = function() {
     GemWarrior.dom.navOverlay.classList.toggle('show')
   })
   GemWarrior.dom.btnHelp.addEventListener('click', () => modalOpen('help'))
+  GemWarrior.dom.btnFeedback.addEventListener('click', () => modalOpen('feedback'))
   GemWarrior.dom.btnSettings.addEventListener('click', () => modalOpen('settings'))
 
   // catch the mobile keyboard buttons
@@ -602,8 +741,9 @@ GemWarrior._attachEventHandlers = function() {
   // if we leave command bar form, return after a moment
   document.addEventListener('mouseup', () => {
     const isTextSelected = window.getSelection().toString() != ''
+    const isFeedbackFocused = ['feedback', 'feedback-email', 'feedback-body', 'feedback-submit', 'captcha-usertext', 'feedback-button-refresh'].includes(document.activeElement.id)
 
-    if (!isTextSelected) {
+    if (!isTextSelected && !isFeedbackFocused) {
       setTimeout(function() {
         GemWarrior.dom.cmdInput.focus()
       }, GW_SNAPBACK_DELAY)
