@@ -176,6 +176,10 @@ async function modalOpen(type) {
           <br />
 
           <p>Feedback accepted and welcomed! Click the dialog icon (<i class="fa-solid fa-comments"></i>) in the top-right of the header and send me a few words.</p>
+
+          <br />
+
+          <p>Now, please choose how to handle audio (can be changed in settings <i class="fa-solid fa-gear"></i> later), and be off on your adventure!
         `,
         'Play w/ sound',
         'Play quietly'
