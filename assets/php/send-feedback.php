@@ -36,7 +36,7 @@ if (!is_array($decoded)) {
 
 /* Send email */
 $headers = 'From: <' . $decoded['email'] . '>' . "\r\n";
-$to = 'neb@neb.host';
+$to = 'gw-feedback@neb.host';
 $subj = 'Gem Warrior feedback';
 $body = $decoded['feedback'];
 
