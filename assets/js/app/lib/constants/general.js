@@ -41,7 +41,7 @@ const GW_COMMANDS = {
     '(l)ook',
     '(p)ickup/(t)ake',
     '(d)rop',
-    '(u)se'
+    '(u)se [with/on]'
   ],
   'meta': [
     '(h)elp',
