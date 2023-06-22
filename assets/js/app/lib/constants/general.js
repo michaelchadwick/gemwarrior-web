@@ -40,7 +40,7 @@ const GW_COMMANDS = {
   'action': [
     '(l)ook',
     '(p)ickup/(t)ake',
-    '(d)op',
+    '(d)rop',
     '(u)se'
   ],
   'meta': [
