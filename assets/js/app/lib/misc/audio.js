@@ -93,5 +93,5 @@ GemWarrior._playSFX = function(action) {
 }
 
 GemWarrior._isBGMPlaying = function() {
-  return GemWarrior.config.synthBGM.playing
+  return GemWarrior.config.synthBGM ? GemWarrior.config.synthBGM.playing : false
 }
