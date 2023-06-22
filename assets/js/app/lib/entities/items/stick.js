@@ -23,6 +23,7 @@ class Stick extends Item {
           const bucket = player_inventory.items.filter(i => i.name == item_name)[0]
 
           if (this.is_clothed) {
+            console.log('bucket', bucket)
             if (bucket.is_filled_with_resin) {
               if (!this.is_resined) {
                 this.is_resined = true
@@ -67,7 +68,7 @@ class Stick extends Item {
         break
 
       default:
-        result = `You are not able to use the <span class="noun">${this.name}</span> with ${item_name}.`
+        result = `You are not able to use the <span class="noun">${this.name}</span> with <span class="noun">${item_name}</span>.`
 
         break
     }

@@ -50,7 +50,7 @@ class Bucket extends Item {
         break
 
       default:
-        result = `You are not able to use the <span class="noun">${this.name}</span> with ${item_name}.`
+        result = `You are not able to use the <span class="noun">${this.name}</span> with <span class="noun">${item_name}</span>.`
 
         break
     }
