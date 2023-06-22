@@ -20,6 +20,8 @@ class Resin extends Item {
         if (player_inventory.has_item(item_name)) {
           player_inventory.update_item_description('bucket', `A small metal container, filled with tree bark <span class="noun">${this.name}</span>.`)
 
+          player_inventory.items.filter(i => i.name == item_name)[0].is_filled_with_resin = true
+
           player_inventory.remove_item(this.name)
 
           result = `You fill the <span class="noun">${item_name}</span> with <span class="noun">${this.name}</span> and discard the bottle.`
@@ -30,7 +32,7 @@ class Resin extends Item {
         break
 
       default:
-        result = `You are not able to use the <span class="noun">${this.name}</span> with ${item_name}.`
+        result = `You are not able to use the <span class="noun">${this.name}</span> with <span class="noun">${item_name}</span>.`
 
         break
     }
