@@ -1114,7 +1114,9 @@ GemWarrior.__traverseHistory = function(key) {
     GemWarrior.dom.cmdInput.focus()
     GemWarrior.dom.cmdInput.value = ''
 
-    setTimeout(() => GemWarrior.dom.cmdInput.value = GemWarrior.config.history[GemWarrior.config.historyMarker], 20)
+    if (GemWarrior.config.history[GemWarrior.config.historyMarker]) {
+      setTimeout(() => GemWarrior.dom.cmdInput.value = GemWarrior.config.history[GemWarrior.config.historyMarker], 20)
+    }
   }
 }
 
