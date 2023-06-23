@@ -81,6 +81,13 @@ const GW_DEFAULTS = {
   }
 }
 
+const GW_DIRECTIONS = {
+  North: 'north',
+  East: 'east',
+  South: 'south',
+  West: 'west'
+}
+
 const GW_DANGER_LEVEL = {
   none: 0,
   low: 15,

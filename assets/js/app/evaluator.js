@@ -92,9 +92,15 @@ class Evaluator {
       case 'go':
       case 'g':
         if (arg1) {
-          GemWarrior.evaluator.process(arg1.toLowerCase())
+          const direction = arg1.toLowerCase()
+
+          if (Object.values(GW_DIRECTIONS).includes(arg1)) {
+            GemWarrior.evaluator.process(arg1)
+          } else {
+            GemWarrior.config.textOutput = `You cannot go in a "${direction}" direction.`
+          }
         } else {
-          GemWarrior.config.textOutput = 'You cannot just <span class="keyword">go</span> without a direction.'
+          GemWarrior.config.textOutput = 'You cannot just <span class="keyword">go</span> without a <em>direction</em>.'
         }
 
         break
