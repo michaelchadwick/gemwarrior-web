@@ -48,6 +48,8 @@ GemWarrior._initSynths = function() {
 
   console.log('[LOADED] /app/lib/misc/audio(synths)')
 }
+
+// BackGround Music
 GemWarrior._playBGM = function(action) {
   if (GemWarrior.settings.enableSound) {
     const filename = `/assets/audio/gw-bgm-${action}.mid`
@@ -71,6 +73,7 @@ GemWarrior._stopBGM = function() {
   GemWarrior.config.synthBGM.stopMIDI()
 }
 
+// Sound eFfects
 GemWarrior._playSFX = function(action) {
   if (GemWarrior.settings.enableSound) {
     const filename = `/assets/audio/gw-sfx-${action}.mid`
@@ -92,6 +95,7 @@ GemWarrior._playSFX = function(action) {
   }
 }
 
+// Flags
 GemWarrior._isBGMPlaying = function() {
   return GemWarrior.config.synthBGM ? GemWarrior.config.synthBGM.playing : false
 }
