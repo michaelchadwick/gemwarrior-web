@@ -28,11 +28,11 @@ As you travel you will discover sights and sounds of the land, all of which are 
 <!--`> rest`                  - take a load off and replenish hp-->
 
 `> (l)ook      [object]`      - look at current location and its items and monsters
-`> (t)ake      [object]`      - take an item from the current location
+`> (g)et`/`(p)ickup`/`(t)ake [object]`           - take an item from the current location
 `> (dr)op      [object]`      - drop an item to the current location
 `> (u)se       [object]`      - use an item from your inventory or current location (use 'with' or 'on' to combine with other item)
 
-`> (g)o        [direction]`   - go in a direction, if possible (north|east|south|west work as shortcuts)
+`> go        [direction]`   - go in a direction, if possible (north|east|south|west work as shortcuts)
 <!--`> (eq)uip [object]`    - designate an item in your inventory your weapon-->
 <!--`> (uneq)uip   [object]`    - stop using an item in your inventory as your weapon-->
 <!--`> (d)rop      [object]`    - drop an item from your inventory-->

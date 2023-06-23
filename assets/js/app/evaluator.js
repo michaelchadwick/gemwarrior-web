@@ -90,7 +90,6 @@ class Evaluator {
       // travel
 
       case 'go':
-      case 'g':
         if (arg1) {
           const direction = arg1.toLowerCase()
 
@@ -142,6 +141,8 @@ class Evaluator {
 
         break
 
+      case 'get':
+      case 'g':
       case 'pickup':
       case 'p':
       case 'take':
