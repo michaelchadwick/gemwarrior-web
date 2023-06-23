@@ -29,10 +29,10 @@ class Rock extends Item {
 
             setTimeout(() => GemWarrior._playSFX('big-get'), 600)
           } else {
-            result = `You knock the two <span class="noun">${this.name}</span>s together, but nothing happens.`
+            result = `You knock the two <span class="noun">${this.name}</span>s together, and you notice the spark singes the end of your <span class="noun">stick</span> a little, but then goes out.`
           }
         } else {
-          result = `You knock the <span class="noun">${this.name}</span>s together, but nothing happens.`
+          result = `You knock the two <span class="noun">${this.name}</span>s together, and you notice a noticeable spark emitting from where they collide, but otherwise nothing happens.`
         }
 
         break
