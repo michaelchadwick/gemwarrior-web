@@ -37,7 +37,7 @@ const ERROR_DROP_PARAM_MISSING              = 'You cannot just "drop". You gotta
 const ERROR_EQUIP_PARAM_MISSING             = 'You cannot just "equip". You gotta choose something to equip.'
 const ERROR_UNEQUIP_PARAM_MISSING           = 'You cannot just "unequip". You gotta choose something to unequip.'
 
-const ERROR_CHANGE_PARAM_MISSING            = 'You cannot just "change". You gotta choose something to change.<br /><br />Current options are <span class="argument">name</span> and <span class="argument">debugMode</span>.'
+const ERROR_CHANGE_PARAM_MISSING            = 'You cannot just "change". You gotta choose something to change.<br /><br />Current options are <span class="argument">name</span> and <span class="argument">debug</span>.'
 const ERROR_CHANGE_PARAM_INVALID            = 'You cannot change that...yet.'
 
 const ERROR_LIST_PARAM_MISSING              = 'You cannot just "list". You gotta choose something to list.'

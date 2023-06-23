@@ -337,7 +337,7 @@ class Evaluator {
           switch(arg1.toLowerCase()) {
             case 'name':
               if (!arg2) {
-                GemWarrior.config.textOutput = 'If you want to <span class="keyword">change</span> your <span class="noun">name</span>, you must indicate <em>what</em> you would like to change it to.'
+                GemWarrior.config.textOutput = `If you want to <span class="keyword">${verb}</span> your <span class="noun">${arg1}</span>, you must indicate <em>what</em> you would like to change it to.`
               } else if (arg2.length > GW_NAME_LENGTH_MAX) {
                 GemWarrior.config.textOutput = `That name is too long. Try again with something fewer than ${GW_NAME_LENGTH_MAX} characters.`
               } else {
@@ -352,25 +352,25 @@ class Evaluator {
 
               break
 
-            case 'debugMode':
+            case 'debug':
               if (!arg2) {
-                GemWarrior.config.textOutput = 'If you want to <span class="keyword">change</span> <span class="argument">debugMode</span>, you must indicate <em>what</em> you would like to change it to.'
+                GemWarrior.config.textOutput = `If you want to <span class="keyword">${verb}</span> <span class="noun">${arg1}</span>, you must indicate <em>what</em> you would like to change it to.`
               } else {
                 if (arg2.toLowerCase() == 'true') {
                   GemWarrior.config.debugMode = true
 
-                  GemWarrior.config.textOutput = `${PROGRAM_NAME}'s <span class="keyword">debugMode</span> is now <span class="keyword true">true</span>`
+                  GemWarrior.config.textOutput = `${PROGRAM_NAME}'s <span class="keyword">${arg1}</span> is now <span class="keyword true">true</span>`
                 } else {
                   GemWarrior.config.debugMode = false
 
-                  GemWarrior.config.textOutput = `${PROGRAM_NAME}'s <span class="keyword">debugMode</span> is now <span class="keyword false">false</span>`
+                  GemWarrior.config.textOutput = `${PROGRAM_NAME}'s <span class="keyword">${arg1}</span> is now <span class="keyword false">false</span>`
                 }
               }
 
               break
 
             default:
-              GemWarrior.config.textOutput = `You cannot <span class="keyword">change</span> <span class="argument">${arg1}</span>...<em>yet</em>.`
+              GemWarrior.config.textOutput = `You cannot <span class="keyword">${verb}</span> <span class="argument">${arg1}</span>...<em>yet</em>.`
               break
           }
         }
