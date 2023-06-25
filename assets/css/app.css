@@ -1,4 +1,16 @@
 /* FOUNDATION */
+:root {
+  --core-yellow:        #f2ed6e;
+  --core-yellow-alt1:   #f9f584;
+
+  --anim-yellow1:         #4c4b1a;
+  --anim-yellow2:         #524f11;
+
+  --neutral-black:      #111111;
+  --neutral-black-alt1: #161616;
+  --neutral-white:      #eeeeee;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -9,9 +21,9 @@ html {
 }
 
 body {
-  background: repeating-linear-gradient(45deg, #161616 0%, #161616 10%, #111111 0%, #111111 50%) 0/15px 15px;
-  background-color: #111111;
-  color: #eeeeee;
+  background: repeating-linear-gradient(45deg, var(--neutral-black-alt1) 0%, var(--neutral-black-alt1) 10%, var(--neutral-black) 0%, var(--neutral-black) 50%) 0/15px 15px;
+  background-color: #var(--neutral-black);
+  color: var(--neutral-white);
   font-family: "Lucida Console", monospace;
   font-size: 1rem;
   font-size-adjust: 0.5;
@@ -21,6 +33,9 @@ body {
   margin: 0;
   padding: 0;
 }
+  body.animate-body-flash {
+    background: repeating-linear-gradient(45deg, var(--anim-yellow1) 0%, var(--anim-yellow1) 10%, var(--anim-yellow2) 0%, var(--anim-yellow2) 50%) 0/15px 15px;
+  }
 
 a,
 a:active
@@ -68,7 +83,7 @@ button {
     cursor: pointer;
     font-size: 16px;
     padding: 0 4px;
-    text-shadow: 1px 1px 1px #111111;
+    text-shadow: 1px 1px 1px #var(--neutral-black);
   }
     @media (min-width: 768px) {
       button.icon {
@@ -407,7 +422,7 @@ section#log-container {
 }
 
 #interface {
-  background-color: #111111;
+  background-color: #var(--neutral-black);
   bottom: 0;
   display: flex;
   flex-direction: column;
@@ -492,8 +507,8 @@ section#log-container {
     }
   #interface #cli {
     background: #222222;
-    border-top: 2px solid #111111;
-    color: #eeeeee;
+    border-top: 2px solid #var(--neutral-black);
+    color: var(--neutral-white);
     display: none;
     height: 30px;
     padding: 5px 0;
@@ -510,7 +525,7 @@ section#log-container {
       #interface #cli form input {
         background: #222222;
         border: 0;
-        color: #eeeeee;
+        color: var(--neutral-white);
         font-family: "Lucida Console", "Consolas", monospace;
         font-size: 0.9rem;
         min-width: 300px;

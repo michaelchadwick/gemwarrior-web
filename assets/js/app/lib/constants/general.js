@@ -71,6 +71,7 @@ const GW_DEFAULTS = {
     'worldSave': true
   },
   'settings': {
+    'enableAnimation': true,
     'enableSound': false,
     'firstTime': true,
     'hasChangedName': false,

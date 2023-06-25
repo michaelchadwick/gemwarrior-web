@@ -213,6 +213,21 @@ async function modalOpen(type) {
         `
           <div id="settings">
 
+            <!-- enable animation -->
+            <div class="setting-row">
+              <div class="text">
+                <div class="title">Enable animation</div>
+                <div class="description">Enable GemWarrior to show some visual zazz for various actions.</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <div id="button-setting-enable-animation" data-status="true" class="switch" onclick="GemWarrior._changeSetting('enableAnimation')">
+                    <span class="knob"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- enable sound -->
             <div class="setting-row">
               <div class="text">
@@ -473,6 +488,29 @@ GemWarrior._loadSettings = async function() {
 }
 GemWarrior._changeSetting = function(setting, event = null) {
   switch (setting) {
+    case 'enableAnimation':
+      var st = document.getElementById('button-setting-enable-animation')
+
+      if (st) {
+        st = st.dataset.status
+
+        if (st == '' || st == 'false') {
+          // update setting DOM
+          document.getElementById('button-setting-enable-animation').dataset.status = 'true'
+
+          // save to code/LS
+          GemWarrior._saveSetting('enableAnimation', true)
+        } else {
+          // update setting DOM
+          document.getElementById('button-setting-enable-animation').dataset.status = 'false'
+
+          // save to code/LS
+          GemWarrior._saveSetting('enableAnimation', false)
+        }
+      }
+
+      break
+
     case 'enableSound':
       var st = document.getElementById('button-setting-enable-sound')
 
