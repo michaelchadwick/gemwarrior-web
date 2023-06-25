@@ -389,7 +389,7 @@ class Evaluator {
               GemWarrior._playBGM('main')
             }
 
-            GemWarrior.config.textOutput = 'Playing background music.'
+            GemWarrior.config.textOutput = 'Playing moody, enchanting background music.'
           } else {
             GemWarrior.config.textOutput = 'Background music is already playing.'
           }
