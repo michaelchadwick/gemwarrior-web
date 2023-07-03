@@ -217,7 +217,7 @@ async function modalOpen(type) {
             <div class="setting-row">
               <div class="text">
                 <div class="title">Enable animation</div>
-                <div class="description">Enable GemWarrior to show some visual zazz for various actions.</div>
+                <div class="description">Show some visual zazz for various actions.</div>
               </div>
               <div class="control">
                 <div class="container">
@@ -232,7 +232,7 @@ async function modalOpen(type) {
             <div class="setting-row">
               <div class="text">
                 <div class="title">Enable sound</div>
-                <div class="description">Enable GemWarrior to play music and sound effects.</div>
+                <div class="description">Play music and sound effects.</div>
               </div>
               <div class="control">
                 <div class="container">
@@ -242,6 +242,23 @@ async function modalOpen(type) {
                 </div>
               </div>
             </div>
+
+            <!-- TODO: enable typewriter -->
+            <!--
+            <div class="setting-row">
+              <div class="text">
+                <div class="title">Enable typewriter</div>
+                <div class="description">Display location descriptions using a typewriter effect the first time you visit them.</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <div id="button-setting-enable-typewriter" data-status="" class="switch" onclick="GemWarrior._changeSetting('enableTypewriter')">
+                    <span class="knob"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            -->
 
             <!-- sound: bgm -->
             <div class="setting-row requires-sound">
@@ -389,6 +406,16 @@ GemWarrior._loadSettings = async function() {
   let setting = null
 
   if (lsSettings) {
+    if (lsSettings.enableAnimation !== undefined) {
+      GemWarrior.settings.enableAnimation = lsSettings.enableAnimation
+
+      setting = document.getElementById('button-setting-enable-animation')
+
+      if (setting) {
+        setting.dataset.status = GemWarrior.settings.enableAnimation
+      }
+    }
+
     if (lsSettings.enableSound !== undefined) {
       GemWarrior.settings.enableSound = lsSettings.enableSound
 
@@ -413,6 +440,19 @@ GemWarrior._loadSettings = async function() {
         setting.dataset.status = GemWarrior.settings.enableSound
       }
     }
+
+    // TODO
+    // if (lsSettings.enableTypewriter !== undefined) {
+    //   GemWarrior.settings.enableTypewriter = lsSettings.enableTypewriter
+
+    //   if (GemWarrior.settings.enableTypewriter) {
+    //     setting = document.getElementById('button-setting-enable-typewriter')
+
+    //     if (setting) {
+    //       setting.dataset.status = GemWarrior.settings.enableTypewriter
+    //     }
+    //   }
+    // }
 
     if (lsSettings.firstTime !== undefined) {
       GemWarrior.settings.firstTime = lsSettings.firstTime
@@ -560,6 +600,29 @@ GemWarrior._changeSetting = function(setting, event = null) {
 
       break
 
+    case 'enableTypewriter':
+      var st = document.getElementById('button-setting-enable-typewriter')
+
+      if (st) {
+        st = st.dataset.status
+
+        if (st == '' || st == 'false') {
+          // update setting DOM
+          document.getElementById('button-setting-enable-typewriter').dataset.status = 'true'
+
+          // save to code/LS
+          GemWarrior._saveSetting('enableTypewriter', true)
+        } else {
+          // update setting DOM
+          document.getElementById('button-setting-enable-typewriter').dataset.status = 'false'
+
+          // save to code/LS
+          GemWarrior._saveSetting('enableTypewriter', false)
+        }
+      }
+
+      break
+
     case 'showAvatar':
       var st = document.getElementById('button-setting-show-avatar')
 
@@ -634,7 +697,7 @@ GemWarrior._changeSetting = function(setting, event = null) {
   }
 }
 GemWarrior._saveSetting = function(setting, value) {
-  console.log('saving setting to LS...', setting, value)
+  // console.log('saving setting to LS...', setting, value)
 
   const settings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
 
@@ -905,28 +968,32 @@ GemWarrior._out = function(text, noLineBreak) {
 }
 
 GemWarrior._type = function(str) {
+  console.log('_type')
+
   let i = 0
 
-  typeWriter()
+  while (i < str.length) {
+    const char = str.charAt(i)
 
-  function typeWriter() {
-    if (i < str.length) {
-      const char = str.charAt(i)
-      console.log('type char', char)
-      const min = 9
-      const max = min + 3
-      // min delay (s) to max delay (s) (exclusive)
-      const delay = Math.floor(Math.random() * max) + min
+    // console.log('type char', char)
 
-      GemWarrior.dom.output.append(char)
-      i++
-      setTimeout(typeWriter, delay)
-    } else {
-      return true
-    }
+    const min = 9
+    const max = min + 3
+    // min delay (s) to max delay (s) (exclusive)
+    const delay = Math.floor(Math.random() * max) + min
+
+    GemWarrior._wait(delay)
+
+    GemWarrior.dom.output.append(char)
+    GemWarrior._scrollOutput()
+    i++
   }
 
-  GemWarrior._scrollOutput()
+  return
+}
+
+GemWarrior._wait = function(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 // update DOM stats and save to localStorage

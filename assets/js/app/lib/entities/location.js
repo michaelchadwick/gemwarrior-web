@@ -58,7 +58,7 @@ class Location extends Entity {
     }
 
     // TODO: sort of works, but not really
-    if (!GemWarrior.config.useTypewriter) {
+    if (!GemWarrior.settings.enableTypewriter) {
       if (!this.is_empty()) {
         result += this.list_items()
       }
@@ -70,12 +70,16 @@ class Location extends Entity {
         if (!this.is_empty()) {
           result += this.list_items()
         }
+
+        return result
       }
       // if not visited yet, do a cool typewriter effect
       else {
         this.visited = true
 
-        GemWarrior._type(result)
+        GemWarrior._type(result, this)
+
+        console.log('foo')
 
         if (!this.is_empty()) {
           return this.list_items()
