@@ -127,7 +127,7 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
     return this.items.some(loc_item => loc_item.name.toLowerCase() == item_name.toLowerCase())
   }
   add_item(item_name) {
-    console.log('location add_item', item_name)
+    // console.log('location add_item', item_name)
 
     return this.items.push(Utils.create_custom_item(item_name))
   }

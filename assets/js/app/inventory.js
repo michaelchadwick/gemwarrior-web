@@ -283,7 +283,7 @@ class Inventory {
   }
 
   remove_item(item_name) {
-    console.log(`remove_item(${item_name})`)
+    // console.log(`remove_item(${item_name})`)
 
     if (this.has_item(item_name)) {
       const index = Object.values(this.items)
@@ -305,7 +305,7 @@ class Inventory {
   }
 
   item_has_condition(item_name, condition) {
-    console.log(`item_has_condition(${item_name}, ${condition})`)
+    // console.log(`item_has_condition(${item_name}, ${condition})`)
 
     const item = Object.values(this.items).filter(i => i.name.toLowerCase() == item_name.toLowerCase())[0]
 

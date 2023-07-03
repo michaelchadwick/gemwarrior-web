@@ -125,7 +125,7 @@ class World {
       loc.visited = false
     })
 
-    console.log('[debug] All locations now unvisited')
+    // console.log('[debug] All locations now unvisited')
   }
 
 }

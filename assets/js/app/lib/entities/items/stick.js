@@ -23,7 +23,6 @@ class Stick extends Item {
           const bucket = player_inventory.items.filter(i => i.name == item_name)[0]
 
           if (this.is_clothed) {
-            console.log('bucket', bucket)
             if (bucket.is_filled_with_resin) {
               if (!this.is_resined) {
                 this.is_resined = true
