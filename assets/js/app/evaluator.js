@@ -8,8 +8,11 @@ class Evaluator {
   }
 
   process(command) {
-    GemWarrior.config.history.push(command)
-    GemWarrior.config.historyMarker = GemWarrior.config.history.length
+    GemWarrior.settings.history.push(command)
+    GemWarrior.settings.historyMarker = GemWarrior.settings.history.length
+
+    GemWarrior._saveSetting('history', GemWarrior.settings.history)
+    GemWarrior._saveSetting('historyMarker', GemWarrior.settings.historyMarker)
 
     let cmds = command.split(' ')
 

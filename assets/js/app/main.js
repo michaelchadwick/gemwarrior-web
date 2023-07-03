@@ -422,6 +422,14 @@ GemWarrior._loadSettings = async function() {
       GemWarrior.settings.hasChangedName = lsSettings.hasChangedName
     }
 
+    if (lsSettings.history !== undefined) {
+      GemWarrior.settings.history = lsSettings.history
+    }
+
+    if (lsSettings.historyMarker !== undefined) {
+      GemWarrior.settings.historyMarker = lsSettings.historyMarker
+    }
+
     if (lsSettings.showAvatar !== undefined) {
       GemWarrior.settings.showAvatar = lsSettings.showAvatar
 
@@ -1134,17 +1142,17 @@ GemWarrior.__handleGesture = function(touchstartX, touchstartY, touchendX, touch
 
 // replace the command bar's command with historic data if available
 GemWarrior.__traverseHistory = function(key) {
-  if (GemWarrior.config.history.length > 0) {
+  if (GemWarrior.settings.history.length > 0) {
     if (key === 'ArrowUp') { // up, or "back", or "prev cmd"
-      if (GemWarrior.config.historyMarker > 0) {
-        GemWarrior.config.historyMarker--
+      if (GemWarrior.settings.historyMarker > 0) {
+        GemWarrior.settings.historyMarker--
       }
     } else { // down, or "forward", or "next most recent cmd"
-      if (GemWarrior.config.historyMarker < GemWarrior.config.history.length) {
-        GemWarrior.config.historyMarker++
+      if (GemWarrior.settings.historyMarker < GemWarrior.settings.history.length) {
+        GemWarrior.settings.historyMarker++
       } else { // back to current untyped-as-of-yet command
         GemWarrior.dom.cmdInput.value = ''
-        GemWarrior.config.historyMarker = GemWarrior.config.history.length
+        GemWarrior.settings.historyMarker = GemWarrior.settings.history.length
       }
     }
 
@@ -1152,15 +1160,18 @@ GemWarrior.__traverseHistory = function(key) {
     GemWarrior.dom.cmdInput.focus()
     GemWarrior.dom.cmdInput.value = ''
 
-    if (GemWarrior.config.history[GemWarrior.config.historyMarker]) {
-      setTimeout(() => GemWarrior.dom.cmdInput.value = GemWarrior.config.history[GemWarrior.config.historyMarker], 20)
+    if (GemWarrior.settings.history[GemWarrior.settings.historyMarker]) {
+      setTimeout(() => GemWarrior.dom.cmdInput.value = GemWarrior.settings.history[GemWarrior.settings.historyMarker], 20)
     }
   }
+
+  GemWarrior._saveSetting('history', GemWarrior.settings.history)
+  GemWarrior._saveSetting('historyMarker', GemWarrior.settings.historyMarker)
 }
 
 // get a filtered list of the player's command history
 GemWarrior.__getHistoryDisplay = function() {
-  return `<strong>Command history</strong>: ${GemWarrior.config.history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
+  return `<strong>Command history</strong>: ${GemWarrior.settings.history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
 }
 
 // print number of spaces
