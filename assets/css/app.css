@@ -33,9 +33,6 @@ body {
   margin: 0;
   padding: 0;
 }
-  body.animate-body-flash {
-    background: repeating-linear-gradient(45deg, var(--anim-yellow1) 0%, var(--anim-yellow1) 10%, var(--anim-yellow2) 0%, var(--anim-yellow2) 50%) 0/15px 15px;
-  }
 
 a,
 a:active
