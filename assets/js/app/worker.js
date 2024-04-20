@@ -105,7 +105,7 @@ async function initData() {
   console.log('[LOADED] /app/worker')
 }
 
-function changeStatus(val) {
+function changeStatus(val = 'standing') {
   const path = GW_ASSET_DATA_PATH
   const format = 'txt'
   const url = `${path}/player-${val}.${format}`
