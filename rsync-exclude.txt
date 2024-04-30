@@ -1,3 +1,4 @@
+.DS_Store
 assets/scss/*
 .codeclimate.yml
 .csslintrc
@@ -9,6 +10,7 @@ assets/scss/*
 *.logicx
 .sass-cache
 node_modules
+LICENSE
 LICENSE.md
 README.md
 Rakefile
