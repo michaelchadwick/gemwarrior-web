@@ -1,6 +1,8 @@
 // /assets/js/app/lib/misc/player_levels.js
 // Stats table for each level the player can reach
 
+// TODO: actually implement leveling system
+
 class PlayerLevels {
   static get_level_stats(level) {
     switch (level) {

@@ -2,6 +2,9 @@
 /* global GemWarrior */
 /* eslint-disable no-unused-vars */
 
+// TODO: Actions should have more visual flair
+// TODO: Ending needs visual extravaganza
+
 GemWarrior.animate = (type, q) => {
   if (GemWarrior.settings.enableAnimation) {
     let speed = 50

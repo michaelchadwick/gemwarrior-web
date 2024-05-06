@@ -50,6 +50,7 @@ GemWarrior._initSynths = function() {
 }
 
 // BackGround Music
+// TODO: add more background music?
 GemWarrior._playBGM = function(action) {
   if (GemWarrior.settings.enableSound) {
     const filename = `/assets/audio/gw-bgm-${action}.mid`

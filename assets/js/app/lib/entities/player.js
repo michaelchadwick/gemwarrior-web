@@ -2,6 +2,8 @@
 /* global GemWarrior */
 /* eslint-disable no-unused-vars */
 
+// TODO: Solving puzzles should reward XP
+
 class Player extends Creature {
   constructor(options = null) {
     super()

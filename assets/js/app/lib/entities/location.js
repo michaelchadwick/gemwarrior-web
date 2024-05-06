@@ -1,6 +1,8 @@
 // /assets/js/app/lib/entities/location.js
 // Place in the game
 
+// TODO: add other locations from gemwarrior-ruby?
+
 class Location extends Entity {
   constructor(options) {
     super()
@@ -57,7 +59,7 @@ class Location extends Entity {
       }
     }
 
-    // TODO: sort of works, but not really
+    // TODO: implement typewriter effect on first visit
     if (!GemWarrior.settings.enableTypewriter) {
       if (!this.is_empty()) {
         result += this.list_items()

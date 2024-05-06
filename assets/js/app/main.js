@@ -243,7 +243,6 @@ async function modalOpen(type) {
               </div>
             </div>
 
-            <!-- TODO: enable typewriter -->
             <!--
             <div class="setting-row">
               <div class="text">
@@ -441,7 +440,6 @@ GemWarrior._loadSettings = async function() {
       }
     }
 
-    // TODO
     // if (lsSettings.enableTypewriter !== undefined) {
     //   GemWarrior.settings.enableTypewriter = lsSettings.enableTypewriter
 
@@ -1192,6 +1190,7 @@ GemWarrior.__handleClickTouch = function(event) {
   }
 }
 
+// TOUCH: add mobile swipe ability
 GemWarrior.__handleGesture = function(touchstartX, touchstartY, touchendX, touchendY) {
   const delx = touchendX - touchstartX
   const dely = touchendY - touchstartY
