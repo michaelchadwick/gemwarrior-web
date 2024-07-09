@@ -3,10 +3,10 @@
 /* global GemWarrior */
 
 // settings: saved in LOCAL STORAGE
-GemWarrior.settings = {...GW_DEFAULTS.settings}
+GemWarrior.settings = { ...GW_DEFAULTS.settings }
 
 // config: only saved while game is loaded
-GemWarrior.config = {...GW_DEFAULTS.config}
+GemWarrior.config = { ...GW_DEFAULTS.config }
 
 // set env
 GemWarrior.config.env = GW_ENV_PROD_URL.includes(document.location.hostname) ? 'prod' : 'local'
@@ -18,7 +18,7 @@ GemWarrior.evaluator = new Evaluator()
  * public methods *
  *************************************************************************/
 
-GemWarrior.sendFeedback = async function(e) {
+GemWarrior.sendFeedback = async function (e) {
   e.preventDefault()
 
   const email = e.target.parentElement[0].value
@@ -29,18 +29,18 @@ GemWarrior.sendFeedback = async function(e) {
   const response = await fetch('../assets/php/send-feedback.php', {
     method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "Accept":       "application/json"
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     },
-    body: JSON.stringify({ "email": email, "feedback": feedback })
+    body: JSON.stringify({ email: email, feedback: feedback }),
   })
   const json = await response.json()
 
   const submitOutput = document.querySelector('#feedback #feedback-submit-output')
 
   if (json.error) {
-    submitOutput.classList.remove("correct")
-    submitOutput.classList.add("incorrect")
+    submitOutput.classList.remove('correct')
+    submitOutput.classList.add('incorrect')
     submitOutput.innerHTML = 'Feedback could not be submitted. Try again later.'
   } else {
     document.querySelector('#feedback').innerHTML = 'Thanks for the feedback!'
@@ -50,7 +50,7 @@ GemWarrior.sendFeedback = async function(e) {
 }
 
 async function modalOpen(type) {
-  switch(type) {
+  switch (type) {
     case 'help':
       GemWarrior._out(`
         <br />
@@ -64,7 +64,9 @@ async function modalOpen(type) {
       const CANVAS_WIDTH = 300
       const CANVAS_HEIGHT = 50
 
-      this.myModal = new Modal('perm', 'Feedback',
+      this.myModal = new Modal(
+        'perm',
+        'Feedback',
         `
           <form id="feedback">
             <p>Thanks for taking the time to send me some feedback on Gem Warrior!</p>
@@ -92,9 +94,9 @@ async function modalOpen(type) {
       let captchaCanvas = document.querySelector('#captcha')
       let captchaTextArr = []
 
-      var ctx = captchaCanvas.getContext("2d")
-      ctx.font = "bold 30px monospace"
-      ctx.fillStyle = "#f2ed6e"
+      var ctx = captchaCanvas.getContext('2d')
+      ctx.font = 'bold 30px monospace'
+      ctx.fillStyle = '#f2ed6e'
       ctx.width = CANVAS_WIDTH
       ctx.height = CANVAS_HEIGHT
 
@@ -107,18 +109,81 @@ async function modalOpen(type) {
       let submitOutput = document.querySelector('#feedback #feedback-submit-output')
 
       // alphaNums contains the characters with which you want to create the CAPTCHA
-      let alphaNums = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      let alphaNums = [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z',
+        'a',
+        'b',
+        'c',
+        'd',
+        'e',
+        'f',
+        'g',
+        'h',
+        'i',
+        'j',
+        'k',
+        'l',
+        'm',
+        'n',
+        'o',
+        'p',
+        'q',
+        'r',
+        's',
+        't',
+        'u',
+        'v',
+        'w',
+        'x',
+        'y',
+        'z',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+      ]
 
       const cw = captchaCanvas.width
       const ch = captchaCanvas.height
 
       for (let i = 1; i <= 7; i++) {
-        captchaTextArr.push(alphaNums[Math.floor(Math.random() * alphaNums.length)]);
+        captchaTextArr.push(alphaNums[Math.floor(Math.random() * alphaNums.length)])
       }
-      var c = captchaTextArr.join('');
+      var c = captchaTextArr.join('')
       ctx.fillText(c, cw / 4, ch / 1.5)
 
-      userText.addEventListener('keyup', function(e) {
+      userText.addEventListener('keyup', function (e) {
         // Key Code Value of "Enter" Button is 13
         if (e.keyCode === 13) {
           if (userText.value === c) {
@@ -129,12 +194,12 @@ async function modalOpen(type) {
             captchaOutput.innerHTML = 'Incorrect, please try again'
           }
         }
-      });
+      })
 
-      refreshButton.addEventListener('click', function(event) {
+      refreshButton.addEventListener('click', function (event) {
         event.preventDefault()
 
-        userText.value = ""
+        userText.value = ''
 
         captchaTextArr = []
         for (let j = 1; j <= 7; j++) {
@@ -144,10 +209,10 @@ async function modalOpen(type) {
         ctx.clearRect(0, 0, cw, ch)
         c = captchaTextArr.join('')
         ctx.fillText(c, cw / 4, ch / 1.5)
-        captchaOutput.innerHTML = ""
-      });
+        captchaOutput.innerHTML = ''
+      })
 
-      submitButton.addEventListener('click', function(event) {
+      submitButton.addEventListener('click', function (event) {
         event.preventDefault()
 
         if (emailField.value == '' || feedbackField.value == '') {
@@ -169,7 +234,9 @@ async function modalOpen(type) {
       break
 
     case 'start':
-      const playConfirm = new Modal('confirm-start', `Welcome to ${PROGRAM_NAME}!`,
+      const playConfirm = new Modal(
+        'confirm-start',
+        `Welcome to ${PROGRAM_NAME}!`,
         `
           <p>Welcome to an old-school text adventure world of mystery and single-scene-ness (because I haven't programmed more than that yet). Use all the typical text adventure command fare and see if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>!</p>
 
@@ -209,7 +276,9 @@ async function modalOpen(type) {
       break
 
     case 'settings':
-      this.myModal = new Modal('perm', 'Settings',
+      this.myModal = new Modal(
+        'perm',
+        'Settings',
         `
           <div id="settings">
 
@@ -324,7 +393,9 @@ async function modalOpen(type) {
       break
 
     case 'win':
-      this.myModal = new Modal('perm-win', 'Congratulations!',
+      this.myModal = new Modal(
+        'perm-win',
+        'Congratulations!',
         `
           You have figured out how to exit the <span class="noun">Inescapable Hole of Turbidity</span>! Well done on completing this pre-pre-alpha version of <span class="noun">${PROGRAM_NAME}</span>. There will be more content in the pre-alpha version, but <a target="_blank" href="https://michaelchadwick.info">let me know</a> if you have any comments so far.
         `,
@@ -336,8 +407,8 @@ async function modalOpen(type) {
   }
 }
 
-GemWarrior.initApp = async function() {
-  // console.log('[INITIALIZING] app')
+GemWarrior.initApp = async function () {
+  console.log('[INITIALIZING] app')
 
   // if local dev, show debug stuff
   if (GemWarrior.config.env == 'local') {
@@ -352,9 +423,9 @@ GemWarrior.initApp = async function() {
 
   await GemWarrior._loadSettings()
 
-  GemWarrior._initAvatarWorker()
-
   await GemWarrior._loadWorld()
+
+  GemWarrior._initAvatarWorker()
 
   GemWarrior._updateDashboard()
 
@@ -365,7 +436,7 @@ GemWarrior.initApp = async function() {
   console.log('[LOADED] /app/main')
 
   // initial command
-  window.scrollTo(0,1)
+  window.scrollTo(0, 1)
 }
 
 /*************************************************************************
@@ -373,11 +444,11 @@ GemWarrior.initApp = async function() {
  *************************************************************************/
 
 // add debug stuff if local
-GemWarrior._initDebug = function() {
+GemWarrior._initDebug = function () {
   // console.log('[INITIALIZING] debug')
 
   const params = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop)
+    get: (searchParams, prop) => searchParams.get(prop),
   })
 
   if (params) {
@@ -398,7 +469,7 @@ GemWarrior._initDebug = function() {
   }
 }
 
-GemWarrior._loadSettings = async function() {
+GemWarrior._loadSettings = async function () {
   // console.log('[LOADING] settings')
 
   const lsSettings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
@@ -532,7 +603,7 @@ GemWarrior._loadSettings = async function() {
 
   console.log('[LOADED] /app/main(settings)')
 }
-GemWarrior._changeSetting = function(setting, event = null) {
+GemWarrior._changeSetting = function (setting, event = null) {
   switch (setting) {
     case 'enableAnimation':
       var st = document.getElementById('button-setting-enable-animation')
@@ -694,7 +765,7 @@ GemWarrior._changeSetting = function(setting, event = null) {
       break
   }
 }
-GemWarrior._saveSetting = function(setting, value) {
+GemWarrior._saveSetting = function (setting, value) {
   // console.log('saving setting to LS...', setting, value)
 
   const settings = JSON.parse(localStorage.getItem(GW_SETTINGS_KEY))
@@ -714,7 +785,7 @@ GemWarrior._saveSetting = function(setting, value) {
 }
 
 // load entire GemWarrior world into existence
-GemWarrior._loadWorld = async function() {
+GemWarrior._loadWorld = async function () {
   // console.log('[INITIALIZING] /app/world')
 
   const lsWorld = localStorage.getItem(GW_WORLD_KEY)
@@ -758,12 +829,16 @@ GemWarrior._loadWorld = async function() {
           } else {
             GemWarrior.world.player.name = GemWarrior.world.player._generate_name()
 
-            console.warn('NameGenerator.generate_name() failed; defaulting to terrible random name generator')
+            console.warn(
+              'NameGenerator.generate_name() failed; defaulting to terrible random name generator'
+            )
           }
         } else {
           GemWarrior.world.player.name = GemWarrior.world.player._generate_name()
 
-          console.warn('NameGenerator.name_set load failed; defaulting to terrible random name generator')
+          console.warn(
+            'NameGenerator.name_set load failed; defaulting to terrible random name generator'
+          )
         }
 
         console.log('[LOADED] /app/world(default)')
@@ -786,7 +861,7 @@ GemWarrior._loadWorld = async function() {
   }
 }
 
-GemWarrior._attachEventHandlers = function() {
+GemWarrior._attachEventHandlers = function () {
   // {} header icons to open modals
   GemWarrior.dom.btnNav.addEventListener('click', () => {
     GemWarrior.dom.navOverlay.classList.toggle('show')
@@ -799,7 +874,7 @@ GemWarrior._attachEventHandlers = function() {
   GemWarrior.dom.btnSettings.addEventListener('click', () => modalOpen('settings'))
 
   // catch the mobile keyboard buttons
-  GemWarrior.dom.keyboardButtons.forEach(button => {
+  GemWarrior.dom.keyboardButtons.forEach((button) => {
     button.addEventListener('click', (event) => {
       let key = event.target.dataset.key
 
@@ -857,10 +932,17 @@ GemWarrior._attachEventHandlers = function() {
   // if we leave command bar form, return after a moment
   document.addEventListener('mouseup', () => {
     const isTextSelected = window.getSelection().toString() != ''
-    const isFeedbackFocused = ['feedback', 'feedback-email', 'feedback-body', 'feedback-submit', 'captcha-usertext', 'feedback-button-refresh'].includes(document.activeElement.id)
+    const isFeedbackFocused = [
+      'feedback',
+      'feedback-email',
+      'feedback-body',
+      'feedback-submit',
+      'captcha-usertext',
+      'feedback-button-refresh',
+    ].includes(document.activeElement.id)
 
     if (!isTextSelected && !isFeedbackFocused) {
-      setTimeout(function() {
+      setTimeout(function () {
         GemWarrior.dom.cmdInput.focus()
       }, GW_SNAPBACK_DELAY)
     }
@@ -871,7 +953,7 @@ GemWarrior._attachEventHandlers = function() {
     const code = event.code
     const excludedKeys = ['Alt', 'Control', 'Meta', 'Shift']
 
-    if (!excludedKeys.some(key => event.getModifierState(key))) {
+    if (!excludedKeys.some((key) => event.getModifierState(key))) {
       if (getComputedStyle(GemWarrior.dom.keyboard).display == 'block') {
         if (code == 'Enter') {
           event.preventDefault()
@@ -889,7 +971,7 @@ GemWarrior._attachEventHandlers = function() {
         } else if (code.startsWith('Key')) {
           const key = code.charAt(code.length - 1)
 
-          GemWarrior.dom.keyboardButtons.forEach(button => {
+          GemWarrior.dom.keyboardButtons.forEach((button) => {
             if (button.dataset.key == key.toLowerCase()) {
               // update keyCommand
               GemWarrior.config.keyCommand += key
@@ -909,13 +991,17 @@ GemWarrior._attachEventHandlers = function() {
     }
   })
 
-  document.addEventListener('touchmove', (event) => {
-    event = event.originalEvent || event
+  document.addEventListener(
+    'touchmove',
+    (event) => {
+      event = event.originalEvent || event
 
-    if (event.scale !== 1) {
-      event.preventDefault()
-    }
-  }, false)
+      if (event.scale !== 1) {
+        event.preventDefault()
+      }
+    },
+    false
+  )
 
   // When the user clicks or touches anywhere outside of the modal, close it
   window.addEventListener('click', GemWarrior.__handleClickTouch)
@@ -924,34 +1010,42 @@ GemWarrior._attachEventHandlers = function() {
   // on viewport change, resize output
   window.onresize = GemWarrior._resizeFixedElements
 
-  let touchstartX = 0;
-  let touchstartY = 0;
-  let touchendX = 0;
-  let touchendY = 0;
+  let touchstartX = 0
+  let touchstartY = 0
+  let touchendX = 0
+  let touchendY = 0
 
-  const gestureZone = document.getElementById('output');
+  const gestureZone = document.getElementById('output')
 
-  gestureZone.addEventListener('touchstart', function(event) {
-    touchstartX = event.changedTouches[0].screenX;
-    touchstartY = event.changedTouches[0].screenY;
-  }, false);
+  gestureZone.addEventListener(
+    'touchstart',
+    function (event) {
+      touchstartX = event.changedTouches[0].screenX
+      touchstartY = event.changedTouches[0].screenY
+    },
+    false
+  )
 
-  gestureZone.addEventListener('touchend', function(event) {
-    touchendX = event.changedTouches[0].screenX;
-    touchendY = event.changedTouches[0].screenY;
-    console.log(GemWarrior.__handleGesture(touchstartX, touchstartY, touchendX, touchendY))
-    // alert(GemWarrior.__handleGesture(touchstartX, touchstartY, touchendX, touchendY))
-  }, false);
+  gestureZone.addEventListener(
+    'touchend',
+    function (event) {
+      touchendX = event.changedTouches[0].screenX
+      touchendY = event.changedTouches[0].screenY
+      console.log(GemWarrior.__handleGesture(touchstartX, touchstartY, touchendX, touchendY))
+      // alert(GemWarrior.__handleGesture(touchstartX, touchstartY, touchendX, touchendY))
+    },
+    false
+  )
 }
 
 // update user stats and send command result to display function
-GemWarrior._repl = function(result) {
+GemWarrior._repl = function (result) {
   GemWarrior._updateDashboard()
   GemWarrior._out(result)
 }
 
 // print result of user command
-GemWarrior._out = function(text, noLineBreak) {
+GemWarrior._out = function (text, noLineBreak) {
   let content_to_display = text
 
   if (!noLineBreak) {
@@ -965,7 +1059,7 @@ GemWarrior._out = function(text, noLineBreak) {
   GemWarrior._scrollOutput()
 }
 
-GemWarrior._type = function(str) {
+GemWarrior._type = function (str) {
   console.log('_type')
 
   let i = 0
@@ -990,12 +1084,12 @@ GemWarrior._type = function(str) {
   return
 }
 
-GemWarrior._wait = function(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+GemWarrior._wait = function (ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 // update DOM stats and save to localStorage
-GemWarrior._updateDashboard = function() {
+GemWarrior._updateDashboard = function () {
   // console.log('_updateDashboard()')
 
   GemWarrior.dom.statsNM.innerText = GemWarrior.world.player.name
@@ -1007,7 +1101,7 @@ GemWarrior._updateDashboard = function() {
 }
 
 // resize fixed elements when viewport changes
-GemWarrior._resizeFixedElements = function() {
+GemWarrior._resizeFixedElements = function () {
   // console.log('resized fixed elements')
 
   GemWarrior.dom.header.style.width = `${window.innerWidth - 32}px`
@@ -1017,7 +1111,7 @@ GemWarrior._resizeFixedElements = function() {
 }
 
 // dynamically scroll output depending on overflow
-GemWarrior._scrollOutput = function() {
+GemWarrior._scrollOutput = function () {
   const output = GemWarrior.dom.output
 
   if (output.scrollHeight > output.clientHeight) {
@@ -1026,18 +1120,20 @@ GemWarrior._scrollOutput = function() {
 }
 
 // return available commands in a nice display
-GemWarrior._displayCommands = function() {
+GemWarrior._displayCommands = function () {
   let cmdList = ''
 
   Object.keys(GW_COMMANDS).forEach((key) => {
-    cmdList += `&nbsp;<strong>${key}</strong>:<br />&nbsp;&nbsp;<span class="keyword">${GW_COMMANDS[key].join(', ')}</span><br />`
+    cmdList += `&nbsp;<strong>${key}</strong>:<br />&nbsp;&nbsp;<span class="keyword">${GW_COMMANDS[
+      key
+    ].join(', ')}</span><br />`
   })
 
   return cmdList
 }
 
 // write command list to main output
-GemWarrior._displayHelp = function() {
+GemWarrior._displayHelp = function () {
   let output = `<span class="noun">${PROGRAM_NAME}</span> is an old-school (if you're not playing this in some alternate, circa 1970-something, timeline) text adventure game. Type words into the command line below, hit enter/return, and things happen! See if you can escape the <span class="noun">Inescapable Hole of Turbidity</span>!`
 
   output += `<br /><br />The following commands are valid:<br />${GemWarrior._displayCommands()}`
@@ -1046,7 +1142,7 @@ GemWarrior._displayHelp = function() {
 }
 
 // write initial welcome message to main output
-GemWarrior._displayWelcome = function() {
+GemWarrior._displayWelcome = function () {
   const name = GemWarrior.world.player.name
   const len = name.length
   const sp = GemWarrior._sp(28 - len)
@@ -1080,7 +1176,7 @@ GemWarrior._displayWelcome = function() {
 }
 
 // write welcome back message for saved game to main output
-GemWarrior._displayWelcomeBack = function() {
+GemWarrior._displayWelcomeBack = function () {
   const name = GemWarrior.world.player.name
   const len = name.length
   const sp = GemWarrior._sp(12 - len).length > 0 ? GemWarrior._sp(12 - len) : ''
@@ -1112,13 +1208,13 @@ GemWarrior._displayWelcomeBack = function() {
   GemWarrior._out('<pre>' + output + '</pre>')
 }
 
-GemWarrior._getNebyooApps = async function() {
+GemWarrior._getNebyooApps = async function () {
   const response = await fetch(NEBYOOAPPS_SOURCE_URL)
   const json = await response.json()
   const apps = json.body
   const appList = document.querySelector('.nav-list')
 
-  Object.values(apps).forEach(app => {
+  Object.values(apps).forEach((app) => {
     const appLink = document.createElement('a')
     appLink.href = app.url
     appLink.innerText = app.title
@@ -1131,7 +1227,7 @@ GemWarrior._getNebyooApps = async function() {
  * _private __helper methods *
  ************************************************************************/
 
-GemWarrior.__handleEnter = function() {
+GemWarrior.__handleEnter = function () {
   if (GemWarrior.config.keyCommand.length > 0) {
     // display last command and then evaluate and output
     let input = GemWarrior.config.keyCommand
@@ -1156,10 +1252,13 @@ GemWarrior.__handleEnter = function() {
   }
 }
 
-GemWarrior.__handleBackspace = function() {
+GemWarrior.__handleBackspace = function () {
   if (GemWarrior.config.keyCommand.length) {
     // remove last letter from keyCommand
-    GemWarrior.config.keyCommand = GemWarrior.config.keyCommand.slice(0, GemWarrior.config.keyCommand.length - 1)
+    GemWarrior.config.keyCommand = GemWarrior.config.keyCommand.slice(
+      0,
+      GemWarrior.config.keyCommand.length - 1
+    )
 
     // sync to DOM display
     GemWarrior.dom.keyboardInput.innerText = GemWarrior.config.keyCommand
@@ -1173,7 +1272,7 @@ GemWarrior.__handleBackspace = function() {
   }
 }
 
-GemWarrior.__handleClickTouch = function(event) {
+GemWarrior.__handleClickTouch = function (event) {
   var dialog = document.getElementsByClassName('modal-dialog')[0]
 
   if (dialog) {
@@ -1191,32 +1290,33 @@ GemWarrior.__handleClickTouch = function(event) {
 }
 
 // TOUCH: add mobile swipe ability
-GemWarrior.__handleGesture = function(touchstartX, touchstartY, touchendX, touchendY) {
+GemWarrior.__handleGesture = function (touchstartX, touchstartY, touchendX, touchendY) {
   const delx = touchendX - touchstartX
   const dely = touchendY - touchstartY
 
   if (Math.abs(delx) > Math.abs(dely)) {
-    if (delx > 0) return "right"
-    else return "left"
-  }
-  else if(Math.abs(delx) < Math.abs(dely)){
-    if(dely > 0) return "down"
-    else return "up"
-  }
-  else return "tap"
+    if (delx > 0) return 'right'
+    else return 'left'
+  } else if (Math.abs(delx) < Math.abs(dely)) {
+    if (dely > 0) return 'down'
+    else return 'up'
+  } else return 'tap'
 }
 
 // replace the command bar's command with historic data if available
-GemWarrior.__traverseHistory = function(key) {
+GemWarrior.__traverseHistory = function (key) {
   if (GemWarrior.settings.history.length > 0) {
-    if (key === 'ArrowUp') { // up, or "back", or "prev cmd"
+    if (key === 'ArrowUp') {
+      // up, or "back", or "prev cmd"
       if (GemWarrior.settings.historyMarker > 0) {
         GemWarrior.settings.historyMarker--
       }
-    } else { // down, or "forward", or "next most recent cmd"
+    } else {
+      // down, or "forward", or "next most recent cmd"
       if (GemWarrior.settings.historyMarker < GemWarrior.settings.history.length) {
         GemWarrior.settings.historyMarker++
-      } else { // back to current untyped-as-of-yet command
+      } else {
+        // back to current untyped-as-of-yet command
         GemWarrior.dom.cmdInput.value = ''
         GemWarrior.settings.historyMarker = GemWarrior.settings.history.length
       }
@@ -1227,7 +1327,12 @@ GemWarrior.__traverseHistory = function(key) {
     GemWarrior.dom.cmdInput.value = ''
 
     if (GemWarrior.settings.history[GemWarrior.settings.historyMarker]) {
-      setTimeout(() => GemWarrior.dom.cmdInput.value = GemWarrior.settings.history[GemWarrior.settings.historyMarker], 20)
+      setTimeout(
+        () =>
+          (GemWarrior.dom.cmdInput.value =
+            GemWarrior.settings.history[GemWarrior.settings.historyMarker]),
+        20
+      )
     }
   }
 
@@ -1236,12 +1341,14 @@ GemWarrior.__traverseHistory = function(key) {
 }
 
 // get a filtered list of the player's command history
-GemWarrior.__getHistoryDisplay = function() {
-  return `<strong>Command history</strong>: ${GemWarrior.settings.history.filter((w) => !['hist', 'history'].includes(w)).join(', ')}`
+GemWarrior.__getHistoryDisplay = function () {
+  return `<strong>Command history</strong>: ${GemWarrior.settings.history
+    .filter((w) => !['hist', 'history'].includes(w))
+    .join(', ')}`
 }
 
 // print number of spaces
-GemWarrior._sp = function(num) {
+GemWarrior._sp = function (num) {
   const spaces = []
 
   for (let i = 0; i < num; i++) {
