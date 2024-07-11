@@ -12,13 +12,24 @@ section#log-container {
   width: 300px;
   z-index: 2;
 }
-  section#log-container #log {
-    white-space: break-spaces;
-  }
+section#log-container #log {
+  white-space: break-spaces;
+}
 
-.log-warn { color: orange }
-.log-error { color: red }
-.log-info { color: skyblue }
-.log-log { color: silver }
+.log-warn {
+  color: orange;
+}
+.log-error {
+  color: red;
+}
+.log-info {
+  color: skyblue;
+}
+.log-log {
+  color: silver;
+}
 
-.log-warn, .log-error { font-weight: bold; }
+.log-warn,
+.log-error {
+  font-weight: bold;
+}
