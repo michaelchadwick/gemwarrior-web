@@ -3,17 +3,17 @@
 
 class Entity {
   constructor() {
-    this.name           = 'entity'
-    this.description    = 'An entity.'
-    this.useable        = true
+    this.name = 'entity'
+    this.description = 'An entity.'
+    this.useable = true
     this.useable_battle = false
-    this.talkable       = false
-    this.consumable     = false
-    this.takeable       = true
-    this.equippable     = false
-    this.equipped       = false
-    this.used           = false
-    this.used_again     = false
+    this.talkable = false
+    this.consumable = false
+    this.takeable = true
+    this.equippable = false
+    this.equipped = false
+    this.used = false
+    this.used_again = false
     this.number_of_uses = null
 
     // console.log('[LOADED] /app/lib/entities/entity')
@@ -33,7 +33,11 @@ ${this.name_display()} [<code>${this.name}</code>]
     for (const prop in this) {
       if (prop !== 'name' && prop !== 'description') {
         result += `
-${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}`
+${prop.toUpperCase()}? ${
+          this[prop] == true
+            ? '<span class="keyword true">true</span>'
+            : '<span class="keyword false">false</span>'
+        }`
       }
     }
 

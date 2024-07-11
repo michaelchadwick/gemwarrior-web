@@ -2,12 +2,12 @@ class Resin extends Item {
   constructor(options = null) {
     super()
 
-    this.name         = 'resin'
-    this.description  = options.description || 'A small flask of what appears to be tree bark resin.'
+    this.name = 'resin'
+    this.description = options.description || 'A small flask of what appears to be tree bark resin.'
   }
 
   use() {
-    return "You open the flask and take a whiff. It smells smoky."
+    return 'You open the flask and take a whiff. It smells smoky.'
   }
 
   use_with(item_name) {
@@ -18,9 +18,12 @@ class Resin extends Item {
     switch (item_name) {
       case 'bucket':
         if (player_inventory.has_item(item_name)) {
-          player_inventory.update_item_description('bucket', `A small metal container, filled with tree bark <span class="noun">${this.name}</span>.`)
+          player_inventory.update_item_description(
+            'bucket',
+            `A small metal container, filled with tree bark <span class="noun">${this.name}</span>.`
+          )
 
-          player_inventory.items.filter(i => i.name == item_name)[0].is_filled_with_resin = true
+          player_inventory.items.filter((i) => i.name == item_name)[0].is_filled_with_resin = true
 
           player_inventory.remove_item(this.name)
 

@@ -3,6 +3,7 @@
 /* eslint-disable no-unused-vars */
 
 // TODO: Actions should have more visual flair
+//       Idea: https://github.com/ChrisBuilds/terminaltexteffects
 // TODO: Ending needs visual extravaganza
 
 GemWarrior.animate = (type, q) => {
@@ -17,25 +18,19 @@ GemWarrior.animate = (type, q) => {
           speed
         )
 
-        setTimeout(
-          () => {
-            clearInterval(intervalId)
-            document.querySelector('body').classList.remove('animate-body-flash')
-          },
-          speed * q * 2
-        )
+        setTimeout(() => {
+          clearInterval(intervalId)
+          document.querySelector('body').classList.remove('animate-body-flash')
+        }, speed * q * 2)
 
         break
 
       case 'shake':
         document.querySelector('#output').classList.toggle('animate-output-move-shake')
 
-        setTimeout(
-          () => {
-            document.querySelector('#output').classList.remove('animate-output-move-shake')
-          },
-          q * 1000
-        )
+        setTimeout(() => {
+          document.querySelector('#output').classList.remove('animate-output-move-shake')
+        }, q * 1000)
 
         break
     }

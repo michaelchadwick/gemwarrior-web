@@ -2,8 +2,10 @@ class Rock extends Item {
   constructor(options = null) {
     super()
 
-    this.name         = 'rock'
-    this.description  = options.description || 'A small, yet quite sharp, sedimentary pebble, suitable for tossing in amusement, and perhaps commerce.'
+    this.name = 'rock'
+    this.description =
+      options.description ||
+      'A small, yet quite sharp, sedimentary pebble, suitable for tossing in amusement, and perhaps commerce.'
   }
 
   use() {
@@ -25,7 +27,8 @@ class Rock extends Item {
             player_inventory.add_item('torch')
             player_inventory.remove_item('stick')
 
-            result = 'You start knocking the two <span class="noun">rock</span>s together. Eventually, you make a consistent spark and it leaps onto your <span class="noun">cloth</span>-wrapped and <span class="noun">resin</span>-soaked stick, lighting the end of the wood on fire, presenting you with a much-needed light source.<br /><br />You now have a <span class="noun">torch</span>.'
+            result =
+              'You start knocking the two <span class="noun">rock</span>s together. Eventually, you make a consistent spark and it leaps onto your <span class="noun">cloth</span>-wrapped and <span class="noun">resin</span>-soaked stick, lighting the end of the wood on fire, presenting you with a much-needed light source.<br /><br />You now have a <span class="noun">torch</span>.'
 
             setTimeout(() => GemWarrior._playSFX('big-get'), 600)
           } else {

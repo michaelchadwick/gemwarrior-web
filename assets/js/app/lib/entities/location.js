@@ -7,19 +7,19 @@ class Location extends Entity {
   constructor(options) {
     super()
 
-    this.name                 = options.name
-    this.description          = options.description
-    this.coords               = options.coords
-    this.paths                = options.paths
-    this.danger_level         = options.danger_level
-    this.monster_level_range  = options.monster_level_range
-    this.items                = this._create_items(options.items)
-    this.monsters_abounding   = options.monsters_abounding
-    this.bosses_abounding     = options.bosses_abounding
+    this.name = options.name
+    this.description = options.description
+    this.coords = options.coords
+    this.paths = options.paths
+    this.danger_level = options.danger_level
+    this.monster_level_range = options.monster_level_range
+    this.items = this._create_items(options.items)
+    this.monsters_abounding = options.monsters_abounding
+    this.bosses_abounding = options.bosses_abounding
     this.checked_for_monsters = options.checked_for_monsters
-    this.visited              = options.visited
-    this.useable              = false
-    this.takeable             = false
+    this.visited = options.visited
+    this.useable = false
+    this.takeable = false
 
     // console.log('[LOADED] /app/lib/entities/location')
   }
@@ -97,8 +97,6 @@ class Location extends Entity {
 
     let result = this.describe()
 
-
-
     result += this.list_coords()
     result += this.list_paths()
 
@@ -108,7 +106,11 @@ class Location extends Entity {
     for (const prop in this) {
       if (!skipped_props.includes(prop)) {
         result += `
-${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</span>' : '<span class="keyword false">false</span>'}`
+${prop.toUpperCase()}? ${
+          this[prop] == true
+            ? '<span class="keyword true">true</span>'
+            : '<span class="keyword false">false</span>'
+        }`
       }
     }
 
@@ -130,7 +132,7 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
     // console.log('has_item() item_name', item_name)
     // console.log('has_item() this.items', this.items)
 
-    return this.items.some(loc_item => loc_item.name.toLowerCase() == item_name.toLowerCase())
+    return this.items.some((loc_item) => loc_item.name.toLowerCase() == item_name.toLowerCase())
   }
   add_item(item_name) {
     // console.log('location add_item', item_name)
@@ -141,7 +143,9 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
     // console.log('location remove_item', item_name)
 
     if (this.has_item(item_name)) {
-      const index = Object.values(this.items).map(item => item.name.toLowerCase()).indexOf(item_name.toLowerCase())
+      const index = Object.values(this.items)
+        .map((item) => item.name.toLowerCase())
+        .indexOf(item_name.toLowerCase())
 
       if (index !== -1) {
         this.items.splice(index, 1)
@@ -160,7 +164,7 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
       // build hash out of location's items
       const item_hash = {}
 
-      Object.values(this.items).forEach(item => {
+      Object.values(this.items).forEach((item) => {
         if (Object.keys(item_hash).includes(item.name)) {
           item_hash[item.name] += 1
         } else {
@@ -173,7 +177,8 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
         const i = Object.keys(item_hash)[0]
         const q = Object.values(item_hash)[0]
 
-        const output = q > 1 ? `<span class="keyword">${i}</span> x${q}` : `<span class="keyword">${i}</span>`
+        const output =
+          q > 1 ? `<span class="keyword">${i}</span> x${q}` : `<span class="keyword">${i}</span>`
 
         return `<br />&gt;&gt; Item(s): ${output}`
       }
@@ -181,7 +186,7 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
       else {
         const output = []
 
-        Object.entries(item_hash).forEach(entry => {
+        Object.entries(item_hash).forEach((entry) => {
           const i = entry[0]
           const q = entry[1]
 
@@ -197,12 +202,14 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
     }
   }
   list_coords() {
-    return `<br />&gt;&gt; Coords: <span class="keyword">[${Object.values(this.coords).join(', ')}]</span>`
+    return `<br />&gt;&gt; Coords: <span class="keyword">[${Object.values(this.coords).join(
+      ', '
+    )}]</span>`
   }
   list_paths() {
     const valid_paths = []
 
-    Object.entries(this.paths).forEach(entry => {
+    Object.entries(this.paths).forEach((entry) => {
       if (!!entry[1]) valid_paths.push(entry[0])
     })
 
@@ -230,7 +237,7 @@ ${prop.toUpperCase()}? ${this[prop] == true ? '<span class="keyword true">true</
     const item_objects = []
 
     if (item_list.length) {
-      Object.values(item_list).forEach(item => {
+      Object.values(item_list).forEach((item) => {
         if (typeof item == 'object') {
           item_objects.push(item)
         } else {

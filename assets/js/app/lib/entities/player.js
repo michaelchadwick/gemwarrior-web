@@ -32,9 +32,7 @@ class Player extends Creature {
       this.hp_cur = 10
       this.hp_max = 10
       // normal
-      this.inventory = new Inventory([
-        new Rock()
-      ])
+      this.inventory = new Inventory([new Rock()])
       // IHOT all stuff needed for torch
       // this.inventory = new Inventory([
       //   new Bucket(),
@@ -51,10 +49,12 @@ class Player extends Creature {
       //   new Torch()
       // ])
       this.inventory_checks = 0
-      this.coords = {
-        x: 1, y: 1, z: 0
-      },
-      this.status = 'standing'
+      ;(this.coords = {
+        x: 1,
+        y: 1,
+        z: 0,
+      }),
+        (this.status = 'standing')
       this.special_abilities = []
       this.monsters_killed = 0
       this.bosses_killed = 0
@@ -73,16 +73,22 @@ class Player extends Creature {
     let output = ''
 
     output += `
-      <p>You, the mighty warrior <span class="noun">${GemWarrior.world.player.name}</span>, assess yourself:</p>
+      <p>You, the mighty warrior <span class="noun">${
+        GemWarrior.world.player.name
+      }</span>, assess yourself:</p>
       <ul>
         <li>You are wearing typical period garb. Your fashion sense is satisfactory, but not notable.</li>
         <li>
           You are reasonably healthy, but due to your current location and station, that feeling of heartiness ever diminishes.
         </li>
         <li>You are <strong>${GemWarrior.world.player.status}</strong>.</li>
-        <li>You have <span class="noun">${this.weapon || 'nothing'}</span> equipped as a weapon.</li>
+        <li>You have <span class="noun">${
+          this.weapon || 'nothing'
+        }</span> equipped as a weapon.</li>
         <li>You have <span class="noun">${this.armor || 'nothing'}</span> equipped as armor.</li>
-        <li>You have the following special abilities: ${this.special_abilities.length ? this.special_abilities.join(', ') : 'none...yet'}.</li>
+        <li>You have the following special abilities: ${
+          this.special_abilities.length ? this.special_abilities.join(', ') : 'none...yet'
+        }.</li>
     `
 
     if (GemWarrior.config.debugMode) {
@@ -109,37 +115,37 @@ class Player extends Creature {
 
   go(direction) {
     switch (direction) {
-    case 'north':
-    case 'n':
-      this.coords.y += 1
-      GemWarrior.world.set_location()
-      GemWarrior._playSFX('go-north')
-      break
-    case 'east':
-    case 'e':
-      this.coords.x += 1
-      GemWarrior.world.set_location()
-      GemWarrior._playSFX('go-east')
-      break
-    case 'south':
-    case 's':
-      this.coords.y -= 1
-      GemWarrior.world.set_location()
-      GemWarrior._playSFX('go-south')
-      break
-    case 'west':
-    case 'w':
-      this.coords.x -= 1
-      GemWarrior.world.set_location()
-      GemWarrior._playSFX('go-west')
-      break
+      case 'north':
+      case 'n':
+        this.coords.y += 1
+        GemWarrior.world.set_location()
+        GemWarrior._playSFX('go-north')
+        break
+      case 'east':
+      case 'e':
+        this.coords.x += 1
+        GemWarrior.world.set_location()
+        GemWarrior._playSFX('go-east')
+        break
+      case 'south':
+      case 's':
+        this.coords.y -= 1
+        GemWarrior.world.set_location()
+        GemWarrior._playSFX('go-south')
+        break
+      case 'west':
+      case 'w':
+        this.coords.x -= 1
+        GemWarrior.world.set_location()
+        GemWarrior._playSFX('go-west')
+        break
     }
 
     return this.coords
   }
 
   has_item(item_name) {
-    return this.inventory.some(inv_item => inv_item.name.toLowerCase() == item_name.toLowerCase())
+    return this.inventory.some((inv_item) => inv_item.name.toLowerCase() == item_name.toLowerCase())
   }
 
   list_inventory() {
@@ -154,17 +160,22 @@ class Player extends Creature {
     const playerInv = GemWarrior.world.player.inventory
     let invOutput = []
 
-    playerInv.filter(item => item.name != 'rock').forEach(item => {
-      invOutput.push(`<span class="noun">a ${item.name}</span>`)
-    })
+    playerInv
+      .filter((item) => item.name != 'rock')
+      .forEach((item) => {
+        invOutput.push(`<span class="noun">a ${item.name}</span>`)
+      })
 
     if (!GemWarrior.world.player.inventory.is_empty()) {
-      GemWarrior.config.textOutput = `You have the clothes on your back, ${invOutput.join(', ')}, and <span class="noun">${roxCount}</span>`
+      GemWarrior.config.textOutput = `You have the clothes on your back, ${invOutput.join(
+        ', '
+      )}, and <span class="noun">${roxCount}</span>`
 
       if (GemWarrior.world.player.inventory_checks >= 1) {
         GemWarrior.config.textOutput += '.'
       } else {
-        GemWarrior.config.textOutput += '. You also can\'t shake the lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
+        GemWarrior.config.textOutput +=
+          '. You also can\'t shake the lingering notion that you shouldn\'t have said "Yes" when that sketchy wizard asked if you wanted to "experience something new".'
 
         GemWarrior.world.player.inventory_checks++
       }
@@ -210,7 +221,7 @@ class Player extends Creature {
     const item_objects = []
 
     if (item_list.length) {
-      Object.values(item_list).forEach(item => {
+      Object.values(item_list).forEach((item) => {
         if (typeof item == 'object') {
           item_objects.push(item)
         } else {

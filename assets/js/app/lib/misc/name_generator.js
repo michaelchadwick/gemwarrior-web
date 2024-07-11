@@ -58,7 +58,7 @@ class NameGenerator {
       if (list && list.length) {
         let chain
 
-        if (chain = this.construct_chain(list)) {
+        if ((chain = this.construct_chain(list))) {
           this.chain_cache[type] = chain
 
           return chain
@@ -84,16 +84,16 @@ class NameGenerator {
 
         chain = this.incr_chain(chain, 'name_len', name.length)
 
-        let c = name.substr(0,1)
+        let c = name.substr(0, 1)
 
-        chain = this.incr_chain(chain,'initial',c)
+        chain = this.incr_chain(chain, 'initial', c)
 
         let string = name.substr(1)
         let last_c = c
 
         while (string.length > 0) {
-          let c = string.substr(0,1)
-          chain = this.incr_chain(chain,last_c,c)
+          let c = string.substr(0, 1)
+          chain = this.incr_chain(chain, last_c, c)
 
           string = string.substr(1)
           last_c = c
@@ -119,10 +119,10 @@ class NameGenerator {
   scale_chain(chain) {
     let table_len = {}
 
-    Object.keys(chain).forEach(key => {
+    Object.keys(chain).forEach((key) => {
       table_len[key] = 0
 
-      Object.keys(chain[key]).forEach(token => {
+      Object.keys(chain[key]).forEach((token) => {
         let count = chain[key][token]
         let weighted = Math.floor(Math.pow(count, 1.3))
 
@@ -151,7 +151,7 @@ class NameGenerator {
       while (name.length < name_len) {
         c = this.select_link(chain, last_c)
 
-        if (! c) break
+        if (!c) break
 
         name += c
         last_c = c
@@ -182,5 +182,4 @@ class NameGenerator {
 
     return false
   }
-
 }

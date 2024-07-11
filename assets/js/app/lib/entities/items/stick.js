@@ -2,10 +2,10 @@ class Stick extends Item {
   constructor(options = null) {
     super()
 
-    this.name         = 'stick'
-    this.description  = options.description || 'Fragment of a tree.'
-    this.is_clothed   = options.is_clothed || false
-    this.is_resined   = options.is_resined || false
+    this.name = 'stick'
+    this.description = options.description || 'Fragment of a tree.'
+    this.is_clothed = options.is_clothed || false
+    this.is_resined = options.is_resined || false
   }
 
   use() {
@@ -20,14 +20,15 @@ class Stick extends Item {
     switch (item_name) {
       case 'bucket':
         if (player_inventory.has_item(item_name)) {
-          const bucket = player_inventory.items.filter(i => i.name == item_name)[0]
+          const bucket = player_inventory.items.filter((i) => i.name == item_name)[0]
 
           if (this.is_clothed) {
             if (bucket.is_filled_with_resin) {
               if (!this.is_resined) {
                 this.is_resined = true
 
-                this.description = 'Fragment of a tree, wrapped in a <span class="noun">cloth</span> near the end, and wet with <span class="noun">resin</span>.'
+                this.description =
+                  'Fragment of a tree, wrapped in a <span class="noun">cloth</span> near the end, and wet with <span class="noun">resin</span>.'
 
                 result = `You poke the <span class="noun">cloth</span>-wrapped <span class="noun">${this.name}</span> into the <span class="noun">bucket</span> filled with <span class="noun">resin</span>, making the end of the <span class="noun">${this.name}</span> wet and drippy.`
               } else {

@@ -2,7 +2,7 @@
 /* global GemWarrior */
 /* eslint-disable no-unused-vars */
 
-GemWarrior._initSynths = function() {
+GemWarrior._initSynths = function () {
   // console.log('[INITIALIZING] synths')
 
   if (!GemWarrior.config.synthBGM) {
@@ -14,7 +14,7 @@ GemWarrior._initSynths = function() {
       quality: 1, // 0: chiptune, 1: FM
       reverbLev: 0.5,
       useReverb: 1,
-      voices: 8
+      voices: 8,
     })
   }
 
@@ -36,7 +36,7 @@ GemWarrior._initSynths = function() {
       quality: 1, // 0: chiptune, 1: FM
       reverbLev: 0.5,
       useReverb: 1,
-      voices: 8
+      voices: 8,
     })
   }
 
@@ -51,7 +51,7 @@ GemWarrior._initSynths = function() {
 
 // BackGround Music
 // TODO: add more background music?
-GemWarrior._playBGM = function(action) {
+GemWarrior._playBGM = function (action) {
   if (GemWarrior.settings.enableSound) {
     const filename = `/assets/audio/gw-bgm-${action}.mid`
 
@@ -70,12 +70,12 @@ GemWarrior._playBGM = function(action) {
     }, 20)
   }
 }
-GemWarrior._stopBGM = function() {
+GemWarrior._stopBGM = function () {
   GemWarrior.config.synthBGM.stopMIDI()
 }
 
 // Sound eFfects
-GemWarrior._playSFX = function(action) {
+GemWarrior._playSFX = function (action) {
   if (GemWarrior.settings.enableSound) {
     const filename = `/assets/audio/gw-sfx-${action}.mid`
 
@@ -97,6 +97,6 @@ GemWarrior._playSFX = function(action) {
 }
 
 // Flags
-GemWarrior._isBGMPlaying = function() {
+GemWarrior._isBGMPlaying = function () {
   return GemWarrior.config.synthBGM ? GemWarrior.config.synthBGM.playing : false
 }

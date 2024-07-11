@@ -18,7 +18,7 @@ class Utils {
   }
 
   static create_custom_item(data) {
-    const item_name = (typeof data == 'object') ? data.name : data
+    const item_name = typeof data == 'object' ? data.name : data
 
     // if (typeof data == 'object') {
     //   console.log(`create_custom_item(${JSON.stringify(data)})`)
@@ -27,14 +27,22 @@ class Utils {
     // }
 
     switch (item_name) {
-      case 'bucket': return new Bucket(data)
-      case 'cloth': return new Cloth(data)
-      case 'etching': return new Etching(data)
-      case 'indentation': return new Indentation(data)
-      case 'resin': return new Resin(data)
-      case 'rock': return new Rock(data)
-      case 'stick': return new Stick(data)
-      case 'torch': return new Torch(data)
+      case 'bucket':
+        return new Bucket(data)
+      case 'cloth':
+        return new Cloth(data)
+      case 'etching':
+        return new Etching(data)
+      case 'indentation':
+        return new Indentation(data)
+      case 'resin':
+        return new Resin(data)
+      case 'rock':
+        return new Rock(data)
+      case 'stick':
+        return new Stick(data)
+      case 'torch':
+        return new Torch(data)
       default:
         return false
     }

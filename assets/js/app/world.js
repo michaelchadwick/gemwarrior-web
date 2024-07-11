@@ -18,7 +18,7 @@ class World {
 
     // check location items->monster->boss, inventory->items
     if (loc.has_item(entity)) {
-      const item = Object.values(loc.items).filter(i => i.name.toLowerCase() == entity)[0]
+      const item = Object.values(loc.items).filter((i) => i.name.toLowerCase() == entity)[0]
 
       // console.log('item', item)
 
@@ -28,26 +28,26 @@ class World {
         result = item.describe()
       }
 
-    // } else if (loc.has_monster(entity)) {
-    //   Object.values(loc.monsters_abounding).forEach(m => {
-    //     if (m.name.toLowerCase() == entity) {
-    //       if (GemWarrior.config.debugMode) {
-    //         result = m.describe_detailed()
-    //       } else {
-    //         result = m.describe()
-    //       }
-    //     }
-    //   })
-    // } else if (loc.has_boss(entity)) {
-    //   Object.values(loc.bosses_abounding).forEach(b => {
-    //     if (b.name.toLowerCase() == entity) {
-    //       if (GemWarrior.config.debugMode) {
-    //         result = b.describe_detailed()
-    //       } else {
-    //         result = b.describe()
-    //       }
-    //     }
-    //   })
+      // } else if (loc.has_monster(entity)) {
+      //   Object.values(loc.monsters_abounding).forEach(m => {
+      //     if (m.name.toLowerCase() == entity) {
+      //       if (GemWarrior.config.debugMode) {
+      //         result = m.describe_detailed()
+      //       } else {
+      //         result = m.describe()
+      //       }
+      //     }
+      //   })
+      // } else if (loc.has_boss(entity)) {
+      //   Object.values(loc.bosses_abounding).forEach(b => {
+      //     if (b.name.toLowerCase() == entity) {
+      //       if (GemWarrior.config.debugMode) {
+      //         result = b.describe_detailed()
+      //       } else {
+      //         result = b.describe()
+      //       }
+      //     }
+      //   })
     } else if (this.player.inventory.has_item(entity)) {
       result = this.player.inventory.describe_item(entity)
     } else {
@@ -65,17 +65,17 @@ class World {
     const place = point ? point : this.player.coords
 
     return this.locations.filter(
-      loc => Object.values(loc.coords).join(',') == Object.values(place).join(',')
+      (loc) => Object.values(loc.coords).join(',') == Object.values(place).join(',')
     )[0]
   }
 
   set_location() {
     this.location = this.locations.filter(
-      loc => Object.values(loc.coords).join(',') == Object.values(this.player.coords).join(',')
+      (loc) => Object.values(loc.coords).join(',') == Object.values(this.player.coords).join(',')
     )[0]
   }
 
-  save = function() {
+  save = function () {
     // console.log('saving world state and global settings to localStorage...')
 
     if (GemWarrior.config.worldSave) {
@@ -83,11 +83,11 @@ class World {
         localStorage.setItem(GW_WORLD_KEY, JSON.stringify(this))
 
         // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_KEY)))
-      } catch(error) {
+      } catch (error) {
         console.error('localStorage world state save failed', error)
       }
     } else {
-      console.warn('World is not being saved, so DON\'T REFRESH!')
+      console.warn("World is not being saved, so DON'T REFRESH!")
     }
   }
 
@@ -97,35 +97,34 @@ class World {
   _create_locations(loc_data) {
     let locs = []
 
-    Object.values(loc_data).forEach(loc => {
+    Object.values(loc_data).forEach((loc) => {
       // console.log('loc', loc.items)
 
-      locs.push(new Location(
-        {
+      locs.push(
+        new Location({
           name: loc.name,
           description: loc.description,
           coords: loc.coords,
           paths: loc.paths,
           danger_level: loc.danger_level,
           monster_level_range: loc.monster_level_range || null,
-          items: loc.items.map(item => Utils.create_custom_item(item)),
+          items: loc.items.map((item) => Utils.create_custom_item(item)),
           monsters_abounding: loc.monsters_abounding || [],
           bosses_abounding: loc.bosses_abounding || [],
           checked_for_monsters: loc.checked_for_monsters || false,
-          visited: loc.visited || false
-        }
-      ))
+          visited: loc.visited || false,
+        })
+      )
     })
 
     return locs
   }
 
   _make_locations_unvisited() {
-    Object.values(GemWarrior.world.locations).forEach(loc => {
+    Object.values(GemWarrior.world.locations).forEach((loc) => {
       loc.visited = false
     })
 
     // console.log('[debug] All locations now unvisited')
   }
-
 }

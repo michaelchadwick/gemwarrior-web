@@ -1,5 +1,3 @@
 class GameAssets {
-  constructor() {
-
-  }
+  constructor() {}
 }

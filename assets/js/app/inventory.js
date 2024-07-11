@@ -4,9 +4,9 @@
 
 class Inventory {
   constructor(items = [], weapon = null, armor = null) {
-    this.items  = this._create_items(items)
+    this.items = this._create_items(items)
     this.weapon = weapon
-    this.armor  = armor
+    this.armor = armor
 
     console.log('[LOADED] /app/inventory')
   }
@@ -20,7 +20,7 @@ class Inventory {
     let result
 
     if (this.has_item(item)) {
-      Object.values(this.items).forEach(i => {
+      Object.values(this.items).forEach((i) => {
         if (i.name == item) {
           if (GemWarrior.config.debugMode) {
             result = i.describe_detailed()
@@ -44,7 +44,7 @@ class Inventory {
       // build hash of inventory's items
       const item_hash = {}
 
-      Object.values(this.items).forEach(item => {
+      Object.values(this.items).forEach((item) => {
         if (Object.keys(item_hash).includes(item.name)) {
           item_hash[item.name] += 1
         } else {
@@ -68,7 +68,7 @@ class Inventory {
         let item_list_text = 'You have '
         const item_arr = []
 
-        Object.entries(item_hash).forEach(entry => {
+        Object.entries(item_hash).forEach((entry) => {
           const i = entry[0]
           const q = entry[1]
 
@@ -94,7 +94,7 @@ class Inventory {
       // build hash out of location's items
       const item_hash = {}
 
-      Object.values(this.items).forEach(name => {
+      Object.values(this.items).forEach((name) => {
         if (Object.keys(item_hash).includes(name)) {
           item_hash[name] += 1
         } else {
@@ -107,7 +107,8 @@ class Inventory {
         const i = Object.keys(item_hash)[0]
         const q = Object.values(item_hash)[0]
 
-        const output = q > 1 ? `<span class="keyword">${i}</span> x${q}` : `<span class="keyword">${i}</span>`
+        const output =
+          q > 1 ? `<span class="keyword">${i}</span> x${q}` : `<span class="keyword">${i}</span>`
 
         return output
       }
@@ -115,7 +116,7 @@ class Inventory {
       else {
         const item_arr = []
 
-        Object.entries(item_hash).forEach(entry => {
+        Object.entries(item_hash).forEach((entry) => {
           const i = entry[0]
           const q = entry[1]
 
@@ -132,20 +133,26 @@ class Inventory {
   }
 
   rox() {
-    return this.items.filter(item => item.name.toLowerCase() == 'rock').length
+    return this.items.filter((item) => item.name.toLowerCase() == 'rock').length
   }
 
   has_item(item_name, amount = null) {
     if (amount) {
-      return Object.values(this.items).filter(item => item.name.toLowerCase() == item_name.toLowerCase()).length >= amount
+      return (
+        Object.values(this.items).filter(
+          (item) => item.name.toLowerCase() == item_name.toLowerCase()
+        ).length >= amount
+      )
     } else {
-      return Object.values(this.items).some(item => item.name.toLowerCase() == item_name.toLowerCase())
+      return Object.values(this.items).some(
+        (item) => item.name.toLowerCase() == item_name.toLowerCase()
+      )
     }
   }
 
   equip_item(item_name) {
     if (this.has_item(item_name)) {
-      Object.values(this.items).forEeach(item => {
+      Object.values(this.items).forEeach((item) => {
         if (item.name == item_name) {
           if (item.equippable) {
             item.equipped = true
@@ -171,8 +178,8 @@ class Inventory {
 
   unequip_item(item_name) {
     if (this.has_item(item_name)) {
-      Object.values(this.items).forEach(item => {
-        if (item.name = item_name) {
+      Object.values(this.items).forEach((item) => {
+        if ((item.name = item_name)) {
           if (item.equippable) {
             item.equipped = false
 
@@ -205,7 +212,7 @@ class Inventory {
     } else {
       let result = ERROR_ITEM_ADD_INVALID
 
-      Object.values(cur_loc.items).every(item => {
+      Object.values(cur_loc.items).every((item) => {
         if (item.name == item_name) {
           // is it takeable?
           if (item.takeable) {
@@ -287,7 +294,7 @@ class Inventory {
 
     if (this.has_item(item_name)) {
       const index = Object.values(this.items)
-        .map(i => i.name.toLowerCase())
+        .map((i) => i.name.toLowerCase())
         .indexOf(item_name.toLowerCase())
 
       this.items.splice(index, 1)
@@ -307,7 +314,9 @@ class Inventory {
   item_has_condition(item_name, condition) {
     // console.log(`item_has_condition(${item_name}, ${condition})`)
 
-    const item = Object.values(this.items).filter(i => i.name.toLowerCase() == item_name.toLowerCase())[0]
+    const item = Object.values(this.items).filter(
+      (i) => i.name.toLowerCase() == item_name.toLowerCase()
+    )[0]
 
     if (item) {
       return item[condition] == true ? true : false
@@ -317,7 +326,9 @@ class Inventory {
   }
 
   update_item_condition(item_name, condition, value) {
-    const item = Object.values(this.items).filter(i => i.name.toLowerCase() == item_name.toLowerCase())[0]
+    const item = Object.values(this.items).filter(
+      (i) => i.name.toLowerCase() == item_name.toLowerCase()
+    )[0]
 
     if (item) {
       item[condition] = value
@@ -330,7 +341,9 @@ class Inventory {
 
   update_item_description(item_name, text) {
     if (this.has_item(item_name)) {
-      const item = Object.values(this.items).filter(i => i.name.toLowerCase() == item_name.toLowerCase())[0]
+      const item = Object.values(this.items).filter(
+        (i) => i.name.toLowerCase() == item_name.toLowerCase()
+      )[0]
 
       item.description = text
 
@@ -341,11 +354,11 @@ class Inventory {
   }
 
   has_battle_item() {
-    return Object.values(this.items).some(item => item.useable_battle)
+    return Object.values(this.items).some((item) => item.useable_battle)
   }
 
   list_battle_items() {
-    return Object.values(this.items).filter(item => item.useable_battle)
+    return Object.values(this.items).filter((item) => item.useable_battle)
   }
 
   /* private */
@@ -363,7 +376,7 @@ class Inventory {
     const item_objects = []
 
     if (item_list.length) {
-      Object.values(item_list).forEach(item => {
+      Object.values(item_list).forEach((item) => {
         item_objects.push(Utils.create_custom_item(item))
       })
     }

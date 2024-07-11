@@ -2,8 +2,8 @@ class Torch extends Item {
   constructor(options = null) {
     super()
 
-    this.name         = 'torch'
-    this.description  = options.description || 'An illuminating piece of wood with fire at the end.'
+    this.name = 'torch'
+    this.description = options.description || 'An illuminating piece of wood with fire at the end.'
   }
 
   use() {
@@ -23,6 +23,5 @@ class Torch extends Item {
     return result
   }
 
-  use_with(item_name) {
-  }
+  use_with(item_name) {}
 }

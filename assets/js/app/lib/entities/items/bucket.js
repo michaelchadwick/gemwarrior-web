@@ -2,8 +2,8 @@ class Bucket extends Item {
   constructor(options = null) {
     super()
 
-    this.name                 = 'bucket'
-    this.description          = options.description || 'A small metal container.'
+    this.name = 'bucket'
+    this.description = options.description || 'A small metal container.'
     this.is_filled_with_resin = options.is_filled_with_resin || false
   }
 

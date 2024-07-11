@@ -102,7 +102,8 @@ class Evaluator {
             GemWarrior.config.textOutput = `You cannot go in a "${direction}" direction.`
           }
         } else {
-          GemWarrior.config.textOutput = 'You cannot just <span class="keyword">go</span> without a <em>direction</em>.'
+          GemWarrior.config.textOutput =
+            'You cannot just <span class="keyword">go</span> without a <em>direction</em>.'
         }
 
         break
@@ -139,7 +140,10 @@ class Evaluator {
             GemWarrior.config.textOutput = GemWarrior.world.location.describe()
           }
         } else {
-          GemWarrior.config.textOutput = GemWarrior.world.describe_entity(GemWarrior.world.location, arg1.toLowerCase())
+          GemWarrior.config.textOutput = GemWarrior.world.describe_entity(
+            GemWarrior.world.location,
+            arg1.toLowerCase()
+          )
         }
 
         break
@@ -153,7 +157,10 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.textOutput = ERROR_TAKE_PARAM_MISSING
         } else {
-          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.add_item(arg1.toLowerCase(), GemWarrior.world.location)
+          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.add_item(
+            arg1.toLowerCase(),
+            GemWarrior.world.location
+          )
         }
 
         break
@@ -163,7 +170,9 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.textOutput = ERROR_DROP_PARAM_MISSING
         } else {
-          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.drop_item(arg1.toLowerCase())
+          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.drop_item(
+            arg1.toLowerCase()
+          )
         }
 
         break
@@ -185,11 +194,15 @@ class Evaluator {
               const item2_name = arg3.toLowerCase()
 
               if (player_inventory.has_item(item1_name)) {
-                const item1 = Object.values(player_inventory.items).filter(i => i.name == item1_name)[0]
+                const item1 = Object.values(player_inventory.items).filter(
+                  (i) => i.name == item1_name
+                )[0]
 
                 if (item1.useable) {
                   if (player_inventory.has_item(item2_name)) {
-                    const item2 = Object.values(player_inventory.items).filter(i => i.name == item2_name)[0]
+                    const item2 = Object.values(player_inventory.items).filter(
+                      (i) => i.name == item2_name
+                    )[0]
 
                     if (item2.useable) {
                       GemWarrior._playSFX('use-with')
@@ -205,11 +218,15 @@ class Evaluator {
                   result = ERROR_USE_PARAM_UNUSEABLE
                 }
               } else if (player_location.has_item(item1_name)) {
-                const item1 = Object.values(player_location.items).filter(i => i.name == item1_name)[0]
+                const item1 = Object.values(player_location.items).filter(
+                  (i) => i.name == item1_name
+                )[0]
 
                 if (item1.useable) {
                   if (player_inventory.has_item(item2_name)) {
-                    const item2 = Object.values(player_location.items).filter(i => i.name == item2_name)[0]
+                    const item2 = Object.values(player_location.items).filter(
+                      (i) => i.name == item2_name
+                    )[0]
 
                     if (item2.useable) {
                       GemWarrior._playSFX('use-with')
@@ -236,7 +253,9 @@ class Evaluator {
             const item_name = arg1.toLowerCase()
 
             if (player_inventory.has_item(item_name)) {
-              const item = Object.values(player_inventory.items).filter(i => i.name == item_name)[0]
+              const item = Object.values(player_inventory.items).filter(
+                (i) => i.name == item_name
+              )[0]
 
               if (item.useable) {
                 GemWarrior._playSFX('use')
@@ -261,7 +280,9 @@ class Evaluator {
                 result = ERROR_USE_PARAM_UNUSEABLE
               }
             } else if (player_location.has_item(item_name)) {
-              const item = Object.values(player_location.items).filter(i => i.name == item_name)[0]
+              const item = Object.values(player_location.items).filter(
+                (i) => i.name == item_name
+              )[0]
 
               if (item.useable) {
                 GemWarrior._playSFX('use')
@@ -286,11 +307,15 @@ class Evaluator {
                 result = ERROR_USE_PARAM_UNUSEABLE
               }
             } else if (player_location.has_monster(item_name)) {
-              const monster = Object.values(player_location.monsters_abounding).filter(m => m.name == item_name)[0]
+              const monster = Object.values(player_location.monsters_abounding).filter(
+                (m) => m.name == item_name
+              )[0]
 
               result = monster.use()
             } else if (player_location.has_boss(item_name)) {
-              const boss = Object.values(player_location.bosses_abounding).forEach(b => b.name == item_name)[0]
+              const boss = Object.values(player_location.bosses_abounding).forEach(
+                (b) => b.name == item_name
+              )[0]
 
               result = boss.use()
             } else {
@@ -337,7 +362,7 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.textOutput = ERROR_CHANGE_PARAM_MISSING
         } else {
-          switch(arg1.toLowerCase()) {
+          switch (arg1.toLowerCase()) {
             case 'name':
               if (!arg2) {
                 GemWarrior.config.textOutput = `If you want to <span class="keyword">${verb}</span> your <span class="noun">${arg1}</span>, you must indicate <em>what</em> you would like to change it to.`
@@ -419,7 +444,8 @@ class Evaluator {
         break
 
       default:
-        GemWarrior.config.textOutput = 'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
+        GemWarrior.config.textOutput =
+          'That command isn\'t recognized. Type <span class="keyword">help</span> for valid commands.'
 
         break
     }
