@@ -49,7 +49,7 @@ GemWarrior.sendFeedback = async function (e) {
   console.log('json response', json)
 }
 
-async function modalOpen(type) {
+GemWarrior.modalOpen = async function (type) {
   switch (type) {
     case 'help':
       GemWarrior._out(`
@@ -598,7 +598,7 @@ GemWarrior._loadSettings = async function () {
       }
     }
   } else {
-    await modalOpen('start')
+    await GemWarrior.modalOpen('start')
   }
 
   console.log('[LOADED] /app/main(settings)')
@@ -802,7 +802,7 @@ GemWarrior._loadWorld = async function () {
     // GemWarrior._updateDashboard()
 
     if (GemWarrior.settings.firstTime) {
-      await modalOpen('start')
+      await GemWarrior.modalOpen('start')
     } else {
       GemWarrior._displayWelcomeBack()
     }
@@ -854,7 +854,7 @@ GemWarrior._loadWorld = async function () {
     }
 
     if (GemWarrior.settings.firstTime) {
-      await modalOpen('start')
+      await GemWarrior.modalOpen('start')
     } else {
       GemWarrior._displayWelcome()
     }
@@ -869,9 +869,9 @@ GemWarrior._attachEventHandlers = function () {
   GemWarrior.dom.btnNavClose.addEventListener('click', () => {
     GemWarrior.dom.navOverlay.classList.toggle('show')
   })
-  GemWarrior.dom.btnHelp.addEventListener('click', () => modalOpen('help'))
-  GemWarrior.dom.btnFeedback.addEventListener('click', () => modalOpen('feedback'))
-  GemWarrior.dom.btnSettings.addEventListener('click', () => modalOpen('settings'))
+  GemWarrior.dom.btnHelp.addEventListener('click', () => GemWarrior.modalOpen('help'))
+  GemWarrior.dom.btnFeedback.addEventListener('click', () => GemWarrior.modalOpen('feedback'))
+  GemWarrior.dom.btnSettings.addEventListener('click', () => GemWarrior.modalOpen('settings'))
 
   // catch the mobile keyboard buttons
   GemWarrior.dom.keyboardButtons.forEach((button) => {
