@@ -30,4 +30,4 @@ GemWarrior.dom = {
   avatar: document.getElementById('avatar'),
 }
 
-console.log('[LOADED] /app/dom')
+GemWarrior._logStatus('[LOADED] /app/dom')

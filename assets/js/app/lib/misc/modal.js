@@ -1,4 +1,4 @@
-/* /assets/js/app/modal.js */
+/* /assets/js/app/lib/misc/modal.js */
 /* modal dialog UI */
 /* eslint-disable no-unused-vars */
 

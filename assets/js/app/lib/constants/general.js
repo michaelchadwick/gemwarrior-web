@@ -2,10 +2,8 @@
 /* general global constants */
 /* eslint-disable no-unused-vars */
 
-const GW_SETTINGS_KEY = 'gemwarrior-settings'
-const GW_WORLD_KEY = 'gemwarrior-world'
-
-const GW_ENV_PROD_URL = ['gemwarrior.com', 'gemwarrior.neb.host', 'gw.neb.host']
+const GW_SETTINGS_LS_KEY = 'gemwarrior-settings'
+const GW_WORLD_LS_KEY = 'gemwarrior-world'
 
 const GW_WORKER_JS_URL = '/assets/js/app/worker.js'
 const GW_WORLD_IHOT_JSON_URL = '/assets/data/world/ihot.json'
@@ -67,8 +65,12 @@ const GW_DANGER_LEVEL = {
   assured: 100,
 }
 
-const CHAR_UPPER_POOL = [...Array(26)].map((val, i) => String.fromCharCode(i + 65))
-const CHAR_LOWER_POOL = [...Array(26)].map((val, i) => String.fromCharCode(i + 97))
+const CHAR_UPPER_POOL = [...Array(26)].map((val, i) =>
+  String.fromCharCode(i + 65)
+)
+const CHAR_LOWER_POOL = [...Array(26)].map((val, i) =>
+  String.fromCharCode(i + 97)
+)
 const CHAR_LOWER_VOWEL_POOL = ['a', 'e', 'i', 'o', 'u', 'y']
 
 const NEBYOOAPPS_SOURCE_URL = 'https://dave.neb.host/?sites'

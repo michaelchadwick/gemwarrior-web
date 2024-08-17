@@ -18,7 +18,9 @@ class World {
 
     // check location items->monster->boss, inventory->items
     if (loc.has_item(entity)) {
-      const item = Object.values(loc.items).filter((i) => i.name.toLowerCase() == entity)[0]
+      const item = Object.values(loc.items).filter(
+        (i) => i.name.toLowerCase() == entity
+      )[0]
 
       // console.log('item', item)
 
@@ -65,13 +67,16 @@ class World {
     const place = point ? point : this.player.coords
 
     return this.locations.filter(
-      (loc) => Object.values(loc.coords).join(',') == Object.values(place).join(',')
+      (loc) =>
+        Object.values(loc.coords).join(',') == Object.values(place).join(',')
     )[0]
   }
 
   set_location() {
     this.location = this.locations.filter(
-      (loc) => Object.values(loc.coords).join(',') == Object.values(this.player.coords).join(',')
+      (loc) =>
+        Object.values(loc.coords).join(',') ==
+        Object.values(this.player.coords).join(',')
     )[0]
   }
 
@@ -80,9 +85,9 @@ class World {
 
     if (GemWarrior.config.worldSave) {
       try {
-        localStorage.setItem(GW_WORLD_KEY, JSON.stringify(this))
+        localStorage.setItem(GW_WORLD_LS_KEY, JSON.stringify(this))
 
-        // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_KEY)))
+        // console.log('FREE localStorage state saved!', JSON.parse(localStorage.getItem(GW_WORLD_LS_KEY)))
       } catch (error) {
         console.error('localStorage world state save failed', error)
       }

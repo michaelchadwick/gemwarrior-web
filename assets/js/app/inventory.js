@@ -7,8 +7,6 @@ class Inventory {
     this.items = this._create_items(items)
     this.weapon = weapon
     this.armor = armor
-
-    console.log('[LOADED] /app/inventory')
   }
 
   is_empty() {
@@ -60,7 +58,9 @@ class Inventory {
         if (q > 1) {
           return `You have ${q} <span class="noun">${i}</span>s.`
         } else {
-          return `You have ${this._article_chooser(i)} <span class="noun">${i}</span>.`
+          return `You have ${this._article_chooser(
+            i
+          )} <span class="noun">${i}</span>.`
         }
       }
       // multiple items? return array of strings to mush together
@@ -75,7 +75,9 @@ class Inventory {
           if (q > 1) {
             item_arr.push(`${q} <span class="noun">${i}</span>s`)
           } else {
-            item_arr.push(`${this._article_chooser(i)} <span class="noun">${i}</span>`)
+            item_arr.push(
+              `${this._article_chooser(i)} <span class="noun">${i}</span>`
+            )
           }
         })
 
@@ -108,7 +110,9 @@ class Inventory {
         const q = Object.values(item_hash)[0]
 
         const output =
-          q > 1 ? `<span class="keyword">${i}</span> x${q}` : `<span class="keyword">${i}</span>`
+          q > 1
+            ? `<span class="keyword">${i}</span> x${q}`
+            : `<span class="keyword">${i}</span>`
 
         return output
       }
@@ -230,7 +234,9 @@ class Inventory {
             if (this.rox() == GW_IHOT_MAX_ROX) {
               setTimeout(() => GemWarrior._playSFX('secret'), 500)
 
-              GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).add_item('indentation')
+              GemWarrior.world
+                .get_location(GW_IHOT_EXIT_POINT)
+                .add_item('indentation')
 
               result = `After adding the most recent <span class="noun">${item_name}</span> to your collection, you hear a faint sound towards the northeast, almost as if stone moved upon stone.`
             } else {
@@ -274,7 +280,9 @@ class Inventory {
       ) {
         setTimeout(() => GemWarrior._playSFX('secret'), 500)
 
-        GemWarrior.world.get_location(GW_IHOT_EXIT_POINT).remove_item('indentation')
+        GemWarrior.world
+          .get_location(GW_IHOT_EXIT_POINT)
+          .remove_item('indentation')
 
         result = `After dropping the most recent <span class="noun">${item_name}</span> to your collection, you hear a faint sound towards the northeast, almost as if stone moved upon stone.`
       } else {
@@ -368,7 +376,9 @@ class Inventory {
   }
 
   _article_chooser(word) {
-    return VOWELS.includes(word[0]) || this._an_words().includes(word) ? 'an' : 'a'
+    return VOWELS.includes(word[0]) || this._an_words().includes(word)
+      ? 'an'
+      : 'a'
   }
 
   // create array of custom objects to fill current inventory's items
