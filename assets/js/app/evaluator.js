@@ -4,7 +4,7 @@
 
 class Evaluator {
   construction() {
-    console.log('[LOADED] /app/evaluator')
+    GemWarrior._logStatus('[LOADED] /app/evaluator')
   }
 
   process(command) {
@@ -51,7 +51,8 @@ class Evaluator {
       case 'inven':
       case 'inv':
       case 'i':
-        GemWarrior.config.textOutput = GemWarrior.world.player.inventory.describe_items()
+        GemWarrior.config.textOutput =
+          GemWarrior.world.player.inventory.describe_items()
 
         break
 
@@ -135,7 +136,8 @@ class Evaluator {
       case 'l':
         if (!arg1) {
           if (GemWarrior.config.debugMode) {
-            GemWarrior.config.textOutput = GemWarrior.world.location.describe_detailed()
+            GemWarrior.config.textOutput =
+              GemWarrior.world.location.describe_detailed()
           } else {
             GemWarrior.config.textOutput = GemWarrior.world.location.describe()
           }
@@ -157,10 +159,11 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.textOutput = ERROR_TAKE_PARAM_MISSING
         } else {
-          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.add_item(
-            arg1.toLowerCase(),
-            GemWarrior.world.location
-          )
+          GemWarrior.config.textOutput =
+            GemWarrior.world.player.inventory.add_item(
+              arg1.toLowerCase(),
+              GemWarrior.world.location
+            )
         }
 
         break
@@ -170,9 +173,8 @@ class Evaluator {
         if (!arg1) {
           GemWarrior.config.textOutput = ERROR_DROP_PARAM_MISSING
         } else {
-          GemWarrior.config.textOutput = GemWarrior.world.player.inventory.drop_item(
-            arg1.toLowerCase()
-          )
+          GemWarrior.config.textOutput =
+            GemWarrior.world.player.inventory.drop_item(arg1.toLowerCase())
         }
 
         break
@@ -188,7 +190,10 @@ class Evaluator {
           const player_location = GemWarrior.world.location
 
           // using one item with another?
-          if (arg2 && (arg2.toLowerCase() == 'with' || arg2.toLowerCase() == 'on')) {
+          if (
+            arg2 &&
+            (arg2.toLowerCase() == 'with' || arg2.toLowerCase() == 'on')
+          ) {
             if (arg3) {
               const item1_name = arg1.toLowerCase()
               const item2_name = arg3.toLowerCase()
@@ -307,15 +312,15 @@ class Evaluator {
                 result = ERROR_USE_PARAM_UNUSEABLE
               }
             } else if (player_location.has_monster(item_name)) {
-              const monster = Object.values(player_location.monsters_abounding).filter(
-                (m) => m.name == item_name
-              )[0]
+              const monster = Object.values(
+                player_location.monsters_abounding
+              ).filter((m) => m.name == item_name)[0]
 
               result = monster.use()
             } else if (player_location.has_boss(item_name)) {
-              const boss = Object.values(player_location.bosses_abounding).forEach(
-                (b) => b.name == item_name
-              )[0]
+              const boss = Object.values(
+                player_location.bosses_abounding
+              ).forEach((b) => b.name == item_name)[0]
 
               result = boss.use()
             } else {
@@ -417,9 +422,11 @@ class Evaluator {
               GemWarrior._playBGM('main')
             }
 
-            GemWarrior.config.textOutput = 'Playing moody, enchanting background music.'
+            GemWarrior.config.textOutput =
+              'Playing moody, enchanting background music.'
           } else {
-            GemWarrior.config.textOutput = 'Background music is already playing.'
+            GemWarrior.config.textOutput =
+              'Background music is already playing.'
           }
         } else {
           GemWarrior.config.textOutput = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`
@@ -435,7 +442,8 @@ class Evaluator {
 
             GemWarrior.config.textOutput = 'Background music has stopped.'
           } else {
-            GemWarrior.config.textOutput = 'Background is not playing, so this has no effect.'
+            GemWarrior.config.textOutput =
+              'Background is not playing, so this has no effect.'
           }
         } else {
           GemWarrior.config.textOutput = `Sound is not enabled. Check the <button class="inline"><i class="fa-solid fa-gear"></i></button> icon.`

@@ -15,7 +15,7 @@ GemWarrior._loadWorld = async function () {
 
     GemWarrior.world = new World(lsWorldObj)
 
-    console.log('[LOADED] /app/world(saved)')
+    GemWarrior._logStatus('[LOADED] /app/world(saved)')
   } else {
     // console.log('No saved world data found. Loading default world...')
 
@@ -53,7 +53,7 @@ GemWarrior._loadWorld = async function () {
           )
         }
 
-        console.log('[LOADED] /app/world(default)')
+        GemWarrior._logStatus('[LOADED] /app/world(default)')
 
         GemWarrior.world.save()
       } else {
@@ -212,7 +212,7 @@ GemWarrior._loadSettings = async function () {
     await GemWarrior.modalOpen('start')
   }
 
-  console.log('[LOADED] /app/main(settings)')
+  GemWarrior._logStatus('[LOADED] /app/main(settings)')
 }
 // change a setting (gear icon) value
 // then save to localStorage

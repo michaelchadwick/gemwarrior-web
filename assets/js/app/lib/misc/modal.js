@@ -40,7 +40,7 @@ class Modal {
       )
     }
 
-    console.log('[LOADED] /app/modal')
+    GemWarrior._logStatus('[LOADED] /app/modal')
   }
 
   question() {

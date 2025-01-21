@@ -9,7 +9,7 @@ class NameGenerator {
     this.name_set = {}
     this.chain_cache = {}
 
-    console.log('[LOADED] /app/lib/misc/name_generator')
+    GemWarrior._logStatus('[LOADED] /app/lib/misc/name_generator')
   }
 
   async get_name_set() {

@@ -29,7 +29,8 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
         eleLog.innerHTML += output + '<br>'
 
         if (isScrolledToBottom) {
-          eleContainerLog.scrollTop = eleContainerLog.scrollHeight - eleContainerLog.clientHeight
+          eleContainerLog.scrollTop =
+            eleContainerLog.scrollHeight - eleContainerLog.clientHeight
         }
       } else {
         eleLog.innerHTML += output + '<br>'
@@ -48,7 +49,9 @@ function rewireLoggingToElement(eleLocator, eleOverflowLocator, autoScroll) {
         ' log-' +
         name +
         '">* ' +
-        (typeof arg === 'object' && (JSON || {}).stringify ? JSON.stringify(arg) : arg) +
+        (typeof arg === 'object' && (JSON || {}).stringify
+          ? JSON.stringify(arg)
+          : arg) +
         '</span>&nbsp;'
       )
     }, '')

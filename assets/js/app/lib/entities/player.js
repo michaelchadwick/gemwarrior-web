@@ -66,7 +66,7 @@ class Player extends Creature {
 
     this.description = `The playable character in the world of ${PROGRAM_NAME}.`
 
-    console.log('[LOADED] /app/lib/entities/player')
+    GemWarrior._logStatus('[LOADED] /app/lib/entities/player')
   }
 
   describe() {
@@ -85,9 +85,13 @@ class Player extends Creature {
         <li>You have <span class="noun">${
           this.weapon || 'nothing'
         }</span> equipped as a weapon.</li>
-        <li>You have <span class="noun">${this.armor || 'nothing'}</span> equipped as armor.</li>
+        <li>You have <span class="noun">${
+          this.armor || 'nothing'
+        }</span> equipped as armor.</li>
         <li>You have the following special abilities: ${
-          this.special_abilities.length ? this.special_abilities.join(', ') : 'none...yet'
+          this.special_abilities.length
+            ? this.special_abilities.join(', ')
+            : 'none...yet'
         }.</li>
     `
 
@@ -145,7 +149,9 @@ class Player extends Creature {
   }
 
   has_item(item_name) {
-    return this.inventory.some((inv_item) => inv_item.name.toLowerCase() == item_name.toLowerCase())
+    return this.inventory.some(
+      (inv_item) => inv_item.name.toLowerCase() == item_name.toLowerCase()
+    )
   }
 
   list_inventory() {

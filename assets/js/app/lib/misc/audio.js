@@ -46,7 +46,7 @@ GemWarrior._initSynths = function () {
     console.error('* synthSFX could not be initialized')
   }
 
-  console.log('[LOADED] /app/lib/misc/audio(synths)')
+  GemWarrior._logStatus('[LOADED] /app/lib/misc/audio(synths)')
 }
 
 // BackGround Music

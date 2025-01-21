@@ -81,8 +81,6 @@ class Location extends Entity {
 
         GemWarrior._type(result, this)
 
-        console.log('foo')
-
         if (!this.is_empty()) {
           return this.list_items()
         } else {
@@ -132,7 +130,9 @@ ${prop.toUpperCase()}? ${
     // console.log('has_item() item_name', item_name)
     // console.log('has_item() this.items', this.items)
 
-    return this.items.some((loc_item) => loc_item.name.toLowerCase() == item_name.toLowerCase())
+    return this.items.some(
+      (loc_item) => loc_item.name.toLowerCase() == item_name.toLowerCase()
+    )
   }
   add_item(item_name) {
     // console.log('location add_item', item_name)
@@ -178,7 +178,9 @@ ${prop.toUpperCase()}? ${
         const q = Object.values(item_hash)[0]
 
         const output =
-          q > 1 ? `<span class="keyword">${i}</span> x${q}` : `<span class="keyword">${i}</span>`
+          q > 1
+            ? `<span class="keyword">${i}</span> x${q}`
+            : `<span class="keyword">${i}</span>`
 
         return `<br />&gt;&gt; Item(s): ${output}`
       }
@@ -202,9 +204,9 @@ ${prop.toUpperCase()}? ${
     }
   }
   list_coords() {
-    return `<br />&gt;&gt; Coords: <span class="keyword">[${Object.values(this.coords).join(
-      ', '
-    )}]</span>`
+    return `<br />&gt;&gt; Coords: <span class="keyword">[${Object.values(
+      this.coords
+    ).join(', ')}]</span>`
   }
   list_paths() {
     const valid_paths = []
@@ -213,7 +215,9 @@ ${prop.toUpperCase()}? ${
       if (!!entry[1]) valid_paths.push(entry[0])
     })
 
-    return `<br />&gt;&gt; Path(s): <span class="keyword">${valid_paths.join(', ')}</span>`
+    return `<br />&gt;&gt; Path(s): <span class="keyword">${valid_paths.join(
+      ', '
+    )}</span>`
   }
 
   // TODO

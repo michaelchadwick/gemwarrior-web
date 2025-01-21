@@ -21,7 +21,7 @@ GemWarrior.sendFeedback = async function (e) {
   const email = e.target.parentElement[0].value
   const feedback = e.target.parentElement[1].value
 
-  console.log('sendFeedback', email, feedback)
+  GemWarrior._logStatus('sendFeedback', email, feedback)
 
   const response = await fetch('../assets/php/send-feedback.php', {
     method: 'POST',
@@ -45,7 +45,7 @@ GemWarrior.sendFeedback = async function (e) {
     document.querySelector('#feedback').innerHTML = 'Thanks for the feedback!'
   }
 
-  console.log('json response', json)
+  GemWarrior._logStatus('json response', json)
 }
 
 GemWarrior.modalOpen = async function (type) {
@@ -449,7 +449,7 @@ GemWarrior.initApp = async function () {
 
   GemWarrior._attachEventHandlers()
 
-  console.log('[LOADED] /app/main')
+  GemWarrior._logStatus('[LOADED] /app/main')
 
   // initial command
   window.scrollTo(0, 1)
@@ -480,7 +480,7 @@ GemWarrior._initDebug = function () {
 
       GemWarrior.dom.logContainer.style.display = 'block'
 
-      console.log('[LOADED] /app/main(debug)')
+      GemWarrior._logStatus('[LOADED] /app/main(debug)')
     }
   }
 }
@@ -507,7 +507,7 @@ GemWarrior._out = function (text, noLineBreak) {
 }
 
 GemWarrior._type = function (str) {
-  console.log('_type')
+  GemWarrior._logStatus('_type')
 
   let i = 0
 

@@ -113,7 +113,7 @@ async function initData() {
 
   postMessage({ command: 'status', value: 'standing-quiet' })
 
-  console.log('[LOADED] /app/worker')
+  GemWarrior._logStatus('[LOADED] /app/worker')
 }
 
 function changeStatus(status = 'standing') {

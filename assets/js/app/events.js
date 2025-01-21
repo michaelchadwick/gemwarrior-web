@@ -260,7 +260,8 @@ GemWarrior._attachEventHandlers = function () {
     function (event) {
       touchendX = event.changedTouches[0].screenX
       touchendY = event.changedTouches[0].screenY
-      console.log(
+
+      GemWarrior._logStatus(
         GemWarrior.__handleGesture(
           touchstartX,
           touchstartY,

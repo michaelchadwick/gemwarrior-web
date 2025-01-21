@@ -55,7 +55,7 @@ GemWarrior._initAvatarWorker = function () {
           GemWarrior._getAvatarDisplay('standing')
         }
 
-        console.log('[LOADED] /app/lib/misc/avatar')
+        GemWarrior._logStatus('[LOADED] /app/lib/misc/avatar')
       } else {
         console.error('Worker(): creation of Web Worker failed')
       }
@@ -72,7 +72,10 @@ GemWarrior._getAvatarDisplay = function (type) {
     if (GemWarrior.config.avatarWorker) {
       // tell Web Worker which data we want via status key
       // console.log('_getAvatarDisplay type', type)
-      GemWarrior.config.avatarWorker.postMessage({ command: 'status', value: type })
+      GemWarrior.config.avatarWorker.postMessage({
+        command: 'status',
+        value: type,
+      })
     } else {
       console.error('web-worker: no valid Web Worker to postMessage')
     }
