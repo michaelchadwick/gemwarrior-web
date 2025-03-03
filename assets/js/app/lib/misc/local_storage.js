@@ -116,7 +116,6 @@ GemWarrior._loadSettings = async function () {
       }
     }
 
-    /*
     if (lsSettings.enableTypewriter !== undefined) {
       GemWarrior.settings.enableTypewriter = lsSettings.enableTypewriter
 
@@ -128,7 +127,6 @@ GemWarrior._loadSettings = async function () {
         }
       }
     }
-    */
 
     if (lsSettings.firstTime !== undefined) {
       GemWarrior.settings.firstTime = lsSettings.firstTime

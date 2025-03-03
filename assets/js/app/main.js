@@ -324,7 +324,6 @@ GemWarrior.modalOpen = async function (type) {
               </div>
             </div>
 
-            <!--
             <div class="setting-row">
               <div class="text">
                 <div class="title">Enable typewriter</div>
@@ -338,7 +337,6 @@ GemWarrior.modalOpen = async function (type) {
                 </div>
               </div>
             </div>
-            -->
 
             <!-- sound: bgm -->
             <div class="setting-row requires-sound">
@@ -506,22 +504,20 @@ GemWarrior._out = function (text, noLineBreak) {
   GemWarrior._scrollOutput()
 }
 
-GemWarrior._type = function (str) {
-  GemWarrior._logStatus('_type')
+GemWarrior._type = async function (str) {
+  GemWarrior._logStatus('_type', str.length)
 
   let i = 0
 
   while (i < str.length) {
     const char = str.charAt(i)
 
-    // console.log('type char', char)
-
-    const min = 9
+    const min = 6
     const max = min + 3
     // min delay (s) to max delay (s) (exclusive)
     const delay = Math.floor(Math.random() * max) + min
 
-    GemWarrior._wait(delay)
+    await GemWarrior._wait(delay)
 
     GemWarrior.dom.output.append(char)
     GemWarrior._scrollOutput()
