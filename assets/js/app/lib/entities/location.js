@@ -59,7 +59,6 @@ class Location extends Entity {
       }
     }
 
-    // TODO: implement typewriter effect on first visit
     if (!GemWarrior.settings.enableTypewriter) {
       if (!this.is_empty()) {
         result += this.list_items()
