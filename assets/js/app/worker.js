@@ -131,6 +131,11 @@ function changeStatus(status = 'standing') {
 onmessage = function (msg) {
   // console.log('web-worker: received msg from main js', msg.data)
 
+  // ignore chrome extension sending messages
+  if ((/^react-devtools/gi).test(msg.data.source)) {
+    return;
+  }
+
   const cmd = msg.data.command
   const val = msg.data.value
 
