@@ -3,7 +3,7 @@ if (typeof GemWarrior === 'undefined') {
   var GemWarrior = {}
 }
 
-const GW_ENV_PROD_URL = ['gemwarrior.com', 'gemwarrior.neb.host', 'gw.neb.host']
+const GW_ENV_PROD_URL = ['gemwarrior.com', 'gemwarrior.neb.host', 'gw.neb.host', 'neb.host']
 
 GemWarrior.env = GW_ENV_PROD_URL.includes(document.location.hostname)
   ? 'prod'
