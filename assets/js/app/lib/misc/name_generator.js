@@ -13,7 +13,7 @@ class NameGenerator {
   }
 
   async get_name_set() {
-    const names_promise = await fetch(`/assets/data/names/${this.type}.json`)
+    const names_promise = await fetch(`./assets/data/names/${this.type}.json`)
     const names_data = await names_promise.json()
 
     if (names_data) {

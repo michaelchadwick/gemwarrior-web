@@ -2,7 +2,7 @@
 /* js background worker for avatar display */
 
 const GW_CACHE_TEXT_KEY = 'gemwarrior-cache-text'
-const GW_ASSET_DATA_PATH = '/assets/data/avatar'
+const GW_ASSET_DATA_PATH = './assets/data/avatar'
 const GW_VALID_STATUSES = [
   'sleeping1',
   'sleeping2',

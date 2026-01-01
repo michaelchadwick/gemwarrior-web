@@ -5,10 +5,10 @@
 const GW_SETTINGS_LS_KEY = 'gemwarrior-settings'
 const GW_WORLD_LS_KEY = 'gemwarrior-world'
 
-const GW_WORKER_JS_URL = '/assets/js/app/worker.js'
-const GW_WORLD_IHOT_JSON_URL = '/assets/data/world/ihot.json'
-const GW_WORLD_JOOL_JSON_URL = '/assets/data/world/jool.json'
-const GW_WORLD_IHOT_JOOL_JSON_URL = '/assets/data/world/ihot_jool.json'
+const GW_WORKER_JS_URL = './assets/js/app/worker.js'
+const GW_WORLD_IHOT_JSON_URL = './assets/data/world/ihot.json'
+const GW_WORLD_JOOL_JSON_URL = './assets/data/world/jool.json'
+const GW_WORLD_IHOT_JOOL_JSON_URL = './assets/data/world/ihot_jool.json'
 
 const GW_IHOT_SW = { x: 0, y: 0, z: 0 }
 const GW_IHOT_EXIT_POINT = { x: 2, y: 2, z: 0 }
