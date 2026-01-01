@@ -11,8 +11,8 @@ assets/scss/*
 *.logicx
 .prettierignore
 .prettierrc.js
-.qlty/*
-.ruby-lsp/*
+.qlty
+.ruby-lsp
 .sass-cache
 node_modules
 LICENSE
