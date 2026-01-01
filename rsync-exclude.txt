@@ -2,12 +2,17 @@
 assets/scss/*
 .codeclimate.yml
 .csslintrc
+.editorconfig
 .eslintignore
 .eslintrc*
 .git
 .gitignore
 .jshintrc
 *.logicx
+.prettierignore
+.prettierrc.js
+.qlty/*
+.ruby-lsp/*
 .sass-cache
 node_modules
 LICENSE
