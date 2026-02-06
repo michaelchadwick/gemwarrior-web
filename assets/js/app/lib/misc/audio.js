@@ -53,7 +53,7 @@ GemWarrior._initSynths = function () {
 // TODO: add more background music?
 GemWarrior._playBGM = function (action) {
   if (GemWarrior.settings.enableSound) {
-    const filename = `/assets/audio/gw-bgm-${action}.mid`
+    const filename = `./assets/audio/gw-bgm-${action}.mid`
 
     GemWarrior.config.synthBGM.loadMIDIUrl(filename)
 
@@ -77,7 +77,7 @@ GemWarrior._stopBGM = function () {
 // Sound eFfects
 GemWarrior._playSFX = function (action) {
   if (GemWarrior.settings.enableSound) {
-    const filename = `/assets/audio/gw-sfx-${action}.mid`
+    const filename = `./assets/audio/gw-sfx-${action}.mid`
 
     GemWarrior.config.synthSFX.loadMIDIUrl(filename)
     GemWarrior.config.synthSFX.setLoop(0)
