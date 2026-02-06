@@ -238,6 +238,7 @@ header .menu-left #nav-overlay #nav-content .container .nav-list a {
 @media (hover: hover) {
   header .menu-left #nav-overlay #nav-content .container .nav-list a:hover {
     background-color: #f2ed6e;
+    color: #000;
   }
 }
 header .menu-left #nav-overlay #nav-content #button-nav-close {
