@@ -309,21 +309,6 @@ GemWarrior.modalOpen = async function (type) {
               </div>
             </div>
 
-            <!-- enable sound -->
-            <div class="setting-row">
-              <div class="text">
-                <div class="title">Enable sound</div>
-                <div class="description">Play music and sound effects.</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <div id="button-setting-enable-sound" data-status="" class="switch" onclick="GemWarrior._changeSetting('enableSound')">
-                    <span class="knob"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div class="setting-row">
               <div class="text">
                 <div class="title">Enable typewriter</div>
@@ -334,32 +319,6 @@ GemWarrior.modalOpen = async function (type) {
                   <div id="button-setting-enable-typewriter" data-status="" class="switch" onclick="GemWarrior._changeSetting('enableTypewriter')">
                     <span class="knob"></span>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- sound: bgm -->
-            <div class="setting-row requires-sound">
-              <div class="text">
-                <div class="title">BGM Volume</div>
-                <div class="description">How loud should the background music be?</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <input type="range" min="0" max="100" value="10" id="range-setting-bgm-level" onchange="GemWarrior._changeSetting('soundBGMLevel', event.target.value)">
-                </div>
-              </div>
-            </div>
-
-            <!-- sound: fx -->
-            <div class="setting-row requires-sound">
-              <div class="text">
-                <div class="title">SFX Volume</div>
-                <div class="description">How loud should the sound effects be?</div>
-              </div>
-              <div class="control">
-                <div class="container">
-                  <input type="range" min="0" max="100" value="20" id="range-setting-sfx-level" onchange="GemWarrior._changeSetting('soundSFXLevel', event.target.value)">
                 </div>
               </div>
             </div>
@@ -388,6 +347,47 @@ GemWarrior.modalOpen = async function (type) {
               <div class="control">
                 <div class="container">
                   <input type="number" id="text-size-pixels" max="22" min="4" step="1" value="16" onchange="GemWarrior._changeSetting('textSize')" onkeyup="GemWarrior._changeSetting('textSize', event)" />
+                </div>
+              </div>
+            </div>
+
+            <!-- enable sound -->
+            <div class="setting-row">
+              <div class="text">
+                <div class="title">Enable sound</div>
+                <div class="description">Play music and sound effects.</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <div id="button-setting-enable-sound" data-status="" class="switch" onclick="GemWarrior._changeSetting('enableSound')">
+                    <span class="knob"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- sound: bgm -->
+            <div class="setting-row requires-sound">
+              <div class="text">
+                <div class="title">BGM Volume</div>
+                <div class="description">How loud should the background music be?</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <input type="range" min="0" max="100" value="10" id="range-setting-bgm-level" onchange="GemWarrior._changeSetting('soundBGMLevel', event.target.value)">
+                </div>
+              </div>
+            </div>
+
+            <!-- sound: fx -->
+            <div class="setting-row requires-sound">
+              <div class="text">
+                <div class="title">SFX Volume</div>
+                <div class="description">How loud should the sound effects be?</div>
+              </div>
+              <div class="control">
+                <div class="container">
+                  <input type="range" min="0" max="100" value="20" id="range-setting-sfx-level" onchange="GemWarrior._changeSetting('soundSFXLevel', event.target.value)">
                 </div>
               </div>
             </div>
